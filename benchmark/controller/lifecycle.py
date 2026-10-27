@@ -26,7 +26,12 @@ def packaged_service(root,data,row,timeout=300):
     root=Path(root).resolve()
     work=root/'.work'
     work.mkdir(exist_ok=True)
-    with tempfile.TemporaryDirectory(prefix='service-deployment-',dir=work) as temporary:
+    from controller.clean_start import current_run
+    lease = current_run(root)
+    temporary_root = lease.scratch if lease is not None else work
+    with tempfile.TemporaryDirectory(prefix='service-deployment-',dir=temporary_root) as temporary:
+        if lease is not None:
+            lease.track_temp(temporary)
         application=Path(temporary)/'app'
         application.mkdir()
         logs=[]
@@ -47,10 +52,15 @@ def packaged_service(root,data,row,timeout=300):
 
 @contextmanager
 def service_process(command, cwd, timeout=60, *, environment=None, limits=None):
+    from controller.clean_start import current_run
+    lease = current_run()
+    if lease is not None:
+        environment = {**(environment if environment is not None else os.environ), **lease.environment()}
     output, errors, messages = [], [], queue.Queue()
     started = time.perf_counter_ns()
     process = subprocess.Popen([str(part) for part in command], cwd=cwd, stdin=subprocess.DEVNULL,
-                               stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, encoding="utf-8", bufsize=1, env=environment)
+                               stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, encoding="utf-8", bufsize=1, env=environment,
+                               start_new_session=os.name != "nt")
     budget = None
     def stdout():
         for line in process.stdout:
@@ -68,6 +78,8 @@ def service_process(command, cwd, timeout=60, *, environment=None, limits=None):
     threading.Thread(target=stdout, daemon=True).start()
     threading.Thread(target=stderr, daemon=True).start()
     try:
+        if lease is not None:
+            lease.track_process(process)
         if limits is not None:
             from controller.resources import ProcessBudget
             budget = ProcessBudget(process.pid, limits)
@@ -87,10 +99,16 @@ def service_process(command, cwd, timeout=60, *, environment=None, limits=None):
             except subprocess.TimeoutExpired:
                 process.kill()
                 process.wait(timeout=5)
-        process.stdout.close()
-        process.stderr.close()
-        if budget:
-            budget.close()
+        try:
+            if lease is not None:
+                lease.process_finished(process)
+        finally:
+            try:
+                if budget:
+                    budget.close()
+            finally:
+                process.stdout.close()
+                process.stderr.close()
 
 
 def first_response(server, path, expected, method="GET", body=None, validator=None, deadline=15):
@@ -158,7 +176,12 @@ def owned_build(root, language, variant, *, timeout=300):
         raise ValueError("Invalid owned build scenario")
     work = root / ".work"
     work.mkdir(exist_ok=True)
-    with tempfile.TemporaryDirectory(prefix="build-stage-", dir=work, ignore_cleanup_errors=True) as temporary:
+    from controller.clean_start import current_run
+    lease = current_run(root)
+    temporary_root = lease.scratch if lease is not None else work
+    with tempfile.TemporaryDirectory(prefix="build-stage-", dir=temporary_root, ignore_cleanup_errors=True) as temporary:
+        if lease is not None:
+            lease.track_temp(temporary)
         stage = Path(temporary) / "benchmark"
         shutil.copytree(root, stage, ignore=shutil.ignore_patterns(".git", ".work", "results", "evidence", "bin", "obj", "target", "build", "__pycache__"))
         if language == "csharp":

@@ -7,6 +7,7 @@ import argparse
 from datetime import datetime, timezone
 import hashlib
 import json
+import os
 from pathlib import Path
 import subprocess
 import sys
@@ -16,6 +17,7 @@ sys.path.insert(0, str(ROOT))
 from controller.database import database_command, validate_batch
 from controller.infrastructure import DatabaseEnvironment
 from controller.resources import ProcessBudget
+from controller.clean_start import current_run
 from infrastructure.provision import redact
 from validation.database_oracle import Oracle, new_order
 
@@ -78,6 +80,12 @@ def requests_and_expected(data):
     ids = list(range(601, 0, -1)) + [12000, 12001, 12000]
     requests.append({"case_id": "COMMITTED", "ids": ids})
     expected.append({"status": "ok", "result": sorted(set(ids) & oracle.tables["orders"].keys())})
+    requests += [{"case_id": "RESET", "inject_failure": True}, {"case_id": "STATE"},
+                 {"case_id": "D01", "input": {"customer_id": 1}}]
+    expected += [{"status": "error"}, {"status": "ok", "result": oracle.state()}, {"status": "error"}]
+    requests.append({"case_id": "RESET"})
+    expected.append({"status": "ok", "result": initial})
+    oracle = Oracle(data)
     requests += [{"case_id": "STATE"},
                  {"case_id": "BATCH", "workload": "D01", "trace": [{"customer_id": 1}, {"customer_id": 2}], "iterations": 2, "workers": 8},
                  {"case_id": "RESET"}, {"case_id": "STATE"}, {"case_id": "QUIT"}]
@@ -110,10 +118,16 @@ def verify(config, data, output):
                 for access in ("raw", "orm"):
                     name = environment.create_database()
                     variables = environment.worker_environment(name, language)
+                    lease = current_run()
+                    if lease:
+                        variables = {**variables, **lease.environment()}
                     row = {"language": language, "engine": "postgresql", "access": access}
                     command = database_command(ROOT, data, row)
                     process = subprocess.Popen(command, cwd=ROOT, env=variables, stdin=subprocess.PIPE,
-                                               stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+                                               stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,
+                                               start_new_session=os.name != "nt")
+                    if lease:
+                        lease.track_process(process)
                     budget = None
                     try:
                         budget = ProcessBudget(process.pid, config["process_limits"])
@@ -125,6 +139,11 @@ def verify(config, data, output):
                     finally:
                         if budget:
                             budget.close()
+                        if lease:
+                            lease.process_finished(process)
+                        for stream in (process.stdin, process.stdout, process.stderr):
+                            if stream:
+                                stream.close()
                     raw = {"command": command, "exit_code": process.returncode,
                            "stdout": redact(stdout, variables, environment.password),
                            "stderr": redact(stderr, variables, environment.password)}

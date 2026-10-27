@@ -67,6 +67,10 @@ def run_harness(root, data, row, fingerprint, evidence, *, limits=None, timeout=
     if row["dataset"] != "S" or row["profile"] != "controlled":
         raise ValueError("Native harness baseline requires controlled S fixtures")
     environment = worker_environment(root)
+    from controller.clean_start import current_run
+    lease = current_run(root)
+    if lease is not None:
+        environment.update(lease.environment())
     if row["language"] == "java":
         target = output / "jmh.json"
         command = [sys.executable, str(root / "java/suite/run_jmh.py"), "--data", str(data), "--case", row["case_id"],
@@ -82,8 +86,10 @@ def run_harness(root, data, row, fingerprint, evidence, *, limits=None, timeout=
     # disposable source staging copies outside that search boundary.
     cwd = root / "dotnet/Suite" if row["language"] == "csharp" else root
     process = subprocess.Popen(command, cwd=cwd, env=environment, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                               text=True, encoding="utf-8", errors="replace")
+                               text=True, encoding="utf-8", errors="replace", start_new_session=os.name != "nt")
     try:
+        if lease is not None:
+            lease.track_process(process)
         if limits is not None:
             budget = ProcessBudget(process.pid, limits)
         stdout, stderr = process.communicate(timeout=timeout)
@@ -105,11 +111,21 @@ def run_harness(root, data, row, fingerprint, evidence, *, limits=None, timeout=
         atomic_json(checkpoint, stored)
         return stored
     finally:
-        if process.poll() is None:
-            process.kill()
-            process.communicate(timeout=5)
-        if budget:
-            budget.close()
+        try:
+            if process.poll() is None:
+                process.kill()
+                process.wait(timeout=5)
+        finally:
+            try:
+                if lease is not None:
+                    lease.process_finished(process)
+            finally:
+                try:
+                    if budget:
+                        budget.close()
+                finally:
+                    process.stdout.close()
+                    process.stderr.close()
 
 
 def corroborates(batch_seconds_per_iteration, native, tolerance=.25):

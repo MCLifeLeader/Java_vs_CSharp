@@ -2,6 +2,46 @@
 
 Updated: 2026-10-27 (America/Denver).
 
+## Latest checkpoint: clean-start assurance
+
+The user prioritizes a verified clean starting state over formal teardown, accepts
+database/Docker effects in measured stack performance, and explicitly confirmed
+Python is fine for shared support. No instruction mandated Python; it was the
+implementation choice for orchestration, fixtures, independent oracles and tests.
+Java/C# remain the measured workload implementations.
+
+Clean-start recovery now uses an exclusive checkout lock, process birth identity,
+repository/container labels and filesystem identities. It recovers stale leased
+processes, containers and scratch; uncertain ownership blocks a new run. Active
+runs, other repositories, tools, immutable inputs, traces and evidence are protected.
+Controller children use Windows kill-on-close jobs or dedicated Linux sessions.
+Run/verification scratch and credentials are leased. Clean builds and fresh input
+generation precede execution; every I/O PREPARE stages/verifies canonical bytes.
+Database startup/reset verifies the complete canonical state, reset is atomic,
+and failed reset quarantines the session until recovery succeeds.
+
+Resume fixes preserve original finalized records/runtime receipts. New attempts
+archive separate receipts. Java database packaging now pins output timestamps
+and its JAR plugin so clean builds can retain identical fingerprints.
+
+Focused checks passed: 21 clean-start methods, 20 database methods, 6 worker methods,
+6 JUnit methods, 30 suite-controller methods, 8 execution methods, 14 controller methods and 5 service
+methods. Latest standalone PostgreSQL four-cell reset-failure/recovery smoke passed
+and cleaned up all owned resources. Consolidated exact-source evidence follows
+under `docs/verification/2026-10-27-clean-start/`; older evidence remains historical.
+
+Reviewed old staging/CsvProbe leftovers were moved to ignored `.work/quarantine`.
+Automatic approval review rejected recursive deletion of the old build stage
+with "blocked by policy" and no more specific reason. Files were retained in
+quarantine; deletion was not retried through another mechanism. Quarantine is
+excluded from builds, fixtures and recovery deletion. Receipts remain in
+`.work/legacy-cleanup-receipt.json` and `.work/legacy-csv-quarantine-receipt.json`.
+
+Commands: `python benchmark/controller/benchmarkctl.py clean-start --dry-run`
+(read-only), `... clean-start` (owned recovery), and
+`python benchmark/validation/verify.py --java`. Full campaign authorization,
+SQL Server EULA/runtime verification and SQLite native parity are unchanged.
+
 ## Resume point
 
 Full-suite implementation is complete on `feat/benchmark-foundation`, using
@@ -18,6 +58,14 @@ separate from authored tests. Coverage is unavailable.
 - Build the full Java/C# suite, create a branch and commit, preserve resume state,
   and use sub-agents. The original C# 15/Java 27 track is deferred by the explicit
   .NET 10 / Java LTS choice.
+- On 2026-10-27, the user accepted database-engine effects and Docker overhead
+  as part of the benchmark environment. Measure the observed application stack
+  without estimating/subtracting those costs. Keep engine/access/container-host
+  profiles, image pins, resource budgets and state/cache policies comparable
+  between languages. Report measured application and database-container CPU
+  separately; their sum is not complete Docker Desktop/VM/host overhead. This
+  decision does not change campaign resource authorization or other admission
+  gates, and does not require a bare-metal control run.
 - Read all supplied PDFs: Part 1 (14 pages), Part 2 (23 pages), benchmark plan
   (21 pages). `benchmark/config/sources.json` retains hashes/page counts;
   `benchmark/specification.md` preserves the benchmark contract. Qualitative

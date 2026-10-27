@@ -38,6 +38,9 @@ fixtures, setup and timing boundaries, semantic outputs and server routes.
 Set `BENCH_NATIVE_LIBRARY` to the common library produced by
 `python benchmark/native/build.py` for N01/N02. TLS tests trust only the supplied
 controller fixture certificate; persistent transfer setup happens in PREPARE.
+Workers use unique scratch children under `BENCH_SCRATCH_ROOT` (OS-temp fallback).
+Each I/O PREPARE rebuilds and fully verifies canonical file bytes outside timing,
+so leftover files, PID reuse and failed teardown cannot supply a later run.
 
 ## Verification and resume
 

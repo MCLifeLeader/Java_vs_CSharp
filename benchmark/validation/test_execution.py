@@ -3,6 +3,9 @@
 import os
 from pathlib import Path
 import sys
+import tempfile
+import time
+import threading
 import unittest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
@@ -17,6 +20,31 @@ def rows(repetitions=5):
 
 
 class ExecutionTests(unittest.TestCase):
+    def test_worker_close_contains_descendants_before_closing_inherited_pipes(self):
+        from controller.clean_start import RunLease, process_identity
+        code = ("import json,subprocess,sys; "
+                "child=subprocess.Popen([sys.executable,'-c','import time;time.sleep(60)']); "
+                "print(json.dumps({'status':'ready','protocol':2,'child_pid':child.pid}),flush=True); "
+                "sys.stdin.readline()")
+        with tempfile.TemporaryDirectory() as directory, RunLease(directory, kind="cleanup-regression"):
+            worker = BatchWorker([sys.executable, "-c", code], directory)
+            child_pid = worker.ready["child_pid"]
+            errors = []
+            def close():
+                try:
+                    worker.close()
+                except BaseException as error:
+                    errors.append(error)
+            closer = threading.Thread(target=close, daemon=True)
+            closer.start()
+            closer.join(timeout=8)
+            self.assertFalse(closer.is_alive(), "Inherited pipe prevented worker cleanup")
+            self.assertFalse(errors, errors)
+            deadline = time.monotonic() + 3
+            while process_identity(child_pid)["state"] == "alive" and time.monotonic() < deadline:
+                time.sleep(.02)
+            self.assertEqual("dead", process_identity(child_pid)["state"])
+
     def test_seeded_pair_order_is_balanced_and_deterministic(self):
         schedule = paired_schedule(rows())
         self.assertEqual(schedule, paired_schedule(rows()))

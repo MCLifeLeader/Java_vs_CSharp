@@ -3,6 +3,8 @@ using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using System.Security.Authentication;
 using System.Security.Cryptography.X509Certificates;
+using System.Text.Json;
+using System.Globalization;
 
 namespace BenchmarkSuite;
 
@@ -18,21 +20,71 @@ public sealed partial class CoreWorkloads
         using var certificate = X509CertificateLoader.LoadCertificateFromFile(Services().GetProperty("tls_certificate").GetString()!);
         trustedThumbprint = certificate.Thumbprint;
     }
+    string? scratchDirectory, scratchToken, ioFile;
+    readonly HashSet<string> scratchFiles = new(StringComparer.Ordinal);
+    bool ioPrepared, disposed;
+
     string WorkFile()
     {
-        string directory = Path.Combine(DataDirectory, "worker-csharp-" + Environment.ProcessId);
-        Directory.CreateDirectory(directory); return Path.Combine(directory, "io.bin");
+        if (ioFile is not null) return ioFile;
+        string? configured = Environment.GetEnvironmentVariable("BENCH_SCRATCH_ROOT");
+        string parent = Path.GetFullPath(string.IsNullOrWhiteSpace(configured) ? Path.GetTempPath() : configured);
+        Directory.CreateDirectory(parent);
+        for (int attempt = 0; attempt < 10; attempt++)
+        {
+            string token = Guid.NewGuid().ToString("N");
+            string candidate = Path.Combine(parent, $"worker-csharp-{Environment.ProcessId}-{token}");
+            if (Directory.Exists(candidate) || File.Exists(candidate)) continue;
+            Directory.CreateDirectory(candidate);
+            DateTimeOffset? started = null;
+            try { using var process = System.Diagnostics.Process.GetCurrentProcess(); started = new DateTimeOffset(process.StartTime.ToUniversalTime()); } catch { }
+            using (var marker = new FileStream(Path.Combine(candidate, "ownership.json"), FileMode.CreateNew, FileAccess.Write, FileShare.Read))
+                JsonSerializer.Serialize(marker, new { schema_version = 1, kind = "benchmark-worker-scratch", language = "csharp", pid = Environment.ProcessId,
+                    process_start_utc = started?.ToString("O", CultureInfo.InvariantCulture), process_start_unix_ms = started?.ToUnixTimeMilliseconds(),
+                    token, scratch_root_source = string.IsNullOrWhiteSpace(configured) ? "os_temp" : "environment" });
+            scratchDirectory = candidate; scratchToken = token; ioFile = Path.Combine(candidate, "io.bin"); scratchFiles.Add(ioFile);
+            return ioFile;
+        }
+        throw new IOException("Cannot allocate a unique worker scratch directory");
     }
-    void EnsureFile(string file, long length)
+    void PrepareIoFile()
     {
-        if (File.Exists(file) && new FileInfo(file).Length == length) return;
-        using var output = new FileStream(file, FileMode.Create, FileAccess.Write, FileShare.None, 65536);
-        for (long written = 0; written < length;) { int count = (int)Math.Min(RandomBytes.Length, length - written); output.Write(RandomBytes, 0, count); written += count; } output.Flush(true);
+        ioPrepared = false;
+        if (RandomBytes.Length == 0) throw new InvalidDataException("Empty canonical I/O corpus");
+        string file = WorkFile(); long length = Smoke ? 65536 : 1L << 30;
+        string staging = Path.Combine(scratchDirectory!, "io-prepare-" + Guid.NewGuid().ToString("N") + ".tmp");
+        scratchFiles.Add(staging);
+        using (var output = new FileStream(staging, FileMode.CreateNew, FileAccess.Write, FileShare.None, 65536))
+        {
+            for (long written = 0; written < length;)
+            {
+                int offset = (int)(written % RandomBytes.Length), count = (int)Math.Min(Math.Min(65536, RandomBytes.Length - offset), length - written);
+                output.Write(RandomBytes, offset, count); written += count;
+            }
+            output.Flush(true);
+        }
+        using (var input = new FileStream(staging, FileMode.Open, FileAccess.Read, FileShare.Read, 65536))
+        {
+            byte[] buffer = new byte[65536];
+            for (long read = 0; read < length;)
+            {
+                int offset = (int)(read % RandomBytes.Length), count = (int)Math.Min(Math.Min(buffer.Length, RandomBytes.Length - offset), length - read);
+                input.ReadExactly(buffer.AsSpan(0, count));
+                if (!buffer.AsSpan(0, count).SequenceEqual(RandomBytes.AsSpan(offset, count))) throw new InvalidDataException("I/O preparation differs from canonical bytes");
+                read += count;
+            }
+            if (input.ReadByte() != -1) throw new InvalidDataException("I/O preparation length differs");
+        }
+        File.Move(staging, file, true); scratchFiles.Remove(staging); ioPrepared = true;
+    }
+    string PreparedWorkFile()
+    {
+        if (!ioPrepared || ioFile is null) throw new InvalidOperationException("PREPARE is required before I/O execution");
+        return ioFile;
     }
     WorkResult SequentialFile(string parameter)
     {
-        string file = WorkFile(); long length = Smoke ? 65536 : 1L << 30; bool write = parameter.StartsWith("write");
-        if (!write) EnsureFile(file, length);
+        string file = PreparedWorkFile(); long length = Smoke ? 65536 : 1L << 30; bool write = parameter.StartsWith("write");
         byte[] buffer = new byte[65536]; ulong total = 0;
         using var stream = new FileStream(file, write ? FileMode.Create : FileMode.Open, write ? FileAccess.Write : FileAccess.Read, FileShare.None, 65536, FileOptions.SequentialScan);
         for (long offset = 0; offset < length; offset += buffer.Length)
@@ -45,7 +97,7 @@ public sealed partial class CoreWorkloads
     }
     WorkResult RandomFile()
     {
-        string file = WorkFile(); long length = Smoke ? 65536 : 1L << 30; EnsureFile(file, length);
+        string file = PreparedWorkFile(); long length = Smoke ? 65536 : 1L << 30;
         byte[] buffer = new byte[4096]; int reads = Smoke ? 16 : 256; ulong sum = 0;
         using var stream = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, FileOptions.RandomAccess);
         for (int i = 0; i < reads; i++) { stream.Position = (i * 7919L % (length / 4096)) * 4096; stream.ReadExactly(buffer); sum += buffer[0]; }
@@ -92,16 +144,37 @@ public sealed partial class CoreWorkloads
         InitializeNative(); int count = parameter == "count-1" ? 1 : 1024;
         return WorkResult.Scalar(buffer ? nativeBuffer!(nativeBytes, (nuint)RandomBytes.Length) : nativeSum!(nativeInts, (nuint)count), buffer ? RandomBytes.Length : count, buffer ? "bytes" : "integers");
     }
+    static void CleanupAttempt(List<string> errors, string name, Action action)
+    {
+        try { action(); } catch (Exception error) { errors.Add(name + ":" + error.GetType().Name); }
+    }
+    void CleanupScratch(List<string> errors)
+    {
+        if (scratchDirectory is null || scratchToken is null) return;
+        string marker = Path.Combine(scratchDirectory, "ownership.json");
+        using (var ownership = JsonDocument.Parse(File.ReadAllBytes(marker)))
+            if (ownership.RootElement.GetProperty("token").GetString() != scratchToken || ownership.RootElement.GetProperty("kind").GetString() != "benchmark-worker-scratch")
+                throw new IOException("Worker scratch ownership marker differs");
+        foreach (string path in scratchFiles) CleanupAttempt(errors, "scratch-file", () => File.Delete(path));
+        if (Directory.EnumerateFileSystemEntries(scratchDirectory).Any(path => !string.Equals(path, marker, StringComparison.Ordinal)))
+        {
+            errors.Add("scratch-directory:not-empty"); return;
+        }
+        CleanupAttempt(errors, "scratch-marker", () => File.Delete(marker));
+        CleanupAttempt(errors, "scratch-directory", () => Directory.Delete(scratchDirectory, false));
+    }
     public void Dispose()
     {
-        delayClient?.Dispose();
-        platformPool?.Dispose();
-        plainEcho?.Dispose(); secureEcho?.Dispose();
-        if (nativeInts != IntPtr.Zero) Marshal.FreeHGlobal(nativeInts);
-        if (nativeBytes != IntPtr.Zero) Marshal.FreeHGlobal(nativeBytes);
-        if (nativeLibrary != IntPtr.Zero) NativeLibrary.Free(nativeLibrary);
-        string directory = Path.GetDirectoryName(WorkFile())!;
-        if (File.Exists(Path.Combine(directory, "io.bin"))) File.Delete(Path.Combine(directory, "io.bin"));
-        if (Directory.Exists(directory) && !Directory.EnumerateFileSystemEntries(directory).Any()) Directory.Delete(directory);
+        if (disposed) return; disposed = true;
+        var errors = new List<string>();
+        CleanupAttempt(errors, "plain-echo", () => plainEcho?.Dispose());
+        CleanupAttempt(errors, "secure-echo", () => secureEcho?.Dispose());
+        CleanupAttempt(errors, "http-client", () => delayClient?.Dispose());
+        CleanupAttempt(errors, "native-integers", () => { if (nativeInts != IntPtr.Zero) { Marshal.FreeHGlobal(nativeInts); nativeInts = IntPtr.Zero; } });
+        CleanupAttempt(errors, "native-bytes", () => { if (nativeBytes != IntPtr.Zero) { Marshal.FreeHGlobal(nativeBytes); nativeBytes = IntPtr.Zero; } });
+        CleanupAttempt(errors, "native-library", () => { if (nativeLibrary != IntPtr.Zero) { NativeLibrary.Free(nativeLibrary); nativeLibrary = IntPtr.Zero; } });
+        CleanupAttempt(errors, "scratch", () => CleanupScratch(errors));
+        CleanupAttempt(errors, "platform-pool", () => platformPool?.Dispose());
+        if (errors.Count != 0) try { Console.Error.WriteLine(JsonSerializer.Serialize(new { status = "cleanup_incomplete", language = "csharp", errors })); } catch { }
     }
 }

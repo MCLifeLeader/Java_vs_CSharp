@@ -59,7 +59,10 @@ public final class Workloads implements AutoCloseable {
     final Pattern regex=Pattern.compile("[A-Za-z]+|[0-9]+");
     final ExecutorService pool;
     final HttpClient http;
-    final Path temporary,file;
+    Path temporary,file;
+    String scratchToken;
+    final Set<Path> scratchFiles=new LinkedHashSet<>();
+    boolean closed;
     final Map<String,Object> services;
     Link linked;
     Socket echo;
@@ -69,7 +72,6 @@ public final class Workloads implements AutoCloseable {
     MemorySegment nativeInts,nativeBytes;
     MethodHandle nativeSum,nativeBuffer;
     boolean ioPrepared;
-    long ioChecksum;
     final ArrayDeque<long[]> sortInputs=new ArrayDeque<>();
     final ArrayDeque<List<RefRecord>> listInputs=new ArrayDeque<>();
     final ArrayDeque<Map<Object,Long>> mapInputs=new ArrayDeque<>();
@@ -102,7 +104,6 @@ public final class Workloads implements AutoCloseable {
         taggedInputs=new Tagged[n];for(int i=0;i<n;i++)taggedInputs[i]=new Tagged(i,i%4);
         pool=Executors.newFixedThreadPool(workers);
         http=HttpClient.newBuilder().version(HttpClient.Version.HTTP_1_1).connectTimeout(Duration.ofSeconds(15)).build();
-        temporary=Files.createTempDirectory("benchmark-java-suite-");file=temporary.resolve("io.bin");
         services=Files.isRegularFile(data.resolve("services.json"))?SuiteMain.JSON.readValue(Files.readAllBytes(data.resolve("services.json")),Map.class):Map.of();
     }
 
@@ -286,18 +287,46 @@ public final class Workloads implements AutoCloseable {
         return bytes(encoded,csvRows.size()-1,"rows",check);
     }
 
-    private void prepareIo()throws Exception {
-        if(ioPrepared)return;long length=smoke?65536:1073741824;
-        try(var output=FileChannel.open(file,StandardOpenOption.CREATE,StandardOpenOption.WRITE,StandardOpenOption.TRUNCATE_EXISTING)){
-            for(long written=0;written<length;){int offset=(int)(written%random.length),amount=(int)Math.min(Math.min(65536,random.length-offset),length-written);
-                var chunk=ByteBuffer.wrap(random,offset,amount);while(chunk.hasRemaining())output.write(chunk);
-                for(int i=offset;i<offset+amount;i++)ioChecksum+=random[i]&255;written+=amount;}
-            output.force(true);
-        }ioPrepared=true;
+    private void initializeScratch()throws Exception {
+        if(temporary!=null)return;
+        String configured=System.getenv("BENCH_SCRATCH_ROOT");
+        Path parent=Path.of(configured==null||configured.isBlank()?System.getProperty("java.io.tmpdir"):configured).toAbsolutePath().normalize();
+        Files.createDirectories(parent);
+        for(int attempt=0;attempt<10;attempt++){
+            String token=UUID.randomUUID().toString().replace("-","");Path candidate=parent.resolve("worker-java-"+ProcessHandle.current().pid()+"-"+token);
+            try{Files.createDirectory(candidate);}catch(FileAlreadyExistsException collision){continue;}
+            var ownership=new LinkedHashMap<String,Object>();var started=ProcessHandle.current().info().startInstant();
+            ownership.put("schema_version",1);ownership.put("kind","benchmark-worker-scratch");ownership.put("language","java");ownership.put("pid",ProcessHandle.current().pid());
+            ownership.put("process_start_utc",started.map(Object::toString).orElse(null));ownership.put("process_start_unix_ms",started.map(java.time.Instant::toEpochMilli).orElse(null));
+            ownership.put("token",token);ownership.put("scratch_root_source",configured==null||configured.isBlank()?"os_temp":"environment");
+            Files.write(candidate.resolve("ownership.json"),SuiteMain.JSON.writeValueAsBytes(ownership),StandardOpenOption.CREATE_NEW);
+            temporary=candidate;scratchToken=token;file=candidate.resolve("io.bin");scratchFiles.add(file);return;
+        }
+        throw new IOException("Cannot allocate a unique worker scratch directory");
     }
+    private void prepareIo()throws Exception {
+        ioPrepared=false;if(random.length==0)throw new IllegalStateException("Empty canonical I/O corpus");initializeScratch();
+        long length=smoke?65536:1073741824;Path staging=temporary.resolve("io-prepare-"+UUID.randomUUID().toString().replace("-","")+".tmp");scratchFiles.add(staging);
+        try(var output=FileChannel.open(staging,StandardOpenOption.CREATE_NEW,StandardOpenOption.WRITE)){
+            for(long written=0;written<length;){int offset=(int)(written%random.length),amount=(int)Math.min(Math.min(65536,random.length-offset),length-written);
+                var chunk=ByteBuffer.wrap(random,offset,amount);while(chunk.hasRemaining())output.write(chunk);written+=amount;}
+            output.force(true);
+        }
+        try(var input=FileChannel.open(staging,StandardOpenOption.READ)){
+            var buffer=ByteBuffer.allocate(65536);
+            for(long read=0;read<length;){int offset=(int)(read%random.length),amount=(int)Math.min(Math.min(buffer.capacity(),random.length-offset),length-read);
+                buffer.clear();buffer.limit(amount);while(buffer.hasRemaining())if(input.read(buffer)<0)throw new EOFException("Incomplete canonical I/O preparation");
+                if(!Arrays.equals(buffer.array(),0,amount,random,offset,offset+amount))throw new IllegalStateException("I/O preparation differs from canonical bytes");read+=amount;}
+            buffer.clear();buffer.limit(1);if(input.read(buffer)!=-1)throw new IllegalStateException("I/O preparation length differs");
+        }
+        try{Files.move(staging,file,StandardCopyOption.ATOMIC_MOVE,StandardCopyOption.REPLACE_EXISTING);}
+        catch(AtomicMoveNotSupportedException unsupported){Files.move(staging,file,StandardCopyOption.REPLACE_EXISTING);}
+        scratchFiles.remove(staging);ioPrepared=true;
+    }
+    private void requirePreparedIo(){if(!ioPrepared||file==null)throw new IllegalStateException("PREPARE is required before I/O execution");}
     private Result sequential(String p,boolean check)throws Exception {
         String[]v=p.split("-",2);if(v.length!=2||(!v[1].equals("buffered")&&!v[1].equals("durable-flush")))throw invalid();
-        prepareIo();long length=smoke?65536:1073741824,checksum=0;
+        requirePreparedIo();long length=smoke?65536:1073741824,checksum=0;
         if(v[0].equals("write")){
             try(var channel=FileChannel.open(file,StandardOpenOption.WRITE,StandardOpenOption.TRUNCATE_EXISTING)){
                 for(long written=0;written<length;){int offset=(int)(written%random.length),amount=(int)Math.min(Math.min(65536,random.length-offset),length-written);
@@ -310,7 +339,7 @@ public final class Workloads implements AutoCloseable {
         return scalar(checksum,length,"bytes",check);
     }
     private long fileByteSum()throws Exception{long sum=0;try(var channel=FileChannel.open(file,StandardOpenOption.READ)){var buffer=ByteBuffer.allocate(65536);while(channel.read(buffer)>0){buffer.flip();while(buffer.hasRemaining())sum+=buffer.get()&255;buffer.clear();}}return sum;}
-    private Result randomReads(String p,boolean check)throws Exception{require(p,"random-4KiB");prepareIo();int count=smoke?16:256;long blocks=Files.size(file)/4096,sum=0;try(var channel=FileChannel.open(file,StandardOpenOption.READ)){var buffer=ByteBuffer.allocate(4096);for(int i=0;i<count;i++){buffer.clear();long offset=((long)i*7919%blocks)*4096;while(buffer.hasRemaining()){int read=channel.read(buffer,offset+buffer.position());if(read<0)throw new EOFException();}sum+=buffer.array()[0]&255;}}return scalar(sum,count,"reads",check);}
+    private Result randomReads(String p,boolean check)throws Exception{require(p,"random-4KiB");requirePreparedIo();int count=smoke?16:256;long blocks=Files.size(file)/4096,sum=0;try(var channel=FileChannel.open(file,StandardOpenOption.READ)){var buffer=ByteBuffer.allocate(4096);for(int i=0;i<count;i++){buffer.clear();long offset=((long)i*7919%blocks)*4096;while(buffer.hasRemaining()){int read=channel.read(buffer,offset+buffer.position());if(read<0)throw new EOFException();}sum+=buffer.array()[0]&255;}}return scalar(sum,count,"reads",check);}
     private Result network(String p,boolean secure,boolean check)throws Exception{byte[]payload=random;Socket socket;boolean close=false;if(!secure){require(p,"echo-1MiB");if(echo==null)echo=openSocket(false);socket=echo;}else if(p.equals("handshake")){socket=openSocket(true);close=true;}else{require(p,"persistent-transfer");if(tls==null)tls=(SSLSocket)openSocket(true);socket=tls;}
         try{if(secure&&p.equals("handshake"))return new Result(1,1,"handshakes",scalarBytes(1),check?Map.of("tls_protocol",((SSLSocket)socket).getSession().getProtocol(),"cipher",((SSLSocket)socket).getSession().getCipherSuite()):null);
             Socket connection=socket;Future<byte[]>reader=pool.submit(()->connection.getInputStream().readNBytes(payload.length));socket.getOutputStream().write(payload);socket.getOutputStream().flush();byte[]response=reader.get(20,TimeUnit.SECONDS);if(response.length!=payload.length||!Arrays.equals(response,payload))throw new IOException("Echo differs");return bytes(response,response.length,"bytes",check);}finally{if(close){((SSLSocket)socket).getSession().invalidate();socket.close();}}
@@ -351,5 +380,23 @@ public final class Workloads implements AutoCloseable {
     private static void require(String actual,String expected){if(!actual.equals(expected))throw invalid();}
     private static IllegalArgumentException invalid(){return new IllegalArgumentException("Unknown parameter for case");}
     private static String strictDecode(byte[]bytes)throws CharacterCodingException{return StandardCharsets.UTF_8.newDecoder().onMalformedInput(CodingErrorAction.REPORT).onUnmappableCharacter(CodingErrorAction.REPORT).decode(ByteBuffer.wrap(bytes)).toString();}
-    public void close()throws Exception{pool.shutdownNow();pool.awaitTermination(5,TimeUnit.SECONDS);http.close();if(echo!=null)echo.close();if(tls!=null)tls.close();if(nativeArena!=null)nativeArena.close();Files.deleteIfExists(file);Files.deleteIfExists(temporary);}
+    @FunctionalInterface interface CleanupAction {void run()throws Exception;}
+    private static void cleanupAttempt(List<String> errors,String name,CleanupAction action){
+        try{action.run();}catch(Exception error){errors.add(name+":"+error.getClass().getSimpleName());if(error instanceof InterruptedException)Thread.currentThread().interrupt();}
+    }
+    private void cleanupScratch(List<String> errors)throws Exception {
+        if(temporary==null||scratchToken==null)return;Path marker=temporary.resolve("ownership.json");var ownership=SuiteMain.JSON.readTree(Files.readAllBytes(marker));
+        if(!scratchToken.equals(ownership.path("token").asText())||!"benchmark-worker-scratch".equals(ownership.path("kind").asText()))throw new IOException("Worker scratch ownership marker differs");
+        for(Path path:scratchFiles)cleanupAttempt(errors,"scratch-file",()->Files.deleteIfExists(path));
+        try(var remaining=Files.list(temporary)){if(remaining.anyMatch(path->!path.equals(marker))){errors.add("scratch-directory:not-empty");return;}}
+        cleanupAttempt(errors,"scratch-marker",()->Files.deleteIfExists(marker));cleanupAttempt(errors,"scratch-directory",()->Files.deleteIfExists(temporary));
+    }
+    public void close(){
+        if(closed)return;closed=true;var errors=new ArrayList<String>();
+        cleanupAttempt(errors,"plain-echo",()->{if(echo!=null)echo.close();});cleanupAttempt(errors,"secure-echo",()->{if(tls!=null)tls.close();});
+        cleanupAttempt(errors,"http-client",()->{http.shutdownNow();if(!http.awaitTermination(Duration.ofSeconds(5)))throw new IllegalStateException("HTTP client termination incomplete");});
+        cleanupAttempt(errors,"platform-pool",()->{pool.shutdownNow();if(!pool.awaitTermination(5,TimeUnit.SECONDS))throw new IllegalStateException("Pool termination incomplete");});
+        cleanupAttempt(errors,"native-arena",()->{if(nativeArena!=null)nativeArena.close();});cleanupAttempt(errors,"scratch",()->cleanupScratch(errors));
+        if(!errors.isEmpty())try{System.err.println(SuiteMain.JSON.writeValueAsString(Map.of("status","cleanup_incomplete","language","java","errors",errors)));}catch(Exception ignored){}
+    }
 }

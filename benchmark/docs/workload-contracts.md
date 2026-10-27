@@ -139,3 +139,16 @@ inputs lazily before its warmed measurement boundary. Loopback-only control rout
 application admission atomically and waits for in-flight application requests;
 reset restores admission, including services without a database. Committed-ID
 audit accepts at most500 positive IDs and enables exact post-timeout state checks.
+
+Worker I/O scratch is allocated lazily under `BENCH_SCRATCH_ROOT` when provided,
+or under the operating-system temporary directory for standalone workers. Each
+worker creates a fresh `worker-<language>-<pid>-<random-token>` child and an
+`ownership.json` marker; PID-only directories and earlier children are never
+adopted. Every I01/I02 PREPARE writes a new staging file, flushes and compares
+all bytes against the canonical corpus, then installs the verified `io.bin`
+outside timing. Timed I/O requires successful preparation and performs no repair.
+Close attempts all resources independently and removes only known owned files
+and an empty child directory. Unexpected files or cleanup failures remain visible
+through `cleanup_incomplete` diagnostics; they cannot seed the next worker.
+Controller run leases own recovery of their scratch root. Standalone OS-temp
+children carry no claim of checkout ownership and are not automatically recovered.

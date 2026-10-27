@@ -65,11 +65,14 @@ class SuiteHttpTests(unittest.TestCase):
         command = suite_command(ROOT, self.data, row, server=True)
         original, copied = self.artifacts[language]
         command = [copied if value == original else value for value in command]
+        from controller.clean_start import current_run
+        lease = current_run(ROOT)
+        environment = {**self.environment, **(lease.environment() if lease is not None else {})}
         stdout = queue.Queue()
         with tempfile.TemporaryFile(mode="w+", encoding="utf-8") as diagnostics:
             process = subprocess.Popen(command, cwd=ROOT, stdin=subprocess.DEVNULL,
                 stdout=subprocess.PIPE, stderr=diagnostics, text=True, encoding="utf-8",
-                env=self.environment)
+                env=environment, start_new_session=os.name != "nt")
             def read():
                 for line in process.stdout:
                     stdout.put(line)
@@ -77,6 +80,8 @@ class SuiteHttpTests(unittest.TestCase):
             reader = threading.Thread(target=read, daemon=True)
             reader.start()
             try:
+                if lease is not None:
+                    lease.track_process(process)
                 line = stdout.get(timeout=60)
                 self.assertIsNotNone(line, "HTTP worker exited before ready")
                 ready = json.loads(line)
@@ -95,6 +100,8 @@ class SuiteHttpTests(unittest.TestCase):
                 except subprocess.TimeoutExpired:
                     process.kill()
                     process.wait(timeout=10)
+                if lease is not None:
+                    lease.process_finished(process)
                 reader.join(timeout=3)
                 process.stdout.close()
 

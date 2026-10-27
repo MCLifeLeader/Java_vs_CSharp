@@ -271,6 +271,40 @@ read/write audit and reconciliation across more than500 scheduled order IDs.
 Evidence is `.work/postgresql-controls-validation.json` and its four cell
 transcripts; it includes realized catalog and durability settings. The earlier
 run is `.work/postgresql-validation.json`, with separate catalog evidence. This is a
-standalone contract script with four cell executions, separate from the18
+standalone contract script with four cell executions, separate from the20
 authored database unittest methods. It is functional evidence, not a measured
 performance repetition or provider statement/round-trip audit.
+
+## Verified clean state and recovery
+
+Every session reads the four canonical CSV files, requires positive strictly
+ascending IDs within each table, freezes their byte hashes, and independently
+computes the expected ordered full-state hash and table counts. Startup checks
+the actual database against that snapshot before exposing a usable session,
+including sessions attaching to a controller-prepared network database. Initial
+schema creation and import use one transaction on all three selected engines.
+Failed construction closes only that session's anchor, connections and ORM
+factory. No machine-wide database or runtime caches are cleared.
+
+Reset requires quiescence: the caller must finish or drain active operations
+first. It verifies the fixture fingerprints, deletes known tables in foreign-key
+order, imports, verifies fingerprints again and compares the complete database
+state inside one transaction before commit. Any failure rolls back the entire
+attempt. The session then rejects measured operations until a successful reset
+restores the canonical snapshot; state and metadata remain available for
+diagnosis. Callers can instead discard the session and create a fresh owned
+database. Successful reset retains warm factories and uses a fresh context or
+session for each subsequent operation.
+
+The untimed JSONL control `{"case_id":"RESET","inject_failure":true}` deliberately
+fails after deletion to exercise transaction rollback; normal controller reset
+does not enable it. Two additional worker test methods execute all four SQLite
+cells: failed reset preserves the prior committed state, changed fixtures are
+rejected, restored fixtures allow canonical recovery, fresh ORM reads see reset
+values, abrupt process termination does not affect the next fresh database, and
+a late foreign-key failure during initial import does not poison the next start.
+These are failure-path correctness checks, separate from performance trials.
+The worker test class generates fresh smoke fixtures in a new temporary
+directory instead of trusting files from an earlier run. Test and live-contract
+worker processes inherit an active verification run lease when present, so an
+interrupted controller leaves recoverable process ownership evidence.

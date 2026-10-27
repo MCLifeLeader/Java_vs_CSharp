@@ -17,7 +17,7 @@ class DatabaseEnvironment:
     def __init__(self, root, config, engine):
         if engine not in ("sqlserver", "postgresql"):
             raise ValueError("Only network engines use disposable infrastructure")
-        self.root, self.config, self.engine = Path(root), config, engine
+        self.root, self.config, self.engine = Path(root).resolve(), config, engine
         self.owner = uuid.uuid4().hex
         self.name = "bench-" + self.owner
         self.databases, self.logs = set(), []
@@ -25,10 +25,30 @@ class DatabaseEnvironment:
         self.container = self.port = None
         self.lease = self.root / ".work" / "leases" / (self.owner + ".json")
         self.profile = config.get("infrastructure", {}).get(engine, {})
+        self.run = self.owned_run = None
+        self.owner_process = None
+        self.repo_id = None
+        self.creation_attempted = False
 
     def docker(self, arguments, *, stdin=None, timeout=60, allow_failure=False):
         command = ["docker", *arguments]
-        completed = subprocess.run(command, input=stdin, capture_output=True, text=True, timeout=timeout, shell=False)
+        process = subprocess.Popen(command, stdin=subprocess.PIPE if stdin is not None else subprocess.DEVNULL,
+                                   stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, shell=False,
+                                   start_new_session=os.name != 'nt',
+                                   creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0)
+        try:
+            if self.run:
+                self.run.track_process(process)
+            stdout, stderr = process.communicate(stdin, timeout=timeout)
+        except BaseException:
+            if process.poll() is None:
+                process.kill()
+            process.communicate()
+            raise
+        finally:
+            if self.run:
+                self.run.process_finished(process)
+        completed = subprocess.CompletedProcess(command, process.returncode, stdout, stderr)
         # None of these command arguments contains a secret. Never inspect/dump
         # Config.Env, container logs, env-file contents or connection strings.
         self.logs.append({"command": command, "exit_code": completed.returncode,
@@ -53,19 +73,39 @@ class DatabaseEnvironment:
             raise ValueError("An explicit application CPU allocation is required before database startup")
         if app_cpus.intersection(cpus):
             raise ValueError("Database and application CPU allocations overlap")
-        self.docker(["pull", image], timeout=300)
+        from controller.clean_start import RunLease, current_run, repo_identity
+        self.run = current_run(self.root)
+        if self.run is None:
+            self.owned_run = RunLease(self.root, kind="database-infrastructure")
+            self.run = self.owned_run.__enter__()
+        self.owner_process = self.run.owner_process
+        self.repo_id = repo_identity(self.root)
+        try:
+            self._save_lease()  # Intent is durable before any container exists.
+            self.docker(["pull", image], timeout=300)
+        except BaseException:
+            self.close()
+            raise
         environment = {"MSSQL_SA_PASSWORD": self.password, "MSSQL_PID": self.profile.get("edition", "Developer"), "ACCEPT_EULA": "Y"} if self.engine == "sqlserver" else {
             "POSTGRES_PASSWORD": self.password, "POSTGRES_USER": "benchmark", "POSTGRES_DB": "postgres"}
-        descriptor, env_file = tempfile.mkstemp(prefix="benchmark-env-", suffix=".txt", dir=self.root / ".work")
+        env_file = None
         try:
+            descriptor, env_file = tempfile.mkstemp(prefix="benchmark-env-", suffix=".txt", dir=self.run.scratch)
             with os.fdopen(descriptor, "w", encoding="utf-8", newline="\n") as output:
+                self.run.track_temp(env_file)
                 for key, value in environment.items():
                     output.write(key + "=" + value + "\n")
             port = "1433" if self.engine == "sqlserver" else "5432"
-            self.container = self.docker(["run", "--detach", "--name", self.name,
+            self.creation_attempted = True
+            self.container = self.docker(["create", "--name", self.name,
                                           "--label", "benchmark.owner=" + self.owner,
+                                          "--label", "benchmark.repo=" + self.repo_id,
+                                          "--label", "benchmark.owner.pid=" + str(self.owner_process['pid']),
+                                          "--label", "benchmark.owner.creation=" + self.owner_process['creation_id'],
                                           "--cpuset-cpus", ",".join(str(cpu) for cpu in cpus), "--memory", str(memory),
                                           "--publish", "127.0.0.1::" + port, "--env-file", env_file, image])
+            self._save_lease()  # Save the created ID before the container can start.
+            self.docker(["start", self.container])
             mapping = self.docker(["port", self.container, port + "/tcp"])
             self.port = int(mapping.rsplit(":", 1)[1])
             deadline = time.monotonic() + self.profile.get("readiness_timeout_seconds", 120)
@@ -88,14 +128,17 @@ class DatabaseEnvironment:
             self.close()
             raise
         finally:
-            Path(env_file).unlink(missing_ok=True)
+            if env_file:
+                Path(env_file).unlink(missing_ok=True)
 
     def _sql(self, sql):
         if self.engine == "postgresql":
             return self.docker(["exec", self.container, "psql", "-U", "benchmark", "-d", "postgres", "-v", "ON_ERROR_STOP=1", "-c", sql])
-        descriptor, secret_file = tempfile.mkstemp(prefix="benchmark-sqlcmd-", suffix=".txt", dir=self.root / ".work")
+        descriptor, secret_file = tempfile.mkstemp(prefix="benchmark-sqlcmd-", suffix=".txt", dir=self.run.scratch if self.run else self.root / ".work")
         try:
             with os.fdopen(descriptor, "w", encoding="utf-8", newline="\n") as output:
+                if self.run:
+                    self.run.track_temp(secret_file)
                 output.write("SQLCMDPASSWORD=" + self.password + "\n")
             return self.docker(["exec", "--env-file", secret_file, self.container, "/opt/mssql-tools18/bin/sqlcmd",
                                 "-S", "localhost", "-U", "sa", "-C", "-b", "-Q", sql])
@@ -122,6 +165,8 @@ class DatabaseEnvironment:
     def _save_lease(self):
         from controller.benchmarkctl import atomic_json
         atomic_json(self.lease, {"owner_token": self.owner, "engine": self.engine, "container_id": self.container,
+                                 "schema": 1, "repo_id": self.repo_id, "container_name": self.name,
+                                 "owner_process": self.owner_process, "run_token": self.run.owner_token if self.run else None,
                                  "allowed_hosts": ["127.0.0.1"], "databases": sorted(self.databases), "status": "active"})
 
     def worker_environment(self, name, language):
@@ -135,7 +180,7 @@ class DatabaseEnvironment:
         else:
             connection = (f"Host=127.0.0.1;Port={self.port};Database={name};Username=benchmark;Password={self.password};SSL Mode=Disable;Maximum Pool Size=16;Timeout=15;Command Timeout=15;Max Auto Prepare=0" if language == "csharp" else
                           f"jdbc:postgresql://127.0.0.1:{self.port}/{name}?user=benchmark&password={self.password}&sslmode=disable&prepareThreshold=0&connectTimeout=15&socketTimeout=15")
-        return {**os.environ, "BENCH_DB_CONNECTION": connection, "BENCH_DB_ALLOWED_HOSTS": "127.0.0.1",
+        return {**os.environ, **(self.run.environment() if self.run else {}), "BENCH_DB_CONNECTION": connection, "BENCH_DB_ALLOWED_HOSTS": "127.0.0.1",
                 "BENCH_DB_OWNED_NAME": name, "BENCH_DB_INITIALIZE": "1",
                 "BENCH_DB_OWNERSHIP_FILE": str(self.lease.resolve()), "BENCH_DB_OWNER_TOKEN": self.owner}
 
@@ -151,13 +196,41 @@ class DatabaseEnvironment:
                 "collector":"Owned Linux cgroup-v2 cpu.stat/memory.current"}
 
     def close(self):
-        if self.container:
-            owner = self.docker(["inspect", "--format", '{{ index .Config.Labels "benchmark.owner" }}', self.container])
-            if owner != self.owner:
-                raise ValueError("Refusing cleanup: container ownership label differs")
-            self.docker(["rm", "--force", "--volumes", self.container])
-            self.container = None
+        error = None
+        try:
+            if not self.container and self.creation_attempted:
+                # A CLI timeout can happen after Docker has created the object.
+                # Preserve the intent lease if absence cannot be proven.
+                identifiers = self.docker(["ps", "--all", "--filter", "name=^/" + self.name + "$", "--format", "{{.ID}}"])
+                if identifiers:
+                    if len(identifiers.splitlines()) != 1:
+                        raise ValueError("Ambiguous created container identity")
+                    self.container = identifiers
+            if self.container:
+                labels = json.loads(self.docker(["inspect", "--format", '{{json .Config.Labels}}', self.container]))
+                expected = {"benchmark.owner": self.owner, "benchmark.repo": self.repo_id,
+                            "benchmark.owner.pid": str(self.owner_process['pid']),
+                            "benchmark.owner.creation": self.owner_process['creation_id']}
+                if any(labels.get(key) != value for key, value in expected.items()):
+                    raise ValueError("Refusing cleanup: container ownership labels differ")
+                self.docker(["rm", "--force", "--volumes", self.container])
+                self.container = None
             self.lease.unlink(missing_ok=True)
+        except BaseException as failure:
+            error = failure
+            # Keep the last durable lease for proactive recovery on next start.
+            if self.lease.exists():
+                from controller.benchmarkctl import atomic_json
+                receipt = json.loads(self.lease.read_text(encoding="utf-8"))
+                receipt['status'] = 'cleanup_pending'
+                atomic_json(self.lease, receipt)
+        finally:
+            if self.owned_run:
+                owned, self.owned_run = self.owned_run, None
+                owned.__exit__(type(error) if error else None, error, None)
+                self.run = None
+        if error:
+            raise error
 
     def __exit__(self, *_):
         self.close()

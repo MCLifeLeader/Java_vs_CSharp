@@ -123,20 +123,33 @@ class BatchWorker:
     """Long-lived protocol-2 worker. Preparation and CHECK are outside timing."""
 
     def __init__(self, command, cwd, timeout=60, limits=None, environment=None, protocol=2, quit_command="QUIT"):
+        from controller.clean_start import current_run
+        self.lease = current_run()
+        if self.lease is not None:
+            environment = {**(environment if environment is not None else os.environ), **self.lease.environment()}
         self.command, self.cwd, self.timeout = [str(part) for part in command], str(cwd), timeout
         self.stdout, self.stderr = [], []
         self.quit_command = quit_command
         self.responses = queue.Queue()
         self.process = subprocess.Popen(self.command, cwd=cwd, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
-                                        stderr=subprocess.PIPE, text=True, encoding="utf-8", errors="strict", bufsize=1, env=environment)
+                                        stderr=subprocess.PIPE, text=True, encoding="utf-8", errors="strict", bufsize=1, env=environment,
+                                        start_new_session=os.name != "nt")
         self.budget = None
+        if self.lease is not None:
+            try:
+                self.lease.track_process(self.process)
+            except BaseException:
+                self.process.kill()
+                self.process.wait(timeout=5)
+                for stream in (self.process.stdin, self.process.stdout, self.process.stderr):
+                    stream.close()
+                raise
         if limits is not None:
             from controller.resources import ProcessBudget
             try:
                 self.budget = ProcessBudget(self.process.pid, limits)
             except BaseException:
-                self.process.terminate()
-                self.process.wait(timeout=5)
+                self.close()
                 raise
         def read_stdout():
             try:
@@ -220,22 +233,30 @@ class BatchWorker:
                 "resources": resources, "boundary": "Controller command send to complete worker reply; worker-only CPU/RSS"}
 
     def close(self):
-        if self.process.poll() is None:
-            try:
-                self.process.stdin.write(self.quit_command + "\n")
-                self.process.stdin.flush()
-                self.process.wait(timeout=5)
-            except (BrokenPipeError, OSError, subprocess.TimeoutExpired):
-                self.process.terminate()
+        try:
+            if self.process.poll() is None:
                 try:
+                    self.process.stdin.write(self.quit_command + "\n")
+                    self.process.stdin.flush()
                     self.process.wait(timeout=5)
-                except subprocess.TimeoutExpired:
-                    self.process.kill()
-                    self.process.wait(timeout=5)
-        for stream in (self.process.stdin, self.process.stdout, self.process.stderr):
-            stream.close()
-        if self.budget:
-            self.budget.close()
+                except (BrokenPipeError, OSError, subprocess.TimeoutExpired):
+                    self.process.terminate()
+                    try:
+                        self.process.wait(timeout=5)
+                    except subprocess.TimeoutExpired:
+                        self.process.kill()
+                        self.process.wait(timeout=5)
+        finally:
+            try:
+                if self.lease is not None:
+                    self.lease.process_finished(self.process)
+            finally:
+                try:
+                    if self.budget:
+                        self.budget.close()
+                finally:
+                    for stream in (self.process.stdin, self.process.stdout, self.process.stderr):
+                        stream.close()
 
     def __enter__(self):
         return self

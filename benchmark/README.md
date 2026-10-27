@@ -94,6 +94,26 @@ authored definitions, discovered cases, executed results by framework/area and
 separate subtest expansion. Workload parameters and repeated benchmark runs are
 not authored tests. Coverage is unavailable without a measured coverage report.
 
+Before execution, the controller and verification runner acquire an exclusive
+checkout lock and recover stale resources whose repository, owner process birth
+identity and filesystem/container ownership can be verified. Unresolved leftovers
+block startup. Inspect or apply recovery explicitly with:
+
+```powershell
+python benchmark/controller/benchmarkctl.py clean-start --dry-run
+python benchmark/controller/benchmarkctl.py clean-start
+```
+
+Runs use clean build outputs, freshly generated fixtures and unique leased
+scratch directories. Each database startup/reset must match canonical CSV state;
+reset deletes, reloads and verifies in one transaction. A failed reset blocks
+workloads until a successful reset. I/O PREPARE repairs and verifies canonical
+scratch bytes outside timing. Runtime warmup and OS cache policy remain explicit;
+clean application state does not require a host reboot or clearing shared caches.
+Inputs, tools, results, evidence and reviewed quarantine are retained. Resume
+preserves completed records and their original receipts; each new attempt records
+its own clean-start, service and generator evidence.
+
 Pilot, full execution, report and resume use:
 
 ```powershell
@@ -127,6 +147,14 @@ work, at least one second per batch, stable warmup, paired processes, enforced
 limits and OS resource evidence. HTTP arrivals include queue delay, failures and
 unsent requests; the load generator must demonstrate capacity before ranking.
 Runtime-specific allocation counters remain diagnostic.
+
+The user accepts database-engine effects and Docker overhead as part of the
+benchmark environment (2026-10-27). Report observed end-to-end stack performance
+without subtracting an estimated database or container cost. Compare Java and C#
+within the same engine, access mode and container-host profile, retaining pinned
+images, matching resource budgets and explicit state/cache policies. Application
+CPU and database-container CPU remain separately reported where measured; their
+sum does not claim to include all Docker Desktop, VM or host overhead.
 
 `prepare_memory_bytes` freezes the memory available for mutable input copies
 outside timing (default 256 MiB); it must fit the enforced process memory limit.

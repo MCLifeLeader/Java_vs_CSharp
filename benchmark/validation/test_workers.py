@@ -8,6 +8,7 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
+from controller.benchmarkctl import run_command
 from data.generate import generate_values
 from validation.oracle import expected
 
@@ -29,8 +30,8 @@ class WorkerParityTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "integers.i64le"
             path.write_bytes(payload)
-            result = subprocess.run(COMMANDS[language] + [str(path)], input=commands,
-                                    capture_output=True, text=True, encoding="utf-8", timeout=20)
+            raw = run_command(COMMANDS[language] + [str(path)], stdin=commands, timeout=20)
+            result = subprocess.CompletedProcess(COMMANDS[language], raw["exit_code"], raw["stdout"], raw["stderr"])
             return result, [json.loads(line) for line in result.stdout.splitlines()]
 
     def test_boundary_values_match_independent_oracle(self):

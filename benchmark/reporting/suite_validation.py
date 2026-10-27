@@ -60,13 +60,21 @@ def validate_suite_record(root, record, manifest, *, verify_raw=True):
 
 def finalize_record(root, record, manifest, evidence):
     from controller.benchmarkctl import file_hash
-    root,evidence = Path(root),Path(evidence)
-    if record.get('raw_evidence'):
-        verify_evidence(root,{'evidence':record['raw_evidence']})
+    root,evidence = Path(root).resolve(),Path(evidence).resolve()
+    if 'raw_evidence' in record:
+        # Finalized checkpoints are immutable. Resume verifies their original
+        # bytes rather than attaching a new attempt or repairing a changed hash.
+        validate_suite_record(root,record,manifest)
+        return record
     names = (record['identity']['case_hash'],canonical_hash(record['command']))
-    common={'campaign-manifest.json','preflight.json','source.json','input-manifest.json','binaries.json','config.json','versions.json','builds.json','services.json','generator-capacity.json'}
-    selected = [path for path in evidence.rglob('*') if path.is_file() and
+    common={'campaign-manifest.json','preflight.json','source.json','input-manifest.json','binaries.json','config.json','versions.json','builds.json'}
+    selected = [path for path in evidence.iterdir() if path.is_file() and
                 (path.name in common or any(path.name.startswith(name) for name in names))]
+    runtime=record.get('runtime_evidence',{})
+    if not isinstance(runtime,dict):
+        raise ValueError('Runtime evidence must map root-relative paths to SHA256 hashes')
+    if runtime:
+        verify_evidence(root,{'evidence':runtime})
     native=record.get('native_harness')
     if native:
         key=canonical_hash({'identity':native['identity'],'fingerprint':native['fingerprint']})
@@ -78,6 +86,7 @@ def finalize_record(root, record, manifest, evidence):
             selected.append(path)
         selected.append(directory/'evidence.json')
     record['raw_evidence'] = {str(path.relative_to(root)).replace('\\','/'):file_hash(path) for path in selected}
+    record['raw_evidence'].update(runtime)
     record['raw_evidence'].update(record.get('trace_evidence',{}))
     record['result_hash'] = canonical_hash({key:value for key,value in record.items() if key!='result_hash'})
     validate_suite_record(root,record,manifest)

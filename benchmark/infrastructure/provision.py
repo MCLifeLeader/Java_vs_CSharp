@@ -1,6 +1,7 @@
 """Review or exercise the controller-owned network DB lifecycle without logging secrets."""
 import argparse
 import json
+import os
 from pathlib import Path
 import re
 import subprocess
@@ -9,6 +10,7 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from controller.infrastructure import DatabaseEnvironment
+from controller.clean_start import RunLease, cleanup_owned
 
 
 def plan(config, engine):
@@ -52,12 +54,23 @@ def execute(config, engine, language, access, data, requests):
                ["java", "--enable-native-access=ALL-UNNAMED", "-jar", str(ROOT / "java/database/target/database-worker-1.0.0-all.jar")])
     command += [str(ROOT), engine, access, str(data.resolve())]
     (ROOT / ".work").mkdir(exist_ok=True)
-    with DatabaseEnvironment(ROOT, config, engine) as environment:
+    with RunLease(ROOT, kind="infrastructure-diagnostic") as run, DatabaseEnvironment(ROOT, config, engine) as environment:
         database = environment.create_database()
         worker_environment = environment.worker_environment(database, language)
-        completed = subprocess.run(command, input=requests.read_text(encoding="utf-8"), text=True,
-                                   capture_output=True, timeout=config.get("process_timeout_seconds", 60),
-                                   env=worker_environment, shell=False)
+        process = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                                   text=True, env=worker_environment, shell=False, start_new_session=os.name != 'nt',
+                                   creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0)
+        try:
+            run.track_process(process)
+            stdout, stderr = process.communicate(requests.read_text(encoding="utf-8"), timeout=config.get("process_timeout_seconds", 60))
+        except BaseException:
+            if process.poll() is None:
+                process.kill()
+            process.communicate()
+            raise
+        finally:
+            run.process_finished(process)
+        completed = subprocess.CompletedProcess(command, process.returncode, stdout, stderr)
         report = {**review, "executed": True, "command": command,
                   "database": database, "owner_token": environment.owner,
                   "exit_code": completed.returncode,
@@ -69,15 +82,24 @@ def execute(config, engine, language, access, data, requests):
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("action", choices=("plan", "execute"))
+    parser.add_argument("action", choices=("plan", "execute", "clean-start"))
+    parser.add_argument("--dry-run", action="store_true", help="Read-only clean-start inspection")
     parser.add_argument("--config", type=Path, default=ROOT / "config/campaign.json")
-    parser.add_argument("--engine", choices=("postgresql", "sqlserver"), required=True)
+    parser.add_argument("--engine", choices=("postgresql", "sqlserver"))
     parser.add_argument("--language", choices=("csharp", "java"), default="csharp")
     parser.add_argument("--access", choices=("raw", "orm"), default="raw")
     parser.add_argument("--data", type=Path, default=ROOT / ".work/suite-data/smoke")
     parser.add_argument("--requests", type=Path)
     args = parser.parse_args(argv)
     try:
+        if args.action == "clean-start":
+            report = cleanup_owned(ROOT, dry_run=args.dry_run)
+            print(json.dumps(report, indent=2))
+            return 0 if report["ready"] else 2
+        if args.engine is None:
+            raise ValueError("plan/execute require an explicit engine")
+        if args.dry_run:
+            raise ValueError("--dry-run applies to clean-start; plan is already read-only")
         config = json.loads(args.config.read_text(encoding="utf-8"))
         if args.action == "plan":
             report = plan(config, args.engine)

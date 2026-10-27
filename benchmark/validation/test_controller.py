@@ -1,6 +1,8 @@
 """Controller failure paths independent of installed SDKs and database services."""
 
 import json
+import contextlib
+import io
 from pathlib import Path
 import struct
 import sys
@@ -13,6 +15,13 @@ from controller import benchmarkctl as ctl
 
 
 class ControllerTests(unittest.TestCase):
+    def test_cli_dry_run_never_acquires_a_run_lease_or_cleans_resources(self):
+        from controller import clean_start
+        with patch.object(clean_start, "RunLease", side_effect=AssertionError("Dry-run acquired a lease")), patch.object(clean_start, "cleanup_owned", side_effect=AssertionError("Dry-run performed cleanup")), contextlib.redirect_stdout(io.StringIO()) as output:
+            code = ctl.main(["run", "--stage", "full", "--all", "--dry-run"])
+        self.assertEqual(0, code)
+        self.assertFalse(json.loads(output.getvalue())["executed"])
+
     def config(self):
         return ctl.read_json(ctl.ROOT / "config" / "campaign.json")
 

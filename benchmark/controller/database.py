@@ -107,7 +107,7 @@ def warm_database(worker, row, trace, minimum, maximum=300):
     return {"status":"unstable","operation_seconds":seconds,"batches":batches,"resets_timed":False}
 
 
-def run_database_rows(root, data, config, rows, stage, campaign_id, fingerprint, directory, evidence, *, resume=False, pilot=None):
+def run_database_rows(root, data, config, rows, stage, campaign_id, fingerprint, directory, evidence, *, resume=False, pilot=None, runtime_evidence=None):
     from controller.benchmarkctl import atomic_json, utc_now
     from controller.suite import process_limits
     from validation.database_oracle import Oracle
@@ -263,6 +263,7 @@ def run_database_rows(root, data, config, rows, stage, campaign_id, fingerprint,
                            "reason":"Admission requires all recorded warmup, trace, resource, engine parity and complete CPU gates"})
             if stage == "full":
                 result["admitted"] = all(result.get("gates",{}).values())
+            result["runtime_evidence"] = dict(runtime_evidence or {})
             result["result_hash"] = canonical_hash(result)
             atomic_json(checkpoint, result)
             records.append(result)

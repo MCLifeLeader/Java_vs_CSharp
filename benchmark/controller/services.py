@@ -76,7 +76,7 @@ class TlsEchoServer(EchoServer):
 class LocalServices:
     def __init__(self, root, data_dir):
         self.root, self.data_dir = Path(root), Path(data_dir)
-        self.servers, self.threads = [], []
+        self.servers, self.threads, self.running = [], [], set()
         self.manifest = None
 
     def __enter__(self):
@@ -85,15 +85,25 @@ class LocalServices:
         context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
         context.minimum_version = context.maximum_version = ssl.TLSVersion.TLSv1_3
         context.load_cert_chain(cert, key)
-        delay = ThreadingHTTPServer(("127.0.0.1", 0), DelayHandler)
-        delay.daemon_threads = True
-        echo = EchoServer(("127.0.0.1", 0), EchoHandler)
-        tls = TlsEchoServer(("127.0.0.1", 0), context)
-        self.servers = [delay, echo, tls]
-        for server in self.servers:
-            thread = threading.Thread(target=server.serve_forever, kwargs={"poll_interval": 0.1}, daemon=True)
-            thread.start()
-            self.threads.append(thread)
+        try:
+            delay = ThreadingHTTPServer(("127.0.0.1", 0), DelayHandler)
+            self.servers.append(delay)
+            delay.daemon_threads = True
+            echo = EchoServer(("127.0.0.1", 0), EchoHandler)
+            self.servers.append(echo)
+            tls = TlsEchoServer(("127.0.0.1", 0), context)
+            self.servers.append(tls)
+            for server in self.servers:
+                thread = threading.Thread(target=server.serve_forever, kwargs={"poll_interval": 0.1}, daemon=True)
+                thread.start()
+                self.threads.append(thread)
+                self.running.add(server)
+            return self._publish(delay, echo, tls, cert)
+        except BaseException:
+            self.__exit__(None, None, None)
+            raise
+
+    def _publish(self, delay, echo, tls, cert):
         self.manifest = {
             "delay_url": f"http://127.0.0.1:{delay.server_address[1]}/delay?ms=2",
             "delay_expected_body": "benchmark-delay-ok", "echo_host": "127.0.0.1",
@@ -107,11 +117,32 @@ class LocalServices:
         return self
 
     def __exit__(self, *_):
+        errors = []
         for server in self.servers:
-            server.shutdown()
-            server.server_close()
+            try:
+                if server in self.running:
+                    server.shutdown()
+            except Exception as error:
+                errors.append(error)
+            finally:
+                try:
+                    server.server_close()
+                except Exception as error:
+                    errors.append(error)
         for thread in self.threads:
             thread.join(timeout=2)
+            if thread.is_alive():
+                errors.append(RuntimeError("Owned fixture thread did not stop"))
+        self.running.clear()
+        path = self.data_dir / "services.json"
+        if self.manifest is not None and path.is_file():
+            try:
+                if json.loads(path.read_text(encoding="utf-8")) == self.manifest:
+                    path.unlink()
+            except (OSError, ValueError) as error:
+                errors.append(error)
+        if errors:
+            raise ExceptionGroup("Owned fixture cleanup failed", errors)
 
 
 def open_loop_http(url, rate, duration_seconds, expected_body, *, method="GET", body=None,

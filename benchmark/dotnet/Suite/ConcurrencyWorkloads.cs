@@ -14,7 +14,7 @@ public sealed partial class CoreWorkloads
     {
         if (id == "M03") InitializeLinked();
         if (id.StartsWith("N")) InitializeNative();
-        if (id is "I01" or "I02") EnsureFile(WorkFile(), Smoke ? 65536 : 1L << 30);
+        if (id is "I01" or "I02") PrepareIoFile();
         if (id == "I03") plainEcho ??= OpenEcho(false);
         if (id == "I04") InitializeTlsTrust();
         if (id == "I04" && parameter == "persistent-transfer") secureEcho ??= OpenEcho(true);

@@ -21,6 +21,15 @@ public sealed class DatabaseSession : IDisposable
     private readonly Dictionary<string, string> sql = [];
     private readonly string? dataDirectory;
     private readonly bool ownsInitializedNetwork;
+    private readonly Dictionary<string, string> fixtureHashes;
+    private readonly StateSnapshot canonicalState;
+    private volatile bool requiresReset;
+    private sealed record StateSnapshot(string sha256, Dictionary<string, int> counts);
+    private static readonly (string File, string Table, string[] Columns)[] Tables = [
+        ("customers.csv", "customer", ["id", "email", "name", "balance_cents", "version"]),
+        ("products.csv", "product", ["id", "sku", "name", "price_cents"]),
+        ("orders.csv", "orders", ["id", "customer_id", "status", "created_epoch_ms", "total_cents", "version"]),
+        ("order_lines.csv", "order_line", ["id", "order_id", "line_no", "product_id", "quantity", "unit_price_cents"])];
     private static object? blackhole;
     public DatabaseSession(string root, string engine, string access, string? connectionString = null,
         string? dataDirectory = null, string[]? allowedHosts = null, string? ownedDatabaseName = null,
@@ -28,17 +37,22 @@ public sealed class DatabaseSession : IDisposable
     {
         this.root = Path.GetFullPath(root); this.engine = engine; this.access = access; this.dataDirectory = dataDirectory; this.ownsInitializedNetwork = engine != "sqlite" && initializeNetwork;
         if (access is not ("raw" or "orm")) throw new ArgumentException("Invalid access mode");
+        if (string.IsNullOrEmpty(dataDirectory)) throw new ArgumentException("Canonical CSV directory required for verified startup");
+        fixtureHashes = Tables.ToDictionary(t => t.File, t => Convert.ToHexStringLower(SHA256.HashData(File.ReadAllBytes(Path.Combine(dataDirectory, t.File)))));
+        canonicalState = FixtureState(dataDirectory); VerifyFixtures();
         if (engine == "sqlite")
         {
             this.connectionString = new SqliteConnectionStringBuilder { DataSource = "bench_" + Guid.NewGuid().ToString("N"),
                 Mode = SqliteOpenMode.Memory, Cache = SqliteCacheMode.Shared, Pooling = false, DefaultTimeout = 5 }.ToString();
-            anchor = NewConnection(); anchor.Open(); Configure(anchor);
+            anchor = NewConnection(); try { anchor.Open(); Configure(anchor); } catch { anchor.Dispose(); throw; }
         }
         else
         {
             if (string.IsNullOrEmpty(connectionString)) throw new ArgumentException("Network connection environment is required");
             this.connectionString = GuardConnection(engine, connectionString, allowedHosts ?? [], ownedDatabaseName);
         }
+        try
+        {
         foreach (string path in Directory.GetFiles(Path.Combine(this.root, "queries", engine), "*.sql"))
             sql[Path.GetFileName(path)] = File.ReadAllText(path);
         if (engine == "sqlite" || initializeNetwork)
@@ -51,13 +65,17 @@ public sealed class DatabaseSession : IDisposable
                 exists.CommandText = "SELECT COUNT(*) FROM information_schema.tables WHERE table_type = 'BASE TABLE' AND table_schema = '" + (engine == "postgresql" ? "public" : "dbo") + "'";
                 if (Convert.ToInt64(exists.ExecuteScalar()) != 0) throw new InvalidOperationException("Initialization requires an empty owned database");
             }
-            using var schema = c.CreateCommand(); schema.CommandText = File.ReadAllText(Path.Combine(this.root, "schema", engine + ".sql")); schema.ExecuteNonQuery();
-            Import(c, dataDirectory);
+            using var tx = Begin(c);
+            using var schema = c.CreateCommand(); schema.Transaction = tx; schema.CommandText = File.ReadAllText(Path.Combine(this.root, "schema", engine + ".sql")); schema.ExecuteNonQuery();
+            Import(c, dataDirectory, tx); VerifyFixtures(); AssertCanonical(StateDigest(c, tx)); tx.Commit();
         }
+        using (var c = Open()) { AssertCanonical(StateDigest(c)); }
         if (access == "orm") { using var c = Open(); using var context = new BenchContext(engine, c); _ = context.Model; }
         var prewarmed = new List<DbConnection>();
         try { for (int i = 0; i < (engine == "sqlite" ? 1 : 16); i++) prewarmed.Add(Open()); }
         finally { foreach (var c in prewarmed) c.Dispose(); }
+        }
+        catch { anchor?.Dispose(); throw; }
     }
     private static string GuardConnection(string engine, string value, string[] hosts, string? ownedName)
     {
@@ -146,6 +164,7 @@ public sealed class DatabaseSession : IDisposable
     }
     public object Execute(string caseId, Dictionary<string, object?> p)
     {
+        if (requiresReset) throw new InvalidOperationException("A failed reset requires canonical recovery before operations resume");
         if (caseId == "D08")
         {
             if (p["trace"] is not JsonElement trace || trace.ValueKind != JsonValueKind.Array) throw new ArgumentException("D08 requires canonical trace array");
@@ -227,12 +246,16 @@ public sealed class DatabaseSession : IDisposable
         PostgresException { SqlState: "40P01" } => "deadlock", PostgresException { SqlState: "40001" } => "conflict",
         _ => e.GetType().Name
     };
-    public object Reset()
+    public object Reset() => Reset(false);
+    public object Reset(bool injectFailure)
     {
         if (engine != "sqlite" && !ownsInitializedNetwork) throw new InvalidOperationException("Reset requires this session to have initialized the empty allowlisted controller-owned database");
         if (engine != "sqlite") _ = GuardConnection(engine, connectionString, (Environment.GetEnvironmentVariable("BENCH_DB_ALLOWED_HOSTS") ?? "").Split(','), Environment.GetEnvironmentVariable("BENCH_DB_OWNED_NAME"));
-        using var c = Open(); using (var tx = Begin(c)) { foreach (string table in new[] { "order_line", "orders", "product", "customer" }) { using var cmd = c.CreateCommand(); cmd.Transaction = tx; cmd.CommandText = "DELETE FROM " + table; cmd.ExecuteNonQuery(); } tx.Commit(); }
-        Import(c, dataDirectory!); return StateDigest();
+        requiresReset = true; VerifyFixtures();
+        using var c = Open(); using var tx = Begin(c);
+        foreach (string table in new[] { "order_line", "orders", "product", "customer" }) { using var cmd = c.CreateCommand(); cmd.Transaction = tx; cmd.CommandText = "DELETE FROM " + table; cmd.ExecuteNonQuery(); }
+        if (injectFailure) throw new InvalidOperationException("Injected reset rollback after delete");
+        Import(c, dataDirectory!, tx); VerifyFixtures(); var restored = StateDigest(c, tx); AssertCanonical(restored); tx.Commit(); requiresReset = false; return restored;
     }
     private object Raw(DbConnection c, string id, Dictionary<string, object?> p)
     {
@@ -324,6 +347,7 @@ public sealed class DatabaseSession : IDisposable
     }
     public object Checkout(Dictionary<string, object?> p)
     {
+        if (requiresReset) throw new InvalidOperationException("A failed reset requires canonical recovery before operations resume");
         using var c = Open();
         if (access == "orm")
         {
@@ -341,18 +365,11 @@ public sealed class DatabaseSession : IDisposable
         if (Change(c, "D05-update.sql", update, rawTx) != 1) throw new DBConcurrencyException();
         if (p.GetValueOrDefault("inject_failure") is true) throw new InvalidOperationException("Injected rollback"); rawTx.Commit(); return Map(("id", newOrder.Id), ("total_cents", newOrder.TotalCents), ("version", version));
     }
-    private void Import(DbConnection c, string directory)
+    private static IEnumerable<Dictionary<string, object?>> FixtureRows(string directory, string file, string[] columns)
     {
-        using var tx = Begin(c);
-        foreach (var (file, table, columns) in new[] {
-            ("customers.csv", "customer", new[] { "id", "email", "name", "balance_cents", "version" }),
-            ("products.csv", "product", new[] { "id", "sku", "name", "price_cents" }),
-            ("orders.csv", "orders", new[] { "id", "customer_id", "status", "created_epoch_ms", "total_cents", "version" }),
-            ("order_lines.csv", "order_line", new[] { "id", "order_id", "line_no", "product_id", "quantity", "unit_price_cents" }) })
-        {
             using var parser = new TextFieldParser(Path.Combine(directory, file), Encoding.UTF8) { HasFieldsEnclosedInQuotes = true, TrimWhiteSpace = false };
             parser.SetDelimiters(","); if (!(parser.ReadFields() ?? []).SequenceEqual(columns)) throw new InvalidDataException("CSV header differs from contract");
-            string statement = $"INSERT INTO {table} ({string.Join(',', columns)}) VALUES ({string.Join(',', columns.Select(x => ':' + x))})";
+            long previous = 0;
             while (!parser.EndOfData)
             {
                 var fields = parser.ReadFields()!; if (fields.Length != columns.Length) throw new InvalidDataException("CSV field count differs");
@@ -367,21 +384,43 @@ public sealed class DatabaseSession : IDisposable
                     }
                     else values[columns[i]] = long.Parse(fields[i], System.Globalization.CultureInfo.InvariantCulture);
                 }
-                Change(c, statement, values, tx);
+                long id = Convert.ToInt64(values["id"]); if (id <= previous) throw new InvalidDataException("Canonical CSV IDs must be positive and strictly ascending"); previous = id;
+                yield return values;
             }
-        }
-        tx.Commit();
+    }
+    private static StateSnapshot FixtureState(string directory)
+    {
+        using var hash = IncrementalHash.CreateHash(HashAlgorithmName.SHA256); var counts = new Dictionary<string, int>();
+        foreach (var (file, table, columns) in Tables) { int count = 0; foreach (var values in FixtureRows(directory, file, columns)) { AppendRow(hash, table, columns.Select(column => values[column])); count++; } counts[table] = count; }
+        return new(Convert.ToHexStringLower(hash.GetHashAndReset()), counts);
+    }
+    private void VerifyFixtures()
+    {
+        foreach (var (file, expected) in fixtureHashes) if (Convert.ToHexStringLower(SHA256.HashData(File.ReadAllBytes(Path.Combine(dataDirectory!, file)))) != expected) throw new InvalidDataException("Canonical CSV changed during database session");
+    }
+    private void AssertCanonical(StateSnapshot actual)
+    {
+        if (actual.sha256 != canonicalState.sha256 || actual.counts.Any(pair => canonicalState.counts[pair.Key] != pair.Value)) throw new InvalidDataException("Database state differs from canonical CSV snapshot");
+    }
+    private static void AppendRow(IncrementalHash hash, string table, IEnumerable<object?> values) => hash.AppendData(Encoding.UTF8.GetBytes(table + "\t" + string.Join('\t', values.Select(value => Convert.ToString(value, System.Globalization.CultureInfo.InvariantCulture))) + "\n"));
+    private void Import(DbConnection c, string directory, DbTransaction tx)
+    {
+        foreach (var (file, table, columns) in Tables) { string statement = $"INSERT INTO {table} ({string.Join(',', columns)}) VALUES ({string.Join(',', columns.Select(x => ':' + x))})"; foreach (var values in FixtureRows(directory, file, columns)) Change(c, statement, values, tx); }
     }
     public object StateDigest()
     {
-        using var c = Open(); using var hash = IncrementalHash.CreateHash(HashAlgorithmName.SHA256); var counts = new Dictionary<string, int>();
-        foreach (var (table, columns) in new[] { ("customer", "id,email,name,balance_cents,version"), ("product", "id,sku,name,price_cents"), ("orders", "id,customer_id,status,created_epoch_ms,total_cents,version"), ("order_line", "id,order_id,line_no,product_id,quantity,unit_price_cents") })
+        using var c = Open(); return StateDigest(c);
+    }
+    private static StateSnapshot StateDigest(DbConnection c, DbTransaction? tx = null)
+    {
+        using var hash = IncrementalHash.CreateHash(HashAlgorithmName.SHA256); var counts = new Dictionary<string, int>();
+        foreach (var (_, table, columns) in Tables)
         {
-            int count = 0; using var cmd = c.CreateCommand(); cmd.CommandText = $"SELECT {columns} FROM {table} ORDER BY id"; using var rows = cmd.ExecuteReader();
-            while (rows.Read()) { var fields = Enumerable.Range(0, rows.FieldCount).Select(i => Convert.ToString(rows.GetValue(i), System.Globalization.CultureInfo.InvariantCulture)); hash.AppendData(Encoding.UTF8.GetBytes(table + "\t" + string.Join('\t', fields) + "\n")); count++; }
+            int count = 0; using var cmd = c.CreateCommand(); cmd.Transaction = tx; cmd.CommandText = $"SELECT {string.Join(',', columns)} FROM {table} ORDER BY id"; using var rows = cmd.ExecuteReader();
+            while (rows.Read()) { AppendRow(hash, table, Enumerable.Range(0, rows.FieldCount).Select(i => rows.GetValue(i))); count++; }
             counts[table] = count;
         }
-        return new { sha256 = Convert.ToHexStringLower(hash.GetHashAndReset()), counts };
+        return new(Convert.ToHexStringLower(hash.GetHashAndReset()), counts);
     }
     public object Metadata()
     {

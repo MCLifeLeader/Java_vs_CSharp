@@ -10,6 +10,7 @@ from pathlib import Path
 import shutil
 import subprocess
 import sys
+import tempfile
 import unittest
 import xml.etree.ElementTree as ET
 
@@ -77,7 +78,9 @@ def flatten(suite):
 def java_tests():
     maven = os.environ.get("BENCH_MAVEN") or shutil.which("mvn") or str(ROOT / ".work/tools/apache-maven-3.9.11/bin" / ("mvn.cmd" if os.name == "nt" else "mvn"))
     command = [maven, "-B", "-q", "test"]
-    completed = subprocess.run(command, cwd=ROOT / "java/suite", capture_output=True, text=True, timeout=300)
+    from controller.benchmarkctl import run_command
+    raw = run_command(command, ROOT / "java/suite", timeout=300)
+    completed = subprocess.CompletedProcess(command, raw["exit_code"], raw["stdout"], raw["stderr"])
     log = ROOT / ".work/java-junit.log"
     log.write_text(completed.stdout + completed.stderr, encoding="utf-8")
     cases, reports = [], []
@@ -98,6 +101,17 @@ def main():
     parser.add_argument("--java", action="store_true", help="Run Java JUnit tests as well as the Python integration suite")
     parser.add_argument("--output", type=Path, default=ROOT / ".work/verification.json")
     args = parser.parse_args()
+    from controller.clean_start import RunLease
+    with RunLease(ROOT, kind="verification") as lease:
+        previous_temporary_root = tempfile.tempdir
+        tempfile.tempdir = lease.environment()["BENCH_SCRATCH_ROOT"]
+        try:
+            return verify(args, lease)
+        finally:
+            tempfile.tempdir = previous_temporary_root
+
+
+def verify(args, lease):
     before = source_inventory()
     authored = {}
     for path in sorted((ROOT / "validation").glob("test_*.py")):
@@ -114,6 +128,7 @@ def main():
     java = java_tests() if args.java else {"framework": "JUnit5/Surefire", "status": "not_run"}
     after = source_inventory()
     evidence = {"recorded_utc": datetime.now(timezone.utc).isoformat(), "source": before,
+                "clean_start": lease.clean_start_report,
                 "source_changed_during_verification": before["content_sha256"] != after["content_sha256"],
                 "python": {"framework": "unittest", "runtime": sys.version, "authored_definitions": sum(authored.values()),
                            "discovered_cases": len(discovered), "tests_run": result.testsRun,

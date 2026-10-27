@@ -24,7 +24,8 @@ def build_suite(root, config):
     from controller.benchmarkctl import run_command, require_success
     root = Path(root)
     commands = []
-    for command in (["dotnet", "restore", "Suite.csproj", "--locked-mode"],
+    for command in (["dotnet", "clean", "Suite.csproj", "--configuration", "Release"],
+                    ["dotnet", "restore", "Suite.csproj", "--locked-mode"],
                     ["dotnet", "build", "Suite.csproj", "--configuration", "Release", "--no-restore"]):
         commands.append((command, root / "dotnet" / "Suite"))
     maven = os.environ.get("BENCH_MAVEN") or shutil.which("mvn") or shutil.which("mvn.cmd")
@@ -33,8 +34,8 @@ def build_suite(root, config):
         maven = str(cached)
     if not maven:
         raise ValueError("Pinned Maven3.9.11 is unavailable; provision it or set BENCH_MAVEN")
-    commands.append(([maven, "-B", "-q", "-DskipTests", "install"], root / "java" / "database"))
-    commands.append(([maven, "-B", "-q", "-DskipTests", "package"], root / "java" / "suite"))
+    commands.append(([maven, "-B", "-q", "-DskipTests", "clean", "install"], root / "java" / "database"))
+    commands.append(([maven, "-B", "-q", "-DskipTests", "clean", "package"], root / "java" / "suite"))
     logs = []
     for command, cwd in commands:
         log = run_command(command, cwd, max(60, config["process_timeout_seconds"]))
@@ -127,7 +128,7 @@ def worker_environment(root,config=None):
     return environment
 
 
-def run_frozen_batches(root, data, config, rows, pilot, fingerprint, campaign_id, directory, evidence, resume):
+def run_frozen_batches(root, data, config, rows, pilot, fingerprint, campaign_id, directory, evidence, resume, runtime_evidence=None):
     from controller.benchmarkctl import atomic_json, utc_now
     records, errors = [], []
     schedule = paired_schedule(rows, config["seed"])
@@ -199,9 +200,11 @@ def run_frozen_batches(root, data, config, rows, pilot, fingerprint, campaign_id
                               "admitted": all(gates.values()), "gates": gates,
                               "reason": "Measurements remain excluded until every disclosed admission gate passes"}
                     result["result_hash"] = canonical_hash(result)
-                    atomic_json(checkpoint, result)
+                    result["runtime_evidence"] = dict(runtime_evidence or {})
+                    result["result_hash"] = canonical_hash({key:value for key,value in result.items() if key != "result_hash"})
                     atomic_json(evidence / (row["case_hash"] + ".worker.json"),
                                 {"command": command, "ready": worker.ready, "stdout": worker.stdout, "stderr": worker.stderr})
+                    atomic_json(checkpoint, result)
                     records.append(result)
             except Exception as error:
                 failure = {"identity": row, "status": "failed_or_invalid", "reason": str(error), "admitted": False}
@@ -211,6 +214,16 @@ def run_frozen_batches(root, data, config, rows, pilot, fingerprint, campaign_id
 
 
 def run_suite(root, config, selectors, *, stage="smoke", campaign_id=None, resume=False, pilot_path=None):
+    from controller.clean_start import RunLease, current_run
+    if current_run(root) is None:
+        with RunLease(root, kind="campaign", campaign_id=campaign_id):
+            return _run_suite(root, config, selectors, stage=stage, campaign_id=campaign_id,
+                              resume=resume, pilot_path=pilot_path)
+    return _run_suite(root, config, selectors, stage=stage, campaign_id=campaign_id,
+                      resume=resume, pilot_path=pilot_path)
+
+
+def _run_suite(root, config, selectors, *, stage="smoke", campaign_id=None, resume=False, pilot_path=None):
     from controller.benchmarkctl import atomic_json, file_hash, inventory, preflight, source_identity, utc_now
     root = Path(root).resolve()
     filters = dict(selectors)
@@ -228,8 +241,10 @@ def run_suite(root, config, selectors, *, stage="smoke", campaign_id=None, resum
     builds = build_suite(root, config)
     work = root / ".work"
     work.mkdir(exist_ok=True)
-    data = work / "suite-data" / filters["dataset"]
-    data.mkdir(parents=True, exist_ok=True)
+    from controller.clean_start import current_run
+    lease = current_run(root)
+    data = Path(tempfile.mkdtemp(prefix="fixtures-", dir=lease.environment()["BENCH_SCRATCH_ROOT"]))
+    lease.track_temp(data)
     inputs = generate_suite(data, filters["dataset"], config["seed"],http_operations=config.get('http_trace_operations'))
     inputs["files"] = {key: value for key, value in inputs["files"].items() if key not in ("services.json", "oracle.json")}
     write_oracles(data, filters["dataset"])
@@ -293,6 +308,9 @@ def run_suite(root, config, selectors, *, stage="smoke", campaign_id=None, resum
         manifest["manifest_hash"] = canonical_hash(manifest)
         atomic_json(manifest_path, manifest)
         atomic_json(evidence / "campaign-manifest.json", manifest)
+    attempt = evidence / "attempts" / lease.owner_token
+    atomic_json(attempt / "clean-start.json", lease.clean_start_report)
+    runtime_evidence = {str((attempt / "clean-start.json").relative_to(root)).replace("\\", "/"): file_hash(attempt / "clean-start.json")}
     for name,value in (("preflight.json",flight),("source.json",source),("input-manifest.json",inputs),
                        ("binaries.json",binaries),("config.json",config),("builds.json",builds),
                        ("versions.json",json.loads((root/'config/versions.lock.json').read_text(encoding='utf-8')))):
@@ -312,18 +330,19 @@ def run_suite(root, config, selectors, *, stage="smoke", campaign_id=None, resum
         pilot = None
     records, errors = [], []
     with LocalServices(root, data) as services:
-        atomic_json(evidence / "services.json", services.manifest)
+        atomic_json(attempt / "services.json", services.manifest)
+        runtime_evidence[str((attempt / "services.json").relative_to(root)).replace("\\", "/")] = file_hash(attempt / "services.json")
         from controller.database import run_database_rows
         database_rows = [row for row in rows if row["case_id"][0] == "D"]
         database_records, database_errors = run_database_rows(root, data, config, database_rows, stage,
                                                               campaign_id, fingerprint, directory, evidence,
-                                                              resume=resume, pilot=pilot)
+                                                              resume=resume, pilot=pilot, runtime_evidence=runtime_evidence)
         records.extend(database_records)
         errors.extend(database_errors)
         from controller.suite_http import run_http_rows
         http_rows = [row for row in rows if row["case_id"][0] in "HP" or row["case_id"] == "L05"]
         http_records, http_errors = run_http_rows(root, data, config, http_rows, stage, campaign_id, fingerprint,
-                                                 directory, evidence, pilot=pilot, resume=resume)
+                                                 directory, evidence, pilot=pilot, resume=resume, runtime_evidence=runtime_evidence)
         records.extend(http_records)
         errors.extend(http_errors)
         # Fresh process per macro/full repetition; smoke can reuse preparation
@@ -332,7 +351,7 @@ def run_suite(root, config, selectors, *, stage="smoke", campaign_id=None, resum
         if stage == "full":
             generic_rows = [row for row in rows if row["case_id"][0] in BATCH_DOMAINS and row["case_id"] != "L05"]
             full_records, full_errors = run_frozen_batches(root, data, config, generic_rows, pilot, fingerprint,
-                                                         campaign_id, directory, evidence, resume)
+                                                         campaign_id, directory, evidence, resume, runtime_evidence)
             records.extend(full_records)
             errors.extend(full_errors)
         for row in rows:
@@ -344,6 +363,20 @@ def run_suite(root, config, selectors, *, stage="smoke", campaign_id=None, resum
             generic = [row for row in group if row["case_id"][0] in BATCH_DOMAINS and row["case_id"] != "L05"]
             if not generic:
                 continue
+            pending = []
+            for row in generic:
+                checkpoint = directory / "records" / (row["case_hash"] + ".json")
+                if checkpoint.exists() and resume:
+                    existing = json.loads(checkpoint.read_text(encoding="utf-8"))
+                    unsigned = {key:value for key,value in existing.items() if key != "result_hash"}
+                    if existing.get("fingerprint") != fingerprint or existing.get("result_hash") != canonical_hash(unsigned):
+                        raise ValueError("Result checkpoint fingerprint/content differs")
+                    records.append(existing)
+                else:
+                    pending.append(row)
+            if not pending:
+                continue
+            generic = pending
             first = generic[0]
             command = suite_command(root, data, first)
             try:
@@ -373,14 +406,17 @@ def run_suite(root, config, selectors, *, stage="smoke", campaign_id=None, resum
                             result.update({"contract_version": "suite-1", "campaign_id": campaign_id,
                                            "identity": row, "fingerprint": fingerprint, "command": command,
                                            "utc_completed": utc_now()})
+                            result["runtime_evidence"] = dict(runtime_evidence)
                             result["result_hash"] = canonical_hash(result)
+                            atomic_json(evidence / (row["case_hash"] + ".worker.json"),
+                                        {"command": command, "ready": worker.ready, "stdout": list(worker.stdout), "stderr": list(worker.stderr)})
                             atomic_json(checkpoint, result)
                             records.append(result)
                         except Exception as error:
                             failure = {"identity": row, "status": "invalid_or_blocked", "reason": str(error), "admitted": False}
                             atomic_json(directory / "failures" / (row["case_hash"] + ".json"), failure)
                             errors.append(failure)
-                    atomic_json(evidence / (canonical_hash(command) + ".worker.json"),
+                    atomic_json(evidence / (canonical_hash(command) + "-" + lease.owner_token + ".worker.json"),
                                 {"command": command, "ready": worker.ready, "stdout": worker.stdout, "stderr": worker.stderr})
             except Exception as error:
                 errors.extend({"identity": row, "status": "blocked", "reason": str(error)} for row in generic)

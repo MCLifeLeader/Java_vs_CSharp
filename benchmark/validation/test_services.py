@@ -8,6 +8,7 @@ import sys
 import tempfile
 import unittest
 from urllib.parse import urlsplit
+from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
@@ -45,6 +46,42 @@ class ServiceTests(unittest.TestCase):
         self.assertEqual(3, len(result["observations"]))
         self.assertTrue(all(row["latency_ms"] > 0 for row in result["observations"]))
         self.assertFalse(result["generator_capacity_calibrated"])
+
+    def test_partial_start_failure_closes_already_bound_fixture_sockets(self):
+        from controller import services as module
+        opened = []
+        http_server, echo_server = module.ThreadingHTTPServer, module.EchoServer
+        def make_http(*args, **kwargs):
+            server = http_server(*args, **kwargs)
+            opened.append(server)
+            return server
+        def make_echo(*args, **kwargs):
+            server = echo_server(*args, **kwargs)
+            opened.append(server)
+            return server
+        with tempfile.TemporaryDirectory() as temporary:
+            fixture = LocalServices(ROOT, temporary)
+            with patch.object(module, "ThreadingHTTPServer", side_effect=make_http), patch.object(module, "EchoServer", side_effect=make_echo), patch.object(module, "TlsEchoServer", side_effect=RuntimeError("Injected TLS startup failure")):
+                with self.assertRaisesRegex(RuntimeError, "Injected TLS"):
+                    fixture.__enter__()
+            self.assertEqual(2, len(opened))
+            self.assertTrue(all(server.socket.fileno() == -1 for server in opened))
+            self.assertFalse((Path(temporary) / "services.json").exists())
+
+    def test_teardown_failure_still_closes_other_fixtures_and_removes_manifest(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            fixture = LocalServices(ROOT, temporary)
+            fixture.__enter__()
+            original = fixture.servers[0].shutdown
+            def fail_after_shutdown():
+                original()
+                raise OSError("Injected shutdown failure")
+            with patch.object(fixture.servers[0], "shutdown", side_effect=fail_after_shutdown):
+                with self.assertRaises(ExceptionGroup):
+                    fixture.__exit__(None, None, None)
+            self.assertTrue(all(server.socket.fileno() == -1 for server in fixture.servers))
+            self.assertTrue(all(not thread.is_alive() for thread in fixture.threads))
+            self.assertFalse((Path(temporary) / "services.json").exists())
 
     def test_rejects_unlisted_remote_host(self):
         with self.assertRaisesRegex(ValueError, "loopback"):

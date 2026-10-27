@@ -1,6 +1,7 @@
 """Full-suite controller failure paths, weighted inventory and native evidence parsers."""
 
 from copy import deepcopy
+from contextlib import contextmanager
 import hashlib
 import json
 from pathlib import Path
@@ -25,6 +26,25 @@ from controller.lifecycle import http_load
 
 
 class SuiteControllerTests(unittest.TestCase):
+    def test_interrupted_smoke_closes_cached_http_server(self):
+        from controller.suite_http import run_http_rows
+        closed = []
+        @contextmanager
+        def fake_service(*args, **kwargs):
+            try:
+                yield {"ready": {"port": 12345}, "stdout": [], "stderr": []}
+            finally:
+                closed.append(True)
+        row = {"case_id":"H01", "case_hash":"test", "language":"csharp", "engine":None,
+               "access":None, "profile":"controlled", "workers":1, "dataset":"smoke",
+               "parameter_id":"get", "repetition":1, "track":"lts"}
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory)
+            with patch("controller.suite_http.service_process", fake_service), patch("controller.suite_http.first_response", side_effect=KeyboardInterrupt("Injected interrupt")):
+                with self.assertRaises(KeyboardInterrupt):
+                    run_http_rows(ROOT, path, {"process_timeout_seconds":1}, [row], "smoke", "interrupted", "frozen", path, path)
+        self.assertEqual([True], closed)
+
     def test_full_weight_inventory_exactly_one_hundred_without_campaign_narrowing(self):
         config = json.loads((ROOT/'config/campaign.json').read_text())
         weights = json.loads((ROOT/'config/weights.json').read_text())
@@ -213,6 +233,34 @@ class SuiteEvidenceTests(unittest.TestCase):
         self.log.write_text('{"changed":true}')
         with self.assertRaisesRegex(ValueError,'hash differs'):
             finalize_record(self.root,self.record,self.manifest,self.log.parent)
+    def test_finalized_record_is_unchanged_when_later_attempt_evidence_appears(self):
+        before=json.dumps(self.record,sort_keys=True)
+        later=self.log.parent/'attempts/later'
+        later.mkdir(parents=True)
+        (later/'services.json').write_text('{"port":123}')
+        (later/(self.record['identity']['case_hash']+'.worker.json')).write_text('{"new":true}')
+        observed=finalize_record(self.root,self.record,self.manifest,self.log.parent)
+        self.assertIs(observed,self.record)
+        self.assertEqual(json.dumps(observed,sort_keys=True),before)
+    def test_changed_finalized_record_is_not_resigned(self):
+        original=self.record['result_hash']
+        self.record['reason']='changed after finalization'
+        with self.assertRaisesRegex(ValueError,'content/provenance'):
+            finalize_record(self.root,self.record,self.manifest,self.log.parent)
+        self.assertEqual(self.record['result_hash'],original)
+    def test_new_record_attaches_only_explicit_attempt_receipts(self):
+        del self.record['raw_evidence']
+        attempt=self.log.parent/'attempts/current'
+        attempt.mkdir(parents=True)
+        current=attempt/'services.json'
+        current.write_text('{"port":123}')
+        other=self.log.parent/'attempts/other'
+        other.mkdir(parents=True)
+        (other/'services.json').write_text('{"port":456}')
+        (self.log.parent/'config.json').write_text('{}')
+        self.record['runtime_evidence']={current.relative_to(self.root).as_posix():hashlib.sha256(current.read_bytes()).hexdigest()}
+        observed=finalize_record(self.root,self.record,self.manifest,self.log.parent)
+        self.assertEqual(set(observed['raw_evidence']),{'evidence/test/config.json','evidence/test/attempts/current/services.json'})
     def test_nonfinite_metric_rejected_even_when_rehashed(self):
         self.manifest['stage']='full'
         self.record.update(status='measured',performance={'throughput_per_second':float('nan')})

@@ -11,19 +11,130 @@ from pathlib import Path
 import subprocess
 import unittest
 import os
+import shutil
+import tempfile
+import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / ".work/suite-data/smoke"
 DOTNET = ROOT / "dotnet/Database/bin/Release/net10.0/Database.dll"
 JAVA = ROOT / "java/database/target/database-worker-1.0.0-all.jar"
+sys.path.insert(0, str(ROOT))
 
 
 from database_oracle import Oracle, new_order
 
 
-@unittest.skipUnless(DOTNET.exists() and JAVA.exists() and (DATA / "customers.csv").exists(),
-                     "Build both DB modules and generate suite smoke CSV fixtures first")
+def run_worker(command, *, input=None, timeout=60, env=None, text=True, capture_output=True):
+    """Preserve CompletedProcess results while inheriting an active verification lease."""
+    from controller.benchmarkctl import run_command
+    if not text or not capture_output:
+        raise ValueError("Worker contracts require captured text results")
+    record = run_command(command, cwd=ROOT, timeout=timeout, stdin=input, environment=env)
+    return subprocess.CompletedProcess(command, record["exit_code"], record["stdout"], record["stderr"])
+
+
+@unittest.skipUnless(DOTNET.exists() and JAVA.exists(), "Build both DB modules first")
 class DatabaseWorkerTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        global DATA
+        from data.generate_suite import generate_suite
+        previous = DATA
+        temporary = tempfile.TemporaryDirectory(prefix="db-worker-fixtures-")
+        cls.addClassCleanup(temporary.cleanup)
+        cls.addClassCleanup(lambda: globals().__setitem__("DATA", previous))
+        DATA = Path(temporary.name)
+        generate_suite(DATA, "smoke")
+
+    def test_failed_reset_and_abrupt_restart_restore_verified_canonical_state(self):
+        initial = Oracle(DATA).state()
+        for language in ("csharp", "java"):
+            for access in ("raw", "orm"):
+                with self.subTest(language=language, access=access), tempfile.TemporaryDirectory(prefix="db-reset-") as temporary:
+                    fixture = Path(temporary)
+                    for name in ("customers.csv", "products.csv", "orders.csv", "order_lines.csv"):
+                        shutil.copyfile(DATA / name, fixture / name)
+                    command = (["dotnet", str(DOTNET)] if language == "csharp" else
+                               ["java", "--enable-native-access=ALL-UNNAMED", "-jar", str(JAVA)])
+                    command += [str(ROOT), "sqlite", access, str(fixture)]
+                    def exchange(process, request):
+                        process.stdin.write(json.dumps(request) + "\n")
+                        process.stdin.flush()
+                        return json.loads(process.stdout.readline())
+                    with (fixture / "stderr.txt").open("w", encoding="utf-8") as errors:
+                        from controller.clean_start import current_run
+                        lease = current_run()
+                        environment = {**os.environ, **lease.environment()} if lease else None
+                        process = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=errors,
+                                                   text=True, env=environment, start_new_session=os.name != "nt")
+                        if lease:
+                            lease.track_process(process)
+                        try:
+                            self.assertEqual(initial, json.loads(process.stdout.readline())["state"])
+                            oracle = Oracle(DATA)
+                            for case, parameter in [("D05", {"customer_id": 1, "delta_cents": 21}), ("D06", new_order(31000))]:
+                                self.assertEqual(oracle.execute(case, parameter), exchange(process, {"case_id": case, "input": parameter})["result"])
+                            dirty = oracle.state()
+                            self.assertNotEqual(initial, dirty)
+                            self.assertEqual("error", exchange(process, {"case_id": "RESET", "inject_failure": True})["status"])
+                            self.assertEqual(dirty, exchange(process, {"case_id": "STATE"})["result"])
+                            self.assertEqual("error", exchange(process, {"case_id": "D01", "input": {"customer_id": 1}})["status"])
+                            product_file = fixture / "products.csv"
+                            original = product_file.read_bytes()
+                            product_file.write_bytes(original.replace(b"Product", b"Changed", 1))
+                            self.assertNotEqual(original, product_file.read_bytes())
+                            self.assertEqual("error", exchange(process, {"case_id": "RESET"})["status"])
+                            self.assertEqual(dirty, exchange(process, {"case_id": "STATE"})["result"])
+                            product_file.write_bytes(original)
+                            self.assertEqual(initial, exchange(process, {"case_id": "RESET"})["result"])
+                            self.assertEqual(Oracle(DATA).execute("D01", {"customer_id": 1}), exchange(process, {"case_id": "D01", "input": {"customer_id": 1}})["result"])
+                            self.assertEqual("ok", exchange(process, {"case_id": "D06", "input": new_order(31000)})["status"])
+                            self.assertEqual("error", exchange(process, {"case_id": "H06", "input": new_order(31001, inject_failure=True)})["status"])
+                            # Terminate without QUIT/disposal after committed and failed work.
+                            process.kill()
+                            process.wait(timeout=10)
+                        finally:
+                            if process.poll() is None:
+                                process.kill()
+                                process.wait(timeout=10)
+                            process.stdin.close()
+                            process.stdout.close()
+                            if lease:
+                                lease.process_finished(process)
+                    restarted = run_worker(command, input=json.dumps({"case_id": "D06", "input": new_order(31000)}) + '\n{"case_id":"QUIT"}\n', text=True, capture_output=True, timeout=60)
+                    self.assertEqual(0, restarted.returncode, restarted.stderr[-2000:])
+                    output = [json.loads(line) for line in restarted.stdout.splitlines()]
+                    self.assertEqual(initial, output[0]["state"])
+                    self.assertEqual("ok", output[1]["status"])
+
+    def test_failed_initial_import_does_not_poison_next_clean_start(self):
+        initial = Oracle(DATA).state()
+        for language in ("csharp", "java"):
+            for access in ("raw", "orm"):
+                with self.subTest(language=language, access=access), tempfile.TemporaryDirectory(prefix="db-import-") as temporary:
+                    fixture = Path(temporary)
+                    for name in ("customers.csv", "products.csv", "orders.csv", "order_lines.csv"):
+                        shutil.copyfile(DATA / name, fixture / name)
+                    lines = fixture / "order_lines.csv"
+                    with lines.open(encoding="utf-8", newline="") as source:
+                        rows = list(csv.DictReader(source))
+                    rows[-1]["product_id"] = "999999"
+                    with lines.open("w", encoding="utf-8", newline="") as target:
+                        writer = csv.DictWriter(target, fieldnames=rows[0].keys())
+                        writer.writeheader()
+                        writer.writerows(rows)
+                    command = (["dotnet", str(DOTNET)] if language == "csharp" else
+                               ["java", "--enable-native-access=ALL-UNNAMED", "-jar", str(JAVA)])
+                    command += [str(ROOT), "sqlite", access, str(fixture)]
+                    failed = run_worker(command, text=True, capture_output=True, timeout=60)
+                    self.assertEqual(1, failed.returncode)
+                    self.assertEqual("blocked", json.loads(failed.stdout.splitlines()[-1])["status"])
+                    shutil.copyfile(DATA / "order_lines.csv", lines)
+                    recovered = run_worker(command, input='{"case_id":"QUIT"}\n', text=True, capture_output=True, timeout=60)
+                    self.assertEqual(0, recovered.returncode, recovered.stderr[-2000:])
+                    self.assertEqual(initial, json.loads(recovered.stdout.splitlines()[0])["state"])
+
     def test_untimed_audit_and_commit_reconciliation_preserve_order_and_state(self):
         first_trace = [
             {"case_id": "D01", "input": {"customer_id": 1}},
@@ -64,7 +175,7 @@ class DatabaseWorkerTests(unittest.TestCase):
                 with self.subTest(language=language, access=access):
                     command = (["dotnet", str(DOTNET)] if language == "csharp" else
                                ["java", "--enable-native-access=ALL-UNNAMED", "-jar", str(JAVA)])
-                    run = subprocess.run(command + [str(ROOT), "sqlite", access, str(DATA)],
+                    run = run_worker(command + [str(ROOT), "sqlite", access, str(DATA)],
                         input="".join(json.dumps(r) + "\n" for r in requests), text=True, capture_output=True, timeout=90)
                     self.assertEqual(0, run.returncode, run.stderr[-2000:])
                     output = [json.loads(line) for line in run.stdout.splitlines()][1:]
@@ -85,7 +196,7 @@ class DatabaseWorkerTests(unittest.TestCase):
             command = (["dotnet", str(DOTNET)] if language == "csharp" else
                        ["java", "--enable-native-access=ALL-UNNAMED", "-jar", str(JAVA)])
             clean_environment = {k: v for k, v in os.environ.items() if not k.startswith("BENCH_DB_")}
-            denied = subprocess.run(command + [str(ROOT), "postgresql", "raw", str(DATA)],
+            denied = run_worker(command + [str(ROOT), "postgresql", "raw", str(DATA)],
                                     text=True, capture_output=True, timeout=30, env=clean_environment)
             with self.subTest(language=language, target="unconfigured network"):
                 self.assertEqual(1, denied.returncode)
@@ -95,7 +206,7 @@ class DatabaseWorkerTests(unittest.TestCase):
                 f"Host=127.0.0.1;Port=1;Database={owned};Username=unused;Password=unused" if language == "csharp" else
                 f"jdbc:postgresql://127.0.0.1:1/{owned}"), BENCH_DB_ALLOWED_HOSTS="127.0.0.1",
                 BENCH_DB_OWNED_NAME=owned, BENCH_DB_INITIALIZE="1")
-            unleased = subprocess.run(command + [str(ROOT), "postgresql", "raw", str(DATA)],
+            unleased = run_worker(command + [str(ROOT), "postgresql", "raw", str(DATA)],
                                      text=True, capture_output=True, timeout=10, env=lease_environment)
             with self.subTest(language=language, target="allowlisted target without controller lease"):
                 self.assertEqual(1, unleased.returncode)
@@ -106,7 +217,7 @@ class DatabaseWorkerTests(unittest.TestCase):
                 {"case_id": "BATCH", "workload": "D06", "trace": [new_order(90000), new_order(90000)], "iterations": 1},
                 {"case_id": "BATCH", "workload": "D08", "trace": [{"case_id": "D01", "input": {"customer_id": 1}}], "iterations": 1},
             ]
-            result = subprocess.run(command + [str(ROOT), "sqlite", "raw", str(DATA)],
+            result = run_worker(command + [str(ROOT), "sqlite", "raw", str(DATA)],
                 input="".join(json.dumps(r) + "\n" for r in invalid + [{"case_id": "STATE"}, {"case_id": "QUIT"}]),
                 text=True, capture_output=True, timeout=60, env=clean_environment)
             with self.subTest(language=language, target="invalid trace"):
@@ -154,7 +265,7 @@ class DatabaseWorkerTests(unittest.TestCase):
                         {"case_id": "STATE"}, batch, {"case_id": "RESET"}, {"case_id": "STATE"}, {"case_id": "QUIT"}]
                     command = (["dotnet", str(DOTNET)] if language == "csharp" else
                                ["java", "--enable-native-access=ALL-UNNAMED", "-jar", str(JAVA)])
-                    result = subprocess.run(command + [str(ROOT), "sqlite", access, str(DATA)],
+                    result = run_worker(command + [str(ROOT), "sqlite", access, str(DATA)],
                         input="".join(json.dumps(r) + "\n" for r in requests), text=True, capture_output=True, timeout=90)
                     self.assertEqual(0, result.returncode, result.stderr[-2000:])
                     output = [json.loads(line) for line in result.stdout.splitlines()]

@@ -62,12 +62,37 @@ def file_hash(path):
 
 
 def run_command(command, cwd=ROOT, timeout=60, stdin=None, environment=None):
+    from controller.clean_start import current_run
+    lease = current_run()
+    process = None
     try:
-        result = subprocess.run([str(part) for part in command], cwd=cwd, input=stdin,
-                                capture_output=True, text=True, encoding="utf-8", errors="replace",
-                                timeout=timeout, shell=False, env=environment)
+        if lease is None:
+            result = subprocess.run([str(part) for part in command], cwd=cwd, input=stdin,
+                                    capture_output=True, text=True, encoding="utf-8", errors="replace",
+                                    timeout=timeout, shell=False, env=environment)
+        else:
+            child_environment = {**(environment if environment is not None else os.environ),
+                                 **lease.environment(), "MSBUILDDISABLENODEREUSE": "1",
+                                 "DOTNET_CLI_USE_MSBUILD_SERVER": "0"}
+            process = subprocess.Popen([str(part) for part in command], cwd=cwd,
+                                       stdin=subprocess.PIPE if stdin is not None else subprocess.DEVNULL,
+                                       stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,
+                                       encoding="utf-8", errors="replace", shell=False,
+                                       env=child_environment, start_new_session=os.name != "nt")
+            lease.track_process(process)
+            stdout, stderr = process.communicate(input=stdin, timeout=timeout)
+            result = subprocess.CompletedProcess(command, process.returncode, stdout, stderr)
     except (FileNotFoundError, subprocess.TimeoutExpired) as error:
         raise Blocked(f"Command unavailable or exceeded {timeout}s: {Path(str(command[0])).name}") from error
+    finally:
+        if process is not None:
+            if process.poll() is None:
+                process.kill()
+                process.wait(timeout=5)
+            lease.process_finished(process)
+            for stream in (process.stdin, process.stdout, process.stderr):
+                if stream is not None:
+                    stream.close()
     return {"command": [str(part) for part in command], "cwd": str(cwd),
             "exit_code": result.returncode, "stdout": result.stdout, "stderr": result.stderr}
 
@@ -210,11 +235,19 @@ def preflight(config):
 def build_workers(config):
     timeout = config["process_timeout_seconds"]
     commands = [
+        (["dotnet", "clean", "Worker.csproj", "--configuration", "Release"], ROOT / "dotnet"),
         (["dotnet", "restore", "Worker.csproj", "--locked-mode"], ROOT / "dotnet"),
         (["dotnet", "build", "Worker.csproj", "--configuration", "Release", "--no-restore"], ROOT / "dotnet"),
         (["javac", "--release", "25", "-d", str(ROOT / "java" / "build"),
           str(ROOT / "java" / "src" / "BenchmarkWorker.java")], ROOT),
     ]
+    java_output = ROOT / "java" / "build"
+    if not java_output.resolve().is_relative_to(ROOT.resolve()) or java_output.is_symlink():
+        raise ValueError("Legacy Java output directory is outside the owned checkout")
+    for path in java_output.rglob("*.class"):
+        if path.is_symlink() or not path.resolve().is_relative_to(java_output):
+            raise ValueError("Legacy Java output contains an unowned link")
+        path.unlink()
     records = []
     for command, cwd in commands:
         record = run_command(command, cwd, timeout)
@@ -446,69 +479,85 @@ def parser():
             command.add_argument("--pilot", type=Path, help="Frozen pilot-lock.json for full measured execution")
         if name == "report":
             command.add_argument("--campaign", required=True)
+    clean = commands.add_parser("clean-start", help="Inspect or recover repository-owned leftovers before a run")
+    clean.add_argument("--dry-run", action="store_true", help="Inspect without changing processes, containers or files")
     return result
 
 
 def main(argv=None):
     args = parser().parse_args(argv)
     try:
-        from controller.toolchain import activate_toolchain
-        activate_toolchain(ROOT)
-        config = resolve_config(args.config)
-        selectors = selectors_from(args)
-        if args.command == "preflight":
-            output = preflight(config)
-            code = 0 if output["status"] == "ready_for_smoke" else 2
-        elif args.command == "inventory":
-            rows = inventory(ROOT, config, selectors)
-            output = {"track": config["track"], "authored_definitions": len(load_catalog(ROOT)),
-                      "expanded_rows": len(rows), "inventory": rows,
-                      "completeness": "Declared variants; pilot-dependent rates/resources remain unresolved"}
-            code = 0
-        elif args.command == "validate":
-            if args.suite or (args.all and not args.legacy):
-                from controller.suite import run_suite
-                output, code = run_suite(ROOT, config, selectors, stage="smoke")
-                print(json.dumps(output, indent=2, sort_keys=True))
-                return code
-            rows = inventory(ROOT, config, {**selectors, "repetition": selectors.get("repetition", 1)})
-            for row in rows:
-                row['implemented'] = bool(row['implemented'] and row['case_id'] in ('C01','K01') and row['profile']=='controlled')
-            flight = preflight(config)
-            if flight["status"] != "ready_for_smoke":
-                output, code = {"status": "blocked", "preflight": flight}, 2
-            else:
-                builds = build_workers(config)
-                validation = semantic_validation(config)
-                gaps = [row for row in rows if not row["implemented"]]
-                output = {"status": "partial" if gaps else "pass", "validation": validation,
-                          "selected_rows": len(rows), "unavailable_rows": len(gaps), "builds": builds,
-                          "scope": "Implemented C01/K01 semantics only; full-suite parity remains incomplete"}
-                code = 2 if gaps else 0
-        elif args.command == "run":
-            if args.dry_run:
-                output, code = dry_run(config, selectors, args.stage), 0
-            elif args.suite or (args.all and not args.legacy):
-                from controller.suite import run_suite
-                output, code = run_suite(ROOT, config, selectors, stage=args.stage,
-                                         campaign_id=args.campaign, resume=args.resume, pilot_path=args.pilot)
-            elif args.stage != "smoke":
-                output, code = dry_run(config, selectors, args.stage), 2
-                output["status"] = "blocked"
-            else:
-                output, code = smoke(config, selectors, args.campaign, args.resume)
-        else:
-            manifest = read_json(ROOT / "results" / args.campaign / "manifest.json") if re.fullmatch(r"[A-Za-z0-9_-]+", args.campaign) else {}
-            if manifest.get("suite"):
-                from controller.suite import summarize_suite
-                output, code = summarize_suite(ROOT, args.campaign), 0
-            else:
-                output, code = summarize(ROOT, args.campaign), 0
-        print(json.dumps(output, indent=2, sort_keys=True))
-        return code
+        if args.command == "clean-start":
+            from controller.clean_start import cleanup_owned
+            output = cleanup_owned(ROOT, dry_run=args.dry_run)
+            print(json.dumps(output, indent=2, sort_keys=True))
+            return 0 if output.get("ready") else 2
+        from contextlib import nullcontext
+        from controller.clean_start import RunLease
+        executes = args.command == "validate" or (args.command == "run" and not args.dry_run and (args.stage == "smoke" or args.suite or (args.all and not args.legacy)))
+        scope = RunLease(ROOT, kind="campaign", campaign_id=getattr(args, "campaign", None)) if executes else nullcontext()
+        with scope:
+            return execute(args)
     except (Blocked, ValueError, KeyError, TypeError, OSError, json.JSONDecodeError) as error:
         print(json.dumps({"status": "blocked" if isinstance(error, Blocked) else "error", "reason": str(error)}, indent=2))
         return 2
+
+
+def execute(args):
+    from controller.toolchain import activate_toolchain
+    activate_toolchain(ROOT)
+    config = resolve_config(args.config)
+    selectors = selectors_from(args)
+    if args.command == "preflight":
+        output = preflight(config)
+        code = 0 if output["status"] == "ready_for_smoke" else 2
+    elif args.command == "inventory":
+        rows = inventory(ROOT, config, selectors)
+        output = {"track": config["track"], "authored_definitions": len(load_catalog(ROOT)),
+                  "expanded_rows": len(rows), "inventory": rows,
+                  "completeness": "Declared variants; pilot-dependent rates/resources remain unresolved"}
+        code = 0
+    elif args.command == "validate":
+        if args.suite or (args.all and not args.legacy):
+            from controller.suite import run_suite
+            output, code = run_suite(ROOT, config, selectors, stage="smoke")
+            print(json.dumps(output, indent=2, sort_keys=True))
+            return code
+        rows = inventory(ROOT, config, {**selectors, "repetition": selectors.get("repetition", 1)})
+        for row in rows:
+            row['implemented'] = bool(row['implemented'] and row['case_id'] in ('C01','K01') and row['profile']=='controlled')
+        flight = preflight(config)
+        if flight["status"] != "ready_for_smoke":
+            output, code = {"status": "blocked", "preflight": flight}, 2
+        else:
+            builds = build_workers(config)
+            validation = semantic_validation(config)
+            gaps = [row for row in rows if not row["implemented"]]
+            output = {"status": "partial" if gaps else "pass", "validation": validation,
+                      "selected_rows": len(rows), "unavailable_rows": len(gaps), "builds": builds,
+                      "scope": "Implemented C01/K01 semantics only; full-suite parity remains incomplete"}
+            code = 2 if gaps else 0
+    elif args.command == "run":
+        if args.dry_run:
+            output, code = dry_run(config, selectors, args.stage), 0
+        elif args.suite or (args.all and not args.legacy):
+            from controller.suite import run_suite
+            output, code = run_suite(ROOT, config, selectors, stage=args.stage,
+                                     campaign_id=args.campaign, resume=args.resume, pilot_path=args.pilot)
+        elif args.stage != "smoke":
+            output, code = dry_run(config, selectors, args.stage), 2
+            output["status"] = "blocked"
+        else:
+            output, code = smoke(config, selectors, args.campaign, args.resume)
+    else:
+        manifest = read_json(ROOT / "results" / args.campaign / "manifest.json") if re.fullmatch(r"[A-Za-z0-9_-]+", args.campaign) else {}
+        if manifest.get("suite"):
+            from controller.suite import summarize_suite
+            output, code = summarize_suite(ROOT, args.campaign), 0
+        else:
+            output, code = summarize(ROOT, args.campaign), 0
+    print(json.dumps(output, indent=2, sort_keys=True))
+    return code
 
 
 if __name__ == "__main__":

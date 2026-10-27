@@ -16,7 +16,7 @@ try
             using var json = JsonDocument.Parse(text); var command = json.RootElement.GetProperty("case_id").GetString();
             if (command == "QUIT") break;
             object result = command switch { "STATE" => session.StateDigest(), "METADATA" => session.Metadata(),
-                "RESET" => session.Reset(),
+                "RESET" => session.Reset(json.RootElement.TryGetProperty("inject_failure", out var injected) && injected.GetBoolean()),
                 "AUDIT" => session.Audit(json.RootElement.GetProperty("workload").GetString()!, json.RootElement.GetProperty("trace")),
                 "COMMITTED" => session.CommittedOrders(json.RootElement.GetProperty("ids").EnumerateArray().Select(id => id.GetInt64())),
                 "BATCH" => session.Batch(json.RootElement.GetProperty("workload").GetString()!, json.RootElement.GetProperty("trace"), json.RootElement.GetProperty("iterations").GetInt32(), json.RootElement.TryGetProperty("workers", out var workers) ? workers.GetInt32() : 1),

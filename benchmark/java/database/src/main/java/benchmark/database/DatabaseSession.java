@@ -26,10 +26,14 @@ public final class DatabaseSession implements AutoCloseable {
     private final String engine, access;
     private final Connection anchor;
     private final HikariDataSource pool;
-    private final SessionFactory factory;
+    private SessionFactory factory;
     private final Map<String,String> queries = new HashMap<>();
     private final Path dataDirectory;
     private final boolean ownsInitializedNetwork;
+    private final Map<String,String> fixtureHashes;
+    private final Map<String,Object> canonicalState;
+    private volatile boolean requiresReset;
+    private static final String[][] TABLES={{"customers.csv","customer","id,email,name,balance_cents,version"},{"products.csv","product","id,sku,name,price_cents"},{"orders.csv","orders","id,customer_id,status,created_epoch_ms,total_cents,version"},{"order_lines.csv","order_line","id,order_id,line_no,product_id,quantity,unit_price_cents"}};
     private static volatile Object blackhole;
     private static Path nativeDirectory;
     private static final Pattern PARAM = Pattern.compile(":([a-z_]+)");
@@ -37,6 +41,9 @@ public final class DatabaseSession implements AutoCloseable {
     public DatabaseSession(Path root, String engine, String access, Path data) throws Exception {
         this.root=root.toAbsolutePath(); this.engine=engine; this.access=access; this.dataDirectory=data;this.ownsInitializedNetwork=!engine.equals("sqlite")&&"1".equals(System.getenv("BENCH_DB_INITIALIZE"));
         if (!List.of("raw","orm").contains(access)) throw new IllegalArgumentException("Unknown access");
+        if(data==null)throw new IllegalArgumentException("Canonical CSV directory required for verified startup");
+        fixtureHashes=new LinkedHashMap<>();for(var table:TABLES)fixtureHashes.put(table[0],fileHash(data.resolve(table[0])));
+        canonicalState=fixtureState(data);verifyFixtures();
         var cfg=new HikariConfig(); cfg.setMaximumPoolSize(engine.equals("sqlite")?1:16); cfg.setMinimumIdle(0);
         cfg.setConnectionTimeout(15000); cfg.setPoolName("benchmark-owned");
         String url;
@@ -52,19 +59,22 @@ public final class DatabaseSession implements AutoCloseable {
             if(engine.equals("postgresql")) { cfg.addDataSourceProperty("prepareThreshold","0"); cfg.addDataSourceProperty("preparedStatementCacheQueries","0"); cfg.addDataSourceProperty("connectTimeout","15"); cfg.addDataSourceProperty("socketTimeout","15"); }
             else { cfg.addDataSourceProperty("loginTimeout","15"); cfg.addDataSourceProperty("queryTimeout","15"); cfg.addDataSourceProperty("connectRetryCount","0"); cfg.addDataSourceProperty("disableStatementPooling","true"); }
         }
-        cfg.setJdbcUrl(url); pool=new HikariDataSource(cfg);
+        cfg.setJdbcUrl(url);try{pool=new HikariDataSource(cfg);}catch(Exception error){if(anchor!=null)try{anchor.close();}catch(Exception cleanup){error.addSuppressed(cleanup);}throw error;}
+        try{
         try(var paths=Files.list(this.root.resolve("queries").resolve(engine))) {
             for(Path p:paths.filter(p->p.toString().endsWith(".sql")).toList()) queries.put(p.getFileName().toString(),Files.readString(p));
         }
         if(engine.equals("sqlite") || "1".equals(System.getenv("BENCH_DB_INITIALIZE"))) {
             try(var c=open()) {
                 if(!engine.equals("sqlite")) try(var q=c.createStatement();var r=q.executeQuery("SELECT COUNT(*) FROM information_schema.tables WHERE table_type='BASE TABLE' AND table_schema='"+(engine.equals("postgresql")?"public":"dbo")+"'")) {r.next();if(r.getLong(1)!=0)throw new IllegalStateException("Only empty owned database may initialize");}
-                // DDL contains no quoted semicolons; each statement executes independently before import.
+                // All three selected engines support transactional schema creation.
                 String schema=Files.readString(this.root.resolve("schema").resolve(engine+".sql")).replaceAll("(?m)^--.*$", "");
-                try(var s=c.createStatement()){for(String statement:schema.split(";"))if(!statement.isBlank())s.execute(statement);}
-                importData(c,data);
+                begin(c);try{try(var s=c.createStatement()){for(String statement:schema.split(";"))if(!statement.isBlank())s.execute(statement);}
+                    importData(c,data);verifyFixtures();assertCanonical(stateDigest(c));c.commit();
+                }catch(Exception e){c.rollback();throw e;}finally{c.setAutoCommit(true);}
             }
         }
+        try(var c=open()){assertCanonical(stateDigest(c));}
         if(access.equals("orm")) {
         String dialect=switch(engine){case "sqlite"->"org.hibernate.community.dialect.SQLiteDialect";case "postgresql"->"org.hibernate.dialect.PostgreSQLDialect";case "sqlserver"->"org.hibernate.dialect.SQLServerDialect";default->throw new IllegalArgumentException();};
         var registry=new StandardServiceRegistryBuilder()
@@ -76,6 +86,7 @@ public final class DatabaseSession implements AutoCloseable {
         factory=new MetadataSources(registry).addAnnotatedClass(Customer.class).addAnnotatedClass(Product.class).addAnnotatedClass(Order.class).addAnnotatedClass(Line.class).buildMetadata().buildSessionFactory();
         }else factory=null;
         var prewarmed=new ArrayList<Connection>();try{for(int i=0;i<(engine.equals("sqlite")?1:16);i++)prewarmed.add(open());}finally{for(var c:prewarmed)c.close();}
+        }catch(Exception error){try{close();}catch(Exception cleanup){error.addSuppressed(cleanup);}throw error;}
     }
     private static void guard(String engine,String url) {
         String owned=System.getenv("BENCH_DB_OWNED_NAME");
@@ -130,6 +141,7 @@ public final class DatabaseSession implements AutoCloseable {
         if(o.id<=0||o.customerId<=0||o.status<0||o.status>3||o.createdEpochMs<0||o.totalCents!=total||!o.lines.stream().map(l->l.lineNo).sorted().toList().equals(List.of(1L,2L,3L,4L,5L)))throw new IllegalArgumentException("Invalid order/total");return o;
     }
     public Object execute(String id,Map<String,Object>p)throws Exception{
+        if(requiresReset)throw new IllegalStateException("A failed reset requires canonical recovery before operations resume");
         if(id.equals("D08")){
             @SuppressWarnings("unchecked") var ops=(List<Map<String,Object>>)p.get("trace");
             var mix=Map.of("D01",60,"D02",15,"D05",10,"D06",10,"D07",5);
@@ -169,10 +181,15 @@ public final class DatabaseSession implements AutoCloseable {
         try{for(int w=0;w<workers;w++){final int worker=w;futures.add(executor.submit(()->{ready.countDown();try{startGate.await();}catch(InterruptedException e){Thread.currentThread().interrupt();return;}for(int repeat=0;repeat<iterations;repeat++)for(int index:jobs.get(worker)){var op=trace.get(index);long start=System.nanoTime();try{String id=(String)op.getOrDefault("case_id",workload);var input=(Map<String,Object>)op.getOrDefault("input",op);blackhole=id.equals("H06")?checkout(input):execute(id,input);successes.incrementAndGet();}catch(Exception e){failures.merge(failureCategory(e),1L,Long::sum);}finally{latencies[repeat*trace.size()+index]=System.nanoTime()-start;}}}));}ready.await();long wall=System.nanoTime();startGate.countDown();for(var future:futures)future.get();return map("attempts",latencies.length,"successes",successes.get(),"categorized_failures",failures,"latencies_ns",latencies,"wall_seconds",(System.nanoTime()-wall)/1e9,"workers",workers,"last_result",blackhole,"timing_boundary","fixed platform workers; connection lease through context/transaction/result consumption/disposal; failures included","admitted",false);}finally{executor.shutdownNow();}
     }
     private static String failureCategory(Exception e){if(e instanceof jakarta.persistence.OptimisticLockException)return "conflict";if(e instanceof SQLTimeoutException)return "timeout";if(e instanceof org.hibernate.exception.ConstraintViolationException)return "constraint";if(e instanceof SQLException sql){if("40P01".equals(sql.getSQLState())||sql.getErrorCode()==1205)return "deadlock";if("40001".equals(sql.getSQLState()))return "conflict";if(sql.getErrorCode()==5)return "busy";if(sql.getErrorCode()==6)return "locked";if(sql.getErrorCode()==19||List.of(2627,2601,547).contains(sql.getErrorCode())||("23505".equals(sql.getSQLState())||"23503".equals(sql.getSQLState())||"23514".equals(sql.getSQLState())))return "constraint";}if(e.getCause() instanceof Exception cause)return failureCategory(cause);return e.getClass().getSimpleName();}
-    public Object reset()throws Exception{
+    public Object reset()throws Exception{return reset(false);}
+    public Object reset(boolean injectFailure)throws Exception{
         if(!engine.equals("sqlite")&&!ownsInitializedNetwork)throw new IllegalStateException("Reset requires this session initialized the empty allowlisted controller-owned database");
         if(!engine.equals("sqlite"))guard(engine,System.getenv("BENCH_DB_CONNECTION"));
-        try(var c=open()){begin(c);try{for(String table:List.of("order_line","orders","product","customer"))try(var s=c.createStatement()){s.executeUpdate("DELETE FROM "+table);}c.commit();}catch(Exception e){c.rollback();throw e;}finally{c.setAutoCommit(true);}importData(c,dataDirectory);}return stateDigest();
+        requiresReset=true;verifyFixtures();
+        try(var c=open()){begin(c);try{for(String table:List.of("order_line","orders","product","customer"))try(var s=c.createStatement()){s.executeUpdate("DELETE FROM "+table);}
+            if(injectFailure)throw new IllegalStateException("Injected reset rollback after delete");
+            importData(c,dataDirectory);verifyFixtures();var restored=stateDigest(c);assertCanonical(restored);c.commit();requiresReset=false;return restored;
+        }catch(Exception e){c.rollback();throw e;}finally{c.setAutoCommit(true);}}
     }
     private Object raw(Connection c,String id,Map<String,Object>p)throws Exception{
         if(id.equals("D01"))return rows(c,"D01.sql",p).getFirst();if(id.equals("D02"))return rows(c,"D02.sql",p);if(id.equals("D03"))return rawGraph(rows(c,"D03.sql",p));if(id.equals("D04"))return rows(c,"D04.sql",p);
@@ -214,25 +231,40 @@ public final class DatabaseSession implements AutoCloseable {
         }
     }
     public Object checkout(Map<String,Object>p)throws Exception{
+        if(requiresReset)throw new IllegalStateException("A failed reset requires canonical recovery before operations resume");
         try(var c=open()){
             if(access.equals("orm"))try(Session s=factory.withOptions().connection(c).openSession()){
                 if(!engine.equals("sqlite"))c.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);var tx=s.beginTransaction();try{var o=newOrder(p);var customer=s.createQuery("from BenchCustomer where id=:id",Customer.class).setParameter("id",o.customerId).getSingleResult();for(var l:o.lines){var product=s.createQuery("from BenchProduct where id=:id",Product.class).setParameter("id",l.productId).getSingleResult();if(l.unitPriceCents!=product.priceCents)throw new IllegalArgumentException("Price mismatch");}customer.balanceCents=Math.subtractExact(customer.balanceCents,o.totalCents);s.persist(o);for(var l:o.lines)s.persist(l);s.flush();if(Boolean.TRUE.equals(p.get("inject_failure")))throw new IllegalStateException("Injected rollback");tx.commit();return map("id",o.id,"total_cents",o.totalCents,"version",customer.version);}catch(Exception e){tx.rollback();throw e;}}
             begin(c);try{var o=newOrder(p);var customer=rows(c,"D01.sql",map("customer_id",o.customerId)).getFirst();for(var l:o.lines){var product=rows(c,"H06-product.sql",map("product_id",l.productId)).getFirst();if(l.unitPriceCents!=n(product,"price_cents"))throw new IllegalArgumentException("Price mismatch");}insertRaw(c,p);long version=Math.addExact(n(customer,"version"),1);if(change(c,"D05-update.sql",map("customer_id",o.customerId,"old_version",customer.get("version"),"new_version",version,"new_balance_cents",Math.subtractExact(n(customer,"balance_cents"),o.totalCents)))!=1)throw new jakarta.persistence.OptimisticLockException();if(Boolean.TRUE.equals(p.get("inject_failure")))throw new IllegalStateException("Injected rollback");c.commit();return map("id",o.id,"total_cents",o.totalCents,"version",version);}catch(Exception e){c.rollback();throw e;}finally{c.setAutoCommit(true);}
         }
     }
-    private void importData(Connection c,Path data)throws Exception{
-        begin(c);try{
-            String[][] tables={{"customers.csv","customer","id,email,name,balance_cents,version"},{"products.csv","product","id,sku,name,price_cents"},{"orders.csv","orders","id,customer_id,status,created_epoch_ms,total_cents,version"},{"order_lines.csv","order_line","id,order_id,line_no,product_id,quantity,unit_price_cents"}};
-            for(var t:tables){var columns=t[2].split(",");try(var reader=Files.newBufferedReader(data.resolve(t[0]),StandardCharsets.UTF_8);var csv=CSVFormat.RFC4180.builder().setHeader().setSkipHeaderRecord(true).get().parse(reader)){
+    @FunctionalInterface private interface RowAction{void accept(Map<String,Object> row)throws Exception;}
+    private static void fixtureRows(Path data,String[] t,RowAction action)throws Exception{
+            var columns=t[2].split(",");try(var reader=Files.newBufferedReader(data.resolve(t[0]),StandardCharsets.UTF_8);var csv=CSVFormat.RFC4180.builder().setHeader().setSkipHeaderRecord(true).get().parse(reader)){
                 if(!csv.getHeaderNames().equals(List.of(columns)))throw new IllegalArgumentException("CSV header mismatch");
-                String statement="INSERT INTO "+t[1]+" ("+t[2]+") VALUES ("+Arrays.stream(columns).map(x->":"+x).collect(Collectors.joining(","))+")";
-                for(var row:csv){if(row.size()!=columns.length)throw new IllegalArgumentException("CSV field count mismatch");var p=new HashMap<String,Object>();for(int i=0;i<columns.length;i++){String key=columns[i],value=row.get(i);if(List.of("email","name","sku").contains(key)){int max=key.equals("email")?254:key.equals("sku")?64:128;if(value.isEmpty()||value.length()>max||value.endsWith(" ")||value.chars().anyMatch(ch->ch<32||ch>126))throw new IllegalArgumentException("Noncanonical string");p.put(key,value);}else p.put(key,Long.parseLong(value));}change(c,statement,p);}
-            }}c.commit();
-        }catch(Exception e){c.rollback();throw e;}finally{c.setAutoCommit(true);}
+                long previous=0;
+                for(var row:csv){if(row.size()!=columns.length)throw new IllegalArgumentException("CSV field count mismatch");var p=new LinkedHashMap<String,Object>();for(int i=0;i<columns.length;i++){String key=columns[i],value=row.get(i);if(List.of("email","name","sku").contains(key)){int max=key.equals("email")?254:key.equals("sku")?64:128;if(value.isEmpty()||value.length()>max||value.endsWith(" ")||value.chars().anyMatch(ch->ch<32||ch>126))throw new IllegalArgumentException("Noncanonical string");p.put(key,value);}else p.put(key,Long.parseLong(value));}
+                    long id=n(p,"id");if(id<=previous)throw new IllegalArgumentException("Canonical CSV IDs must be positive and strictly ascending");previous=id;action.accept(p);}
+            }
+    }
+    private static String fileHash(Path file)throws Exception{return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(Files.readAllBytes(file)));}
+    private void verifyFixtures()throws Exception{for(var item:fixtureHashes.entrySet())if(!item.getValue().equals(fileHash(dataDirectory.resolve(item.getKey()))))throw new IllegalArgumentException("Canonical CSV changed during database session");}
+    private void assertCanonical(Map<String,Object> actual){if(!canonicalState.equals(actual))throw new IllegalStateException("Database state differs from canonical CSV snapshot");}
+    private static void appendRow(MessageDigest digest,String table,Collection<?> fields){digest.update((table+"\t"+fields.stream().map(Object::toString).collect(Collectors.joining("\t"))+"\n").getBytes(StandardCharsets.UTF_8));}
+    private static Map<String,Object> fixtureState(Path data)throws Exception{
+        var digest=MessageDigest.getInstance("SHA-256");var counts=new LinkedHashMap<String,Integer>();
+        for(var t:TABLES){int[] count={0};fixtureRows(data,t,row->{appendRow(digest,t[1],row.values());count[0]++;});counts.put(t[1],count[0]);}
+        return map("sha256",HexFormat.of().formatHex(digest.digest()),"counts",counts);
+    }
+    private void importData(Connection c,Path data)throws Exception{
+        for(var t:TABLES){String statement="INSERT INTO "+t[1]+" ("+t[2]+") VALUES ("+Arrays.stream(t[2].split(",")).map(x->":"+x).collect(Collectors.joining(","))+")";fixtureRows(data,t,row->change(c,statement,row));}
     }
     public Object stateDigest()throws Exception{
+        try(var c=open()){return stateDigest(c);}
+    }
+    private static Map<String,Object> stateDigest(Connection c)throws Exception{
         var digest=MessageDigest.getInstance("SHA-256");var counts=new LinkedHashMap<String,Integer>();
-        try(var c=open()){for(var t:new String[][]{{"customer","id,email,name,balance_cents,version"},{"product","id,sku,name,price_cents"},{"orders","id,customer_id,status,created_epoch_ms,total_cents,version"},{"order_line","id,order_id,line_no,product_id,quantity,unit_price_cents"}}){int count=0;try(var s=c.createStatement();var r=s.executeQuery("SELECT "+t[1]+" FROM "+t[0]+" ORDER BY id")){while(r.next()){var fields=new ArrayList<String>();for(int i=1;i<=r.getMetaData().getColumnCount();i++)fields.add(r.getString(i));digest.update((t[0]+"\t"+String.join("\t",fields)+"\n").getBytes(StandardCharsets.UTF_8));count++;}}counts.put(t[0],count);}}
+        for(var t:TABLES){int count=0;try(var s=c.createStatement();var r=s.executeQuery("SELECT "+t[2]+" FROM "+t[1]+" ORDER BY id")){while(r.next()){var fields=new ArrayList<String>();for(int i=1;i<=r.getMetaData().getColumnCount();i++)fields.add(r.getString(i));appendRow(digest,t[1],fields);count++;}}counts.put(t[1],count);}
         return map("sha256",HexFormat.of().formatHex(digest.digest()),"counts",counts);
     }
     public Object metadata()throws Exception{
@@ -248,5 +280,11 @@ public final class DatabaseSession implements AutoCloseable {
             m.put("native_libraries",libs);m.put("native_hash_status",libs.isEmpty()?"unavailable: locate Xerial extracted native library before admission":"measured");m.put("build_parity","compare with .NET metadata before admission");
         }}return m;
     }
-    @Override public void close()throws Exception{if(factory!=null)factory.close();pool.close();if(anchor!=null)anchor.close();}
+    @Override public void close()throws Exception{
+        Exception failure=null;
+        try{if(factory!=null)factory.close();}catch(Exception error){failure=error;}
+        try{pool.close();}catch(Exception error){if(failure==null)failure=error;else failure.addSuppressed(error);}
+        try{if(anchor!=null)anchor.close();}catch(Exception error){if(failure==null)failure=error;else failure.addSuppressed(error);}
+        if(failure!=null)throw failure;
+    }
 }
