@@ -1,0 +1,20 @@
+{
+  "reviewed_date": "2026-10-27",
+  "sources": [
+    {
+      "path": "docs/csharp15_java27_report Part 1.pdf",
+      "sha256": "c16458f9ceb89db5e760dbad7cef2d76a8d85474223583fb4f1cb547f1970c2d",
+      "pages": 14
+    },
+    {
+      "path": "docs/csharp15_java27_report Part 2.pdf",
+      "sha256": "adc6552b6a50d326fdbc1c12e2c11188b4c888b190c5e6489f7e359a44934486",
+      "pages": 23
+    },
+    {
+      "path": "docs/csharp_java_benchmark_plan.pdf",
+      "sha256": "050b4ca61c4f695deaeb6e8f6019f3e8ee9e8c72aeaa8310ab812023f71d1554",
+      "pages": 21
+    }
+  ]
+}

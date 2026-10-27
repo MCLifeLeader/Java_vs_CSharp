@@ -1,0 +1,12 @@
+syntax = "proto3";
+package benchmark;
+option java_package = "benchmark.proto";
+option java_outer_classname = "CanonicalRecord";
+option csharp_namespace = "Benchmark.Suite.Proto";
+
+message Record {
+  int64 id = 1;
+  string name = 2;
+  repeated int64 values = 3 [packed = true];
+  bool active = 4;
+}

@@ -1,0 +1,250 @@
+{
+  "format_version": 1,
+  "resolved_date": "2026-10-27",
+  "scope": "Shipped third-party runtime JAR inventory with SHA-256; project database-worker is built from repository source. This is not a complete SBOM or license audit.",
+  "runtime": "Microsoft OpenJDK 25.0.3+9-LTS",
+  "build_tools": {
+    "maven": "3.9.11",
+    "maven_archive_sha256": "0d7125e8c91097b36edb990ea5934e6c68b4440eef4ea96510a0f6815e7eeadb",
+    "protoc": "4.33.2",
+    "jmh_annotation_processor": "1.37"
+  },
+  "artifacts": [
+    {
+      "artifact": "HikariCP-7.1.0.jar",
+      "sha256": "2be45c641b841e81df87292e181f2c203500c5f0e9a1676f135927387f3cf40b"
+    },
+    {
+      "artifact": "angus-activation-2.0.3.jar",
+      "sha256": "a6bd35c538cf90fff941ad6258c40c08fca0b5c9c3f536c657114f27ce0527a7"
+    },
+    {
+      "artifact": "antlr4-runtime-4.13.2.jar",
+      "sha256": "dd3e8a13a2d669bf84fb8d834de35ce4875f27157698d206241ec8488aadcaf7"
+    },
+    {
+      "artifact": "byte-buddy-1.17.8.jar",
+      "sha256": "2b5ddc8c1f4234bdb7cb45338a8e10a13e0e3ca473e91d5d821d681127ea8ba1"
+    },
+    {
+      "artifact": "checker-qual-3.55.1.jar",
+      "sha256": "857658c8bdcbff794949a8d9922f88d63ee3751c203c7cd7d21ea97f9e745288"
+    },
+    {
+      "artifact": "commons-codec-1.18.0.jar",
+      "sha256": "ba005f304cef92a3dede24a38ad5ac9b8afccf0d8f75839d6c1338634cf7f6e4"
+    },
+    {
+      "artifact": "commons-csv-1.14.1.jar",
+      "sha256": "32be0e1e76673092f5d12cb790bd2acb6c2ab04c4ea6efc69ea5ee17911c24fe"
+    },
+    {
+      "artifact": "commons-io-2.20.0.jar",
+      "sha256": "df90bba0fe3cb586b7f164e78fe8f8f4da3f2dd5c27fa645f888100ccc25dd72"
+    },
+    {
+      "artifact": "commons-math3-3.6.1.jar",
+      "sha256": "1e56d7b058d28b65abd256b8458e3885b674c1d588fa43cd7d1cbb9c7ef2b308"
+    },
+    {
+      "artifact": "hibernate-community-dialects-7.4.14.Final.jar",
+      "sha256": "ab568f8ef0d274997122fd2966390c2a8cc92a45f9292fecd33e7533865b0d23"
+    },
+    {
+      "artifact": "hibernate-core-7.4.14.Final.jar",
+      "sha256": "d41b4adc59b53aaa3a69ab46dfc5a9dab4d3eac3229d7e0a8e24a4e27c46831f"
+    },
+    {
+      "artifact": "hibernate-models-1.1.2.jar",
+      "sha256": "d683d70e2592b23c5f2fbc3510d2e087aa61f2ac399a9090b941a1a42d3f3a98"
+    },
+    {
+      "artifact": "istack-commons-runtime-4.1.2.jar",
+      "sha256": "7fd6792361f4dd00f8c56af4a20cecc0066deea4a8f3dec38348af23fc2296ee"
+    },
+    {
+      "artifact": "jackson-annotations-2.20.jar",
+      "sha256": "959a2ffb2d591436f51f183c6a521fc89347912f711bf0cae008cdf045d95319"
+    },
+    {
+      "artifact": "jackson-core-2.20.1.jar",
+      "sha256": "ffab4d957daa2796cf24cb66d0b78a7090f1bcbe17c3a4578f09affaaf137089"
+    },
+    {
+      "artifact": "jackson-databind-2.20.1.jar",
+      "sha256": "34bbeb4526fff4f8565b12106bf85a6afcbae858966d489b54214ac46b2e26e8"
+    },
+    {
+      "artifact": "jackson-datatype-jdk8-2.20.1.jar",
+      "sha256": "6821cdd695e95c4e6853ec855a7432c71f2f4be318b3ca190fbbf8a2e5f981f2"
+    },
+    {
+      "artifact": "jackson-datatype-jsr310-2.20.1.jar",
+      "sha256": "692be83c7e2eebb53b995c11d813c603a7d716d60c9d2d4fb9486ecb105f9291"
+    },
+    {
+      "artifact": "jackson-module-parameter-names-2.20.1.jar",
+      "sha256": "3b7e3702fce28ff4819bc5d3f18ff513c3cd32eda46e74cf3328142dea882aa9"
+    },
+    {
+      "artifact": "jakarta.activation-api-2.1.4.jar",
+      "sha256": "c9db52100ce6c8aac95cc39075f95720d2e561b11f8051b81c121ad4effd7004"
+    },
+    {
+      "artifact": "jakarta.annotation-api-2.1.1.jar",
+      "sha256": "5f65fdaf424eee2b55e1d882ba9bb376be93fb09b37b808be6e22e8851c909fe"
+    },
+    {
+      "artifact": "jakarta.inject-api-2.0.1.jar",
+      "sha256": "f7dc98062fccf14126abb751b64fab12c312566e8cbdc8483598bffcea93af7c"
+    },
+    {
+      "artifact": "jakarta.persistence-api-3.2.0.jar",
+      "sha256": "be8a26b0e75c84c1b7600f759256fbc68d60333d89ec0ce3f784fc3ffa09aa8c"
+    },
+    {
+      "artifact": "jakarta.transaction-api-2.0.1.jar",
+      "sha256": "50c0a7c760c13ae6c042acf182b28f0047413db95b4636fb8879bcffab5ba875"
+    },
+    {
+      "artifact": "jakarta.xml.bind-api-4.0.4.jar",
+      "sha256": "c507ca69a8c6dd11bf4afeec9e0d412c4fa3933fffb0a84680ea5727e8472124"
+    },
+    {
+      "artifact": "jaxb-core-4.0.6.jar",
+      "sha256": "ebbd274207b4860d0dc6e2d44d6dbdb5945cede01222d2e50661d45f5d46c0f7"
+    },
+    {
+      "artifact": "jaxb-runtime-4.0.6.jar",
+      "sha256": "1c0d57f8c25f9605d5a2f7ad0a87581893776ac85b00b101b2651258edaa9118"
+    },
+    {
+      "artifact": "jboss-logging-3.6.1.Final.jar",
+      "sha256": "5e08a4b092dc85b337f0910a740571d8720cfa565fabd880a8caf94a657ca416"
+    },
+    {
+      "artifact": "jmh-core-1.37.jar",
+      "sha256": "dc0eaf2bbf0036a70b60798c785d6e03a9daf06b68b8edb0f1ba9eb3421baeb3"
+    },
+    {
+      "artifact": "jmh-generator-annprocess-1.37.jar",
+      "sha256": "6a5604b5b804e0daca1145df1077609321687734a8b49387e49f10557c186c77"
+    },
+    {
+      "artifact": "jopt-simple-5.0.4.jar",
+      "sha256": "df26cc58f235f477db07f753ba5a3ab243ebe5789d9f89ecf68dd62ea9a66c28"
+    },
+    {
+      "artifact": "jul-to-slf4j-2.0.17.jar",
+      "sha256": "a7afcd23b9cfd1475e55c94f943b808c5922035e7e2c2a5c65a487a4106bc538"
+    },
+    {
+      "artifact": "log4j-api-2.24.3.jar",
+      "sha256": "5b4a0a0cd0e751ded431c162442bdbdd53328d1f8bb2bae5fc1bbeee0f66d80f"
+    },
+    {
+      "artifact": "log4j-to-slf4j-2.24.3.jar",
+      "sha256": "c7f2b0c612a4eb05b1587d1c880eb4cf5f4f53850676a8ede8da2b8fabb4f73f"
+    },
+    {
+      "artifact": "logback-classic-1.5.20.jar",
+      "sha256": "1228db99e1af602e191a2b142252d8aaf68129e643c19e7f92137ce5f7209ad3"
+    },
+    {
+      "artifact": "logback-core-1.5.20.jar",
+      "sha256": "29fe095bb7b7f850907aec3fddeb40c8d399d85e5680e8d3533e3da5d9aae917"
+    },
+    {
+      "artifact": "micrometer-commons-1.15.5.jar",
+      "sha256": "55fc55ec22f8e2965fa9a7c3521d4e5f1fc020bf236f919a12cbb68cafabf83f"
+    },
+    {
+      "artifact": "micrometer-observation-1.15.5.jar",
+      "sha256": "69fac03f20b5b6b4f90abcf463682e0134b21e27925b0e223f2c3a64ca04e0c3"
+    },
+    {
+      "artifact": "mssql-jdbc-13.6.1.jre11.jar",
+      "sha256": "4f470d23dfdf187ece2d1f9feb33d9dbd2230051b9c9676456727692a1b97d5e"
+    },
+    {
+      "artifact": "postgresql-42.7.14.jar",
+      "sha256": "73914527305a40cce504b0d3d90b23caf565136912d607ae8ae7c5895512332c"
+    },
+    {
+      "artifact": "protobuf-java-4.33.2.jar",
+      "sha256": "c5b582aa127fb62c5fc3077329d522dfb7930b4e9a625c08760b681b2ba5aab7"
+    },
+    {
+      "artifact": "slf4j-api-2.0.17.jar",
+      "sha256": "7b751d952061954d5abfed7181c1f645d336091b679891591d63329c622eb832"
+    },
+    {
+      "artifact": "snakeyaml-2.4.jar",
+      "sha256": "ef779af5d29a9dde8cc70ce0341f5c6f7735e23edff9685ceaa9d35359b7bb7f"
+    },
+    {
+      "artifact": "spring-aop-6.2.12.jar",
+      "sha256": "befc1dc092de62dab3aae3c7a0e11f797c6060fffc2121e1fe8fb95c94272655"
+    },
+    {
+      "artifact": "spring-beans-6.2.12.jar",
+      "sha256": "26ab8ce28a42fe951b0a4ebaf8dbe97478effca833a7b2f51b45d6540fe7179f"
+    },
+    {
+      "artifact": "spring-boot-3.5.7.jar",
+      "sha256": "fdb3611f0baaa3a55b59b69c420d3bffac45cfb8868aaec8d6ee64451fb68e08"
+    },
+    {
+      "artifact": "spring-boot-autoconfigure-3.5.7.jar",
+      "sha256": "0f078fa10ab1deaf41f1aeb0133c08661d06592e7e50c7bcaafa9ec0b62b8a19"
+    },
+    {
+      "artifact": "spring-boot-jarmode-tools-3.5.7.jar",
+      "sha256": "0b2e56b36aae7bd49d0523adea1999ffbf3a95122398b6e6f24ef1ea4d49e70e"
+    },
+    {
+      "artifact": "spring-context-6.2.12.jar",
+      "sha256": "0439fb9cb09a8b8d04c4e37dcba592e489b690882c56940aa33b58cf3f0b69cb"
+    },
+    {
+      "artifact": "spring-core-6.2.12.jar",
+      "sha256": "bddc5a5be2d94191ebcfbadc672fa4d81e6ab51e38a9eaf41d5d035cb17548d4"
+    },
+    {
+      "artifact": "spring-expression-6.2.12.jar",
+      "sha256": "62e68f4f18b8c5580180de6ef8578b1d1fc170ed993b5a7d59b946b63e5ebefd"
+    },
+    {
+      "artifact": "spring-jcl-6.2.12.jar",
+      "sha256": "8244ee2a515291f41ed4f99aa89b4cd41fc13961c21d7c271a381210f6075fed"
+    },
+    {
+      "artifact": "spring-web-6.2.12.jar",
+      "sha256": "caff724ebb7c423696e1d2c7690245fbbafe218695b3a4479faa668af0400e6d"
+    },
+    {
+      "artifact": "spring-webmvc-6.2.12.jar",
+      "sha256": "530d3b2fd82c97ca4418bb4b200d7626f042cc2c78c705bdd5176dcc580c84e1"
+    },
+    {
+      "artifact": "sqlite-jdbc-3.53.4.0.jar",
+      "sha256": "bcb1f51e36f940867e83342f9efbf5968ac44a6bef4d397bb4af7b17b45cd2fb"
+    },
+    {
+      "artifact": "tomcat-embed-core-10.1.48.jar",
+      "sha256": "a9137d3526a05ce2f9359cfc7b108240bd3d01ff323b37986e5bd43208ff0f56"
+    },
+    {
+      "artifact": "tomcat-embed-el-10.1.48.jar",
+      "sha256": "e7bd9eca5dd6b5e97bef17eb94266a4f87a58a9ebc5fc85800d017003c9b0f2f"
+    },
+    {
+      "artifact": "tomcat-embed-websocket-10.1.48.jar",
+      "sha256": "d445d0ba335bcf06e6d02257a07c68d1c3c471d10c68330360af51db9ee47faa"
+    },
+    {
+      "artifact": "txw2-4.0.6.jar",
+      "sha256": "fcc749785412ef3806fde1ce70f93ef5a0065dcc47fe449bc871db0795cb11af"
+    }
+  ]
+}

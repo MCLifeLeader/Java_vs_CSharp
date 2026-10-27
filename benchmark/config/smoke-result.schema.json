@@ -1,0 +1,279 @@
+{
+  "type": "object",
+  "required": [
+    "contract_version",
+    "campaign_id",
+    "case_id",
+    "parameter_id",
+    "pair_id",
+    "repetition",
+    "language",
+    "engine",
+    "access",
+    "profile",
+    "dataset",
+    "workers",
+    "track",
+    "case_hash",
+    "status",
+    "fingerprint",
+    "provenance",
+    "input",
+    "outcome",
+    "performance",
+    "admission",
+    "evidence",
+    "result_hash"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "contract_version": {
+      "const": "smoke-1"
+    },
+    "campaign_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]+$"
+    },
+    "case_id": {
+      "enum": [
+        "C01",
+        "K01"
+      ]
+    },
+    "parameter_id": {
+      "enum": [
+        "transform",
+        "scan",
+        "sort"
+      ]
+    },
+    "pair_id": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "repetition": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "language": {
+      "enum": [
+        "csharp",
+        "java"
+      ]
+    },
+    "engine": {
+      "type": "null"
+    },
+    "access": {
+      "type": "null"
+    },
+    "profile": {
+      "const": "controlled"
+    },
+    "dataset": {
+      "enum": [
+        "smoke",
+        "S"
+      ]
+    },
+    "workers": {
+      "const": 1
+    },
+    "track": {
+      "const": "lts"
+    },
+    "case_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "status": {
+      "const": "validated"
+    },
+    "fingerprint": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "provenance": {
+      "type": "object",
+      "required": [
+        "utc_start",
+        "utc_end",
+        "source_commit",
+        "source_hash",
+        "dirty_source",
+        "command",
+        "host_manifest_hash",
+        "versions_hash",
+        "config_hash"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "utc_start": {
+          "type": "string",
+          "minLength": 1
+        },
+        "utc_end": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_commit": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{40,64}$"
+        },
+        "source_hash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "dirty_source": {
+          "type": "boolean"
+        },
+        "command": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "host_manifest_hash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "versions_hash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "config_hash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    },
+    "input": {
+      "type": "object",
+      "required": [
+        "dataset_hash",
+        "seed",
+        "encoding",
+        "payload_bytes"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "dataset_hash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "seed": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "encoding": {
+          "const": "signed-int64-little-endian"
+        },
+        "payload_bytes": {
+          "type": "integer",
+          "minimum": 8
+        }
+      }
+    },
+    "outcome": {
+      "type": "object",
+      "required": [
+        "attempts",
+        "successes",
+        "failures",
+        "correctness",
+        "checksum",
+        "items"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "attempts": {
+          "const": 1
+        },
+        "successes": {
+          "const": 1
+        },
+        "failures": {
+          "const": 0
+        },
+        "correctness": {
+          "const": "pass"
+        },
+        "checksum": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{16}$"
+        },
+        "items": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "performance": {
+      "type": "object",
+      "required": [
+        "measured",
+        "throughput_ops_s",
+        "cpu_seconds",
+        "peak_rss_bytes",
+        "p99_ms",
+        "unavailable_reason"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "measured": {
+          "const": false
+        },
+        "throughput_ops_s": {
+          "type": "null"
+        },
+        "cpu_seconds": {
+          "type": "null"
+        },
+        "peak_rss_bytes": {
+          "type": "null"
+        },
+        "p99_ms": {
+          "type": "null"
+        },
+        "unavailable_reason": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "admission": {
+      "type": "object",
+      "required": [
+        "admitted",
+        "reason"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "admitted": {
+          "const": false
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^[a-f0-9]{64}$"
+      }
+    },
+    "result_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:java-vs-csharp:smoke-result:1",
+  "title": "Correctness-only smoke repetition; not measured performance"
+}

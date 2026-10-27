@@ -1,0 +1,23 @@
+{
+  "source": "benchmark plan section 14; independent from Part 2's earlier SLO rating bands",
+  "frozen": false,
+  "reason": "Freeze after pilot and before scoring; no score is currently available.",
+  "domains": {
+    "C": {"weight": 12, "metrics": {"throughput": 70, "cpu_per_op": 30}},
+    "K": {"weight": 10, "metrics": {"throughput": 60, "cpu_per_op": 25, "peak_rss": 15}},
+    "M": {"weight": 12, "metrics": {"throughput": 40, "peak_rss": 40, "cpu_per_op": 20}},
+    "A": {"weight": 12, "metrics": {"throughput": 70, "cpu_per_op": 30}},
+    "S": {"weight": 8, "metrics": {"throughput": 60, "cpu_per_op": 25, "peak_rss": 15}},
+    "I": {"weight": 8, "metrics": {"throughput": 70, "cpu_per_op": 30}},
+    "H": {"weight": 14, "metrics": {"slo_throughput": 50, "common_rate_p99": 25, "cpu_per_op": 15, "peak_rss": 10}},
+    "D": {"weight": 18, "metrics": {"throughput": 60, "total_cpu_per_op": 25, "application_peak_rss": 15}},
+    "P": {"weight": 4, "metrics": {"P01_first_response": 50, "P02_idle_rss": 25, "P04_runtime_image_size": 25}},
+    "N": {"weight": 2, "metrics": {"throughput": 70, "cpu_per_op": 30}},
+    "L": {"weight": 0, "metrics": {}}
+  },
+  "engines": {"sqlserver": 40, "postgresql": 40, "sqlite": 20},
+  "access": {"orm": 50, "raw": 50},
+  "overall_assessment_benchmark_weight": 8,
+  "full_index": null,
+  "unavailable_reason": "Mandatory implementations, parity, pilot, frozen manifest and admitted repeated measurements are incomplete."
+}

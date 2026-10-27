@@ -1,0 +1,23 @@
+{
+  "example_only": true,
+  "description": "Illustrative 16-core allocation from the specification. Review topology, physical cores and total memory before copying into a campaign.",
+  "sqlserver_eula_accepted": false,
+  "process_limits": {"cpu_affinity": [0, 1, 2, 3], "memory_bytes": 4294967296},
+  "infrastructure": {
+    "postgresql": {
+      "image": "postgres@sha256:9770878138a2e83abcb10856d30cc3f24dae0d317bb956db6ab9159de6c3c80d",
+      "cpu_affinity": [4, 5, 6, 7, 8, 9, 10, 11],
+      "memory_bytes": 17179869184,
+      "readiness_timeout_seconds": 120,
+      "tls_profile": "isolated-lab-tls-off"
+    },
+    "sqlserver": {
+      "image": "mcr.microsoft.com/mssql/server@sha256:cf8f0ab2ebe61feec2eed2629061a07d247f791c2a8ddda74a4ac9f06a291718",
+      "edition": "Developer",
+      "cpu_affinity": [4, 5, 6, 7, 8, 9, 10, 11],
+      "memory_bytes": 17179869184,
+      "readiness_timeout_seconds": 120,
+      "tls_profile": "isolated-lab-tls-off"
+    }
+  }
+}

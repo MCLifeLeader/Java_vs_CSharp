@@ -1,0 +1,151 @@
+{
+  "format": 1,
+  "resolved_date": "2026-10-27",
+  "artifacts": [
+    {
+      "coordinate": "com.fasterxml.jackson.core:jackson-annotations:2.20",
+      "file": "jackson-annotations-2.20.jar",
+      "sha256": "959a2ffb2d591436f51f183c6a521fc89347912f711bf0cae008cdf045d95319"
+    },
+    {
+      "coordinate": "com.fasterxml.jackson.core:jackson-core:2.20.1",
+      "file": "jackson-core-2.20.1.jar",
+      "sha256": "ffab4d957daa2796cf24cb66d0b78a7090f1bcbe17c3a4578f09affaaf137089"
+    },
+    {
+      "coordinate": "com.fasterxml.jackson.core:jackson-databind:2.20.1",
+      "file": "jackson-databind-2.20.1.jar",
+      "sha256": "34bbeb4526fff4f8565b12106bf85a6afcbae858966d489b54214ac46b2e26e8"
+    },
+    {
+      "coordinate": "com.microsoft.sqlserver:mssql-jdbc:13.6.1.jre11",
+      "file": "mssql-jdbc-13.6.1.jre11.jar",
+      "sha256": "4f470d23dfdf187ece2d1f9feb33d9dbd2230051b9c9676456727692a1b97d5e"
+    },
+    {
+      "coordinate": "com.sun.istack:istack-commons-runtime:4.1.2",
+      "file": "istack-commons-runtime-4.1.2.jar",
+      "sha256": "7fd6792361f4dd00f8c56af4a20cecc0066deea4a8f3dec38348af23fc2296ee"
+    },
+    {
+      "coordinate": "com.zaxxer:HikariCP:7.1.0",
+      "file": "HikariCP-7.1.0.jar",
+      "sha256": "2be45c641b841e81df87292e181f2c203500c5f0e9a1676f135927387f3cf40b"
+    },
+    {
+      "coordinate": "commons-codec:commons-codec:1.19.0",
+      "file": "commons-codec-1.19.0.jar",
+      "sha256": "5c3881e4f556855e9c532927ee0c9dfde94cc66760d5805c031a59887070af5f"
+    },
+    {
+      "coordinate": "commons-io:commons-io:2.20.0",
+      "file": "commons-io-2.20.0.jar",
+      "sha256": "df90bba0fe3cb586b7f164e78fe8f8f4da3f2dd5c27fa645f888100ccc25dd72"
+    },
+    {
+      "coordinate": "jakarta.activation:jakarta.activation-api:2.1.4",
+      "file": "jakarta.activation-api-2.1.4.jar",
+      "sha256": "c9db52100ce6c8aac95cc39075f95720d2e561b11f8051b81c121ad4effd7004"
+    },
+    {
+      "coordinate": "jakarta.inject:jakarta.inject-api:2.0.1",
+      "file": "jakarta.inject-api-2.0.1.jar",
+      "sha256": "f7dc98062fccf14126abb751b64fab12c312566e8cbdc8483598bffcea93af7c"
+    },
+    {
+      "coordinate": "jakarta.persistence:jakarta.persistence-api:3.2.0",
+      "file": "jakarta.persistence-api-3.2.0.jar",
+      "sha256": "be8a26b0e75c84c1b7600f759256fbc68d60333d89ec0ce3f784fc3ffa09aa8c"
+    },
+    {
+      "coordinate": "jakarta.transaction:jakarta.transaction-api:2.0.1",
+      "file": "jakarta.transaction-api-2.0.1.jar",
+      "sha256": "50c0a7c760c13ae6c042acf182b28f0047413db95b4636fb8879bcffab5ba875"
+    },
+    {
+      "coordinate": "jakarta.xml.bind:jakarta.xml.bind-api:4.0.4",
+      "file": "jakarta.xml.bind-api-4.0.4.jar",
+      "sha256": "c507ca69a8c6dd11bf4afeec9e0d412c4fa3933fffb0a84680ea5727e8472124"
+    },
+    {
+      "coordinate": "net.bytebuddy:byte-buddy:1.18.14",
+      "file": "byte-buddy-1.18.14.jar",
+      "sha256": "b7f2b2f111c6ddc09d3d9718ca5895dde16217bb4e5f2d2a6eb571f274909a82"
+    },
+    {
+      "coordinate": "org.antlr:antlr4-runtime:4.13.2",
+      "file": "antlr4-runtime-4.13.2.jar",
+      "sha256": "dd3e8a13a2d669bf84fb8d834de35ce4875f27157698d206241ec8488aadcaf7"
+    },
+    {
+      "coordinate": "org.apache.commons:commons-csv:1.14.1",
+      "file": "commons-csv-1.14.1.jar",
+      "sha256": "32be0e1e76673092f5d12cb790bd2acb6c2ab04c4ea6efc69ea5ee17911c24fe"
+    },
+    {
+      "coordinate": "org.checkerframework:checker-qual:3.55.1",
+      "file": "checker-qual-3.55.1.jar",
+      "sha256": "857658c8bdcbff794949a8d9922f88d63ee3751c203c7cd7d21ea97f9e745288"
+    },
+    {
+      "coordinate": "org.eclipse.angus:angus-activation:2.0.3",
+      "file": "angus-activation-2.0.3.jar",
+      "sha256": "a6bd35c538cf90fff941ad6258c40c08fca0b5c9c3f536c657114f27ce0527a7"
+    },
+    {
+      "coordinate": "org.glassfish.jaxb:jaxb-core:4.0.7",
+      "file": "jaxb-core-4.0.7.jar",
+      "sha256": "f29af5c37592c3a06a912da8cdf1d16036e6ca6d4eed9be6f7670e60fa466601"
+    },
+    {
+      "coordinate": "org.glassfish.jaxb:jaxb-runtime:4.0.7",
+      "file": "jaxb-runtime-4.0.7.jar",
+      "sha256": "61a5daf5a1987f7ed7149c5a883ddf220ca9bf714a8d8cffc85fac301e92b5f2"
+    },
+    {
+      "coordinate": "org.glassfish.jaxb:txw2:4.0.7",
+      "file": "txw2-4.0.7.jar",
+      "sha256": "c725676f2550caa3f57943f2d10dfac7e14c3abb34a6a9d89ac7ebbf1bde3269"
+    },
+    {
+      "coordinate": "org.hibernate.models:hibernate-models:1.1.2",
+      "file": "hibernate-models-1.1.2.jar",
+      "sha256": "d683d70e2592b23c5f2fbc3510d2e087aa61f2ac399a9090b941a1a42d3f3a98"
+    },
+    {
+      "coordinate": "org.hibernate.orm:hibernate-community-dialects:7.4.14.Final",
+      "file": "hibernate-community-dialects-7.4.14.Final.jar",
+      "sha256": "ab568f8ef0d274997122fd2966390c2a8cc92a45f9292fecd33e7533865b0d23"
+    },
+    {
+      "coordinate": "org.hibernate.orm:hibernate-core:7.4.14.Final",
+      "file": "hibernate-core-7.4.14.Final.jar",
+      "sha256": "d41b4adc59b53aaa3a69ab46dfc5a9dab4d3eac3229d7e0a8e24a4e27c46831f"
+    },
+    {
+      "coordinate": "org.jboss.logging:jboss-logging:3.6.1.Final",
+      "file": "jboss-logging-3.6.1.Final.jar",
+      "sha256": "5e08a4b092dc85b337f0910a740571d8720cfa565fabd880a8caf94a657ca416"
+    },
+    {
+      "coordinate": "org.postgresql:postgresql:42.7.14",
+      "file": "postgresql-42.7.14.jar",
+      "sha256": "73914527305a40cce504b0d3d90b23caf565136912d607ae8ae7c5895512332c"
+    },
+    {
+      "coordinate": "org.slf4j:slf4j-api:2.0.17",
+      "file": "slf4j-api-2.0.17.jar",
+      "sha256": "7b751d952061954d5abfed7181c1f645d336091b679891591d63329c622eb832"
+    },
+    {
+      "coordinate": "org.slf4j:slf4j-simple:2.0.17",
+      "file": "slf4j-simple-2.0.17.jar",
+      "sha256": "ddfea59ac074c6d3e24ac2c38622d2d963895e17f70b38ed4bdae4d780be6964"
+    },
+    {
+      "coordinate": "org.xerial:sqlite-jdbc:3.53.4.0",
+      "file": "sqlite-jdbc-3.53.4.0.jar",
+      "sha256": "bcb1f51e36f940867e83342f9efbf5968ac44a6bef4d397bb4af7b17b45cd2fb"
+    }
+  ]
+}

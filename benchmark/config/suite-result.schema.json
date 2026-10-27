@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Protocol2 suite correctness/pilot/measured result",
+  "type": "object",
+  "required": [
+    "contract_version",
+    "campaign_id",
+    "identity",
+    "fingerprint",
+    "command",
+    "utc_completed",
+    "status",
+    "performance",
+    "admitted",
+    "reason",
+    "result_hash"
+  ],
+  "properties": {
+    "contract_version": {
+      "const": "suite-1"
+    },
+    "campaign_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]+$"
+    },
+    "identity": {
+      "type": "object",
+      "required": [
+        "case_id",
+        "parameter_id",
+        "language",
+        "engine",
+        "access",
+        "profile",
+        "dataset",
+        "workers",
+        "repetition",
+        "track",
+        "case_hash"
+      ]
+    },
+    "fingerprint": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "command": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+    "utc_completed": {
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "validated",
+        "pilot",
+        "measured"
+      ]
+    },
+    "admitted": {
+      "type": "boolean"
+    },
+    "reason": {
+      "type": "string"
+    },
+    "result_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    }
+  }
+}

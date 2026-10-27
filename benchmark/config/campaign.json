@@ -1,0 +1,37 @@
+{
+  "contract_version": "1.0",
+  "track": "lts",
+  "seed": 20261025,
+  "dataset": "S",
+  "languages": [
+    "csharp",
+    "java"
+  ],
+  "engines": [
+    "sqlserver",
+    "postgresql",
+    "sqlite"
+  ],
+  "access_modes": [
+    "orm",
+    "raw"
+  ],
+  "network_workers": [
+    1,
+    8,
+    32
+  ],
+  "sqlite_workers": [
+    1
+  ],
+  "repetitions": 5,
+  "warmup_seconds": 60,
+  "measurement_seconds": 120,
+  "mutation_operations": 50000,
+  "smoke_items": 4096,
+  "process_timeout_seconds": 60,
+  "full_campaign_authorized": false,
+  "database_reset_enabled": false,
+  "allowed_database_hosts": [],
+  "sqlserver_eula_accepted": false
+}

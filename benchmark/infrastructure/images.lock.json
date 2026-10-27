@@ -1,0 +1,37 @@
+{
+  "resolved_date": "2026-10-27",
+  "platform": "linux/amd64",
+  "executed": true,
+  "resolution_method": "Official registry manifest/config APIs pinned linux/amd64 digests. PostgreSQL subsequently executed; SQL Server not executed. Per-engine runtime_verification records apply.",
+  "postgresql": {
+    "image": "postgres@sha256:9770878138a2e83abcb10856d30cc3f24dae0d317bb956db6ab9159de6c3c80d",
+    "resolved_from": "https://registry-1.docker.io/v2/library/postgres/manifests/18",
+    "config_digest": "sha256:79061104669bb30919d015b549c764e2d8021a18ee39cb175581a2588fe90dbe",
+    "config_created_utc": "2026-10-21T00:37:01.146225564Z",
+    "declared_version": "18.6-1.pgdg13+2",
+    "version_source": "PG_VERSION image configuration and live SELECT version(); four functional cells passed"
+  },
+  "sqlserver": {
+    "image": "mcr.microsoft.com/mssql/server@sha256:cf8f0ab2ebe61feec2eed2629061a07d247f791c2a8ddda74a4ac9f06a291718",
+    "resolved_from": "https://mcr.microsoft.com/v2/mssql/server/manifests/2022-latest",
+    "config_digest": "sha256:7fb2139341715e8a71843cfc2f02bab6e95f1c52c0fa9f9a6b2e7b761f060780",
+    "config_created_utc": "2026-10-03T05:58:05.433673258Z",
+    "declared_version": "16.0.4305.5",
+    "version_source": "com.microsoft.version image configuration; runtime verification pending",
+    "os_image": "Ubuntu 22.04",
+    "edition": "Developer",
+    "eula_accepted": false
+  },
+  "runtime_verification": {
+    "postgresql": {
+      "status": "four_functional_cells_passed",
+      "date": "2026-10-27",
+      "evidence": ".work/postgresql-validation.json",
+      "admitted_performance": false
+    },
+    "sqlserver": {
+      "status": "not_executed",
+      "eula_accepted": false
+    }
+  }
+}

@@ -1,0 +1,340 @@
+{
+  "resolved_date": "2026-10-27",
+  "requested": {
+    "status": "deferred_by_user",
+    "dotnet_sdk": "11.0.100-rc.3.26522.148",
+    "dotnet_runtime": "11.0.0-rc.3.26522.148",
+    "csharp_language": "15.0",
+    "dotnet_maturity": "prerelease",
+    "dotnet_source": "https://dotnet.microsoft.com/en-us/download/dotnet/11.0",
+    "jdk_major": 27,
+    "jdk_vendor_build": null,
+    "jdk_release_status": "unverified: OpenJDK official pages returned HTTP 403",
+    "reason": ".NET 11 and JDK 27 absent locally; JDK distribution/build and artifact hashes unresolved. No requested-track build verified."
+  },
+  "unresolved": {
+    "resource_limits_and_pilot": "Application/database core and memory budgets, trace headroom, generator capacity, thermal/storage stabilization and all pilot-frozen settings remain unapproved/unverified for scoring",
+    "sqlite_native_parity": "Measured .NET3.53.3 versus Java3.53.4 and differing native builds block SQLite primary comparisons",
+    "network_database_execution": "Four SQLServer language/access cells compile but live startup, schema realization and D01-D08/H06 execution remain unverified. Four PostgreSQL18.6 cells passed live LinuxAMD64 functional contracts on2026-10-27; full performance, plans and provider statement/round-trip diagnostics remain unverified.",
+    "sqlserver_terms": "Developer edition image pinned; operator EULA acceptance false; no SQLServer container started or terms accepted",
+    "native_platforms": "Windowsx64 shared C library smoke verified; PostgreSQL18.6 LinuxAMD64 server verified from Windows clients. Native language/C-library Linux/macOS execution not performed.",
+    "packaging_sbom_license": "Owned packaging verified for both stacks, including measured runtime-inclusive bytes and hashed dependency inventory. Missing/inherited license metadata still needs review; this inventory is not a complete formal SBOM/license audit.",
+    "measurement_campaign": "No full repeated admitted performance campaign; no measured aggregate score or coverage percentage"
+  },
+  "lts": {
+    "status": "implementation_smoke_verified",
+    "dotnet_sdk": "10.0.402",
+    "dotnet_runtime": "10.0.14",
+    "csharp_language": "14.0",
+    "java_release": 25,
+    "jdk_vendor": "Microsoft",
+    "jdk_runtime": "25.0.3+9-LTS",
+    "python": "3.15.1",
+    "host": "Windows x64",
+    "dependencies": "Exact direct package pins below; transitive package/JAR hashes are retained in module lock inventories.",
+    "reason": "User-selected .NET10/Java25 LTS suite implements all authored workload IDs. Windows and live PostgreSQL functional evidence exists; scientific admission and remaining platform/engine validation remain separate gates."
+  },
+  "selected_dependencies": {
+    "dotnet": {
+      "framework": "Microsoft.AspNetCore.App10.0.14 / Microsoft.NETCore.App10.0.14",
+      "modules": {
+        "dotnet/Suite": {
+          "BenchmarkDotNet": "0.15.8",
+          "Google.Protobuf": "3.36.2",
+          "Grpc.Tools": "2.85.0"
+        },
+        "dotnet/Database": {
+          "Microsoft.EntityFrameworkCore.SqlServer": "10.0.14",
+          "Microsoft.EntityFrameworkCore.Sqlite": "10.0.14",
+          "Npgsql.EntityFrameworkCore.PostgreSQL": "10.0.3",
+          "Microsoft.Data.SqlClient": "7.1.1",
+          "System.Security.Cryptography.Pkcs": "10.0.14",
+          "SQLitePCLRaw.bundle_e_sqlite3": "2.1.13"
+        }
+      },
+      "npgsql_driver": "10.0.3",
+      "transitive_locks": [
+        "dotnet/Suite/packages.lock.json",
+        "dotnet/Database/packages.lock.json"
+      ],
+      "lock_method": "NuGet resolved versions and package content hashes; restore --locked-mode"
+    },
+    "java": {
+      "spring_boot": "3.5.7",
+      "tomcat_embedded": "10.1.48",
+      "jackson_bom_and_databind": "2.20.1",
+      "jackson_annotations": "2.20",
+      "protobuf_java_and_protoc": "4.33.2",
+      "jmh": "1.37",
+      "junit_jupiter_test": "5.12.2",
+      "hibernate_core_and_community_dialects": "7.4.14.Final",
+      "jakarta_persistence": "3.2.0",
+      "hikaricp": "7.1.0",
+      "sqlite_jdbc": "3.53.4.0",
+      "postgresql_jdbc": "42.7.14",
+      "mssql_jdbc": "13.6.1.jre11",
+      "commons_csv": "1.14.1",
+      "standalone_db_slf4j_simple": "2.0.17",
+      "transitive_locks": [
+        "java/suite/dependencies.lock.json",
+        "java/database/dependencies.lock.json"
+      ],
+      "lock_method": "Exact Maven dependency/plugin coordinates plus resolved runtime JAR SHA256 inventories; not a complete license/SBOM audit"
+    }
+  },
+  "build_helpers": {
+    "maven": {
+      "url": "https://archive.apache.org/dist/maven/maven-3/3.9.11/binaries/apache-maven-3.9.11-bin.zip",
+      "sha256": "0d7125e8c91097b36edb990ea5934e6c68b4440eef4ea96510a0f6815e7eeadb",
+      "archive": "apache-maven-3.9.11-bin.zip",
+      "destination": ".",
+      "platform": "portable Java",
+      "archive_sha256_measured": "0d7125e8c91097b36edb990ea5934e6c68b4440eef4ea96510a0f6815e7eeadb",
+      "verification": "Local downloaded archive SHA256 matches tools/bootstrap.py",
+      "verified_date": "2026-10-27"
+    },
+    "runtime": {
+      "url": "https://builds.dotnet.microsoft.com/dotnet/aspnetcore/Runtime/10.0.14/aspnetcore-runtime-10.0.14-win-x64.zip",
+      "sha256": "ae61cd4db653c4fec9b4ad74fc8bdb2d735179966d400fdfe64c65f1b36c2014",
+      "archive": "aspnetcore-runtime-10.0.14-win-x64.zip",
+      "destination": "dotnet-runtime",
+      "platform": "Windows x64",
+      "archive_sha256_measured": "ae61cd4db653c4fec9b4ad74fc8bdb2d735179966d400fdfe64c65f1b36c2014",
+      "verification": "Local downloaded archive SHA256 matches tools/bootstrap.py",
+      "verified_date": "2026-10-27"
+    },
+    "native": {
+      "url": "https://ziglang.org/download/0.17.0/zig-x86_64-windows-0.17.0.zip",
+      "sha256": "b5663f69581dcf391293fbf16c06cb80d81d806545ce618b4d0bab7f0eb8c428",
+      "archive": "zig-0.17.0.zip",
+      "destination": ".",
+      "platform": "Windows x64",
+      "archive_sha256_measured": "b5663f69581dcf391293fbf16c06cb80d81d806545ce618b4d0bab7f0eb8c428",
+      "verification": "Local downloaded archive SHA256 matches tools/bootstrap.py",
+      "verified_date": "2026-10-27"
+    },
+    "jdk": {
+      "url": "https://aka.ms/download-jdk/microsoft-jdk-25.0.3-windows-x64.zip",
+      "sha256": "ba3ce9fa6ebb921eccda29b08c2bad26b5f8839080931096c73f306e0dd9856f",
+      "archive": "microsoft-jdk-25.0.3-windows-x64.zip",
+      "destination": ".",
+      "platform": "Windows x64",
+      "archive_sha256_measured": "ba3ce9fa6ebb921eccda29b08c2bad26b5f8839080931096c73f306e0dd9856f",
+      "verification": "Downloaded archive SHA256 matches the official Microsoft .sha256sum.txt and tools/bootstrap.py",
+      "verified_date": "2026-10-27"
+    }
+  },
+  "native_interop": {
+    "compiler": "Zig 0.17.0",
+    "target": "x86_64-windows-gnu",
+    "source": "native/bench.c",
+    "source_sha256": "400395a7484e28be91d61c4a2003e00ae4de12221eaed6d979661a8c6fecffa4",
+    "artifact": ".work/bench.dll",
+    "artifact_sha256": "8edac669a047011a04a3b4abf29e76a6ed18403f5d387ec1210abb871edfb0b1",
+    "build_script": "native/build.py",
+    "evidence": ".work/native-build.json",
+    "policy": "Same C binary loaded by both language workers; Linux/macOS compilation and execution unverified"
+  },
+  "sqlite_native_identity": {
+    "status": "mismatch_blocks_paired_admission",
+    "platform": "Windows x64",
+    "observed_date": "2026-10-27",
+    "evidence": ".work/database-validation.json",
+    "implementations": {
+      "csharp": {
+        "sqlite_version": "3.53.3",
+        "sqlite_source_id": "2026-06-26 20:14:12 d4c0e51e4aeb96955b99185ab9cde75c339e2c29c3f3f12428d364a10d782c62",
+        "compile_options": [
+          "ATOMIC_INTRINSICS=0",
+          "COMPILER=msvc-1951",
+          "DEFAULT_AUTOVACUUM",
+          "DEFAULT_CACHE_SIZE=-2000",
+          "DEFAULT_FILE_FORMAT=4",
+          "DEFAULT_FOREIGN_KEYS",
+          "DEFAULT_JOURNAL_SIZE_LIMIT=-1",
+          "DEFAULT_MMAP_SIZE=0",
+          "DEFAULT_PAGE_SIZE=4096",
+          "DEFAULT_PCACHE_INITSZ=20",
+          "DEFAULT_RECURSIVE_TRIGGERS",
+          "DEFAULT_SECTOR_SIZE=4096",
+          "DEFAULT_SYNCHRONOUS=2",
+          "DEFAULT_WAL_AUTOCHECKPOINT=1000",
+          "DEFAULT_WAL_SYNCHRONOUS=2",
+          "DEFAULT_WORKER_THREADS=0",
+          "DIRECT_OVERFLOW_READ",
+          "DQS=0",
+          "ENABLE_COLUMN_METADATA",
+          "ENABLE_FTS3",
+          "ENABLE_FTS3_PARENTHESIS",
+          "ENABLE_FTS4",
+          "ENABLE_FTS5",
+          "ENABLE_GEOPOLY",
+          "ENABLE_MATH_FUNCTIONS",
+          "ENABLE_PREUPDATE_HOOK",
+          "ENABLE_RTREE",
+          "ENABLE_SESSION",
+          "ENABLE_SNAPSHOT",
+          "LIKE_DOESNT_MATCH_BLOBS",
+          "MALLOC_SOFT_LIMIT=1024",
+          "MAX_ATTACHED=10",
+          "MAX_COLUMN=2000",
+          "MAX_COMPOUND_SELECT=500",
+          "MAX_DEFAULT_PAGE_SIZE=8192",
+          "MAX_EXPR_DEPTH=1000",
+          "MAX_FUNCTION_ARG=1000",
+          "MAX_LENGTH=1000000000",
+          "MAX_LIKE_PATTERN_LENGTH=50000",
+          "MAX_MMAP_SIZE=0x7fff0000",
+          "MAX_PAGE_COUNT=0xfffffffe",
+          "MAX_PAGE_SIZE=65536",
+          "MAX_SQL_LENGTH=1000000000",
+          "MAX_TRIGGER_DEPTH=1000",
+          "MAX_VARIABLE_NUMBER=32766",
+          "MAX_VDBE_OP=250000000",
+          "MAX_WORKER_THREADS=8",
+          "MUTEX_W32",
+          "SYSTEM_MALLOC",
+          "TEMP_STORE=1",
+          "THREADSAFE=1"
+        ],
+        "native_libraries": [
+          {
+            "name": "e_sqlite3.DLL",
+            "sha256": "b7385d722c83fb52142a00477a726723745916d22a555711ee89834c1111fb2e"
+          }
+        ]
+      },
+      "java": {
+        "sqlite_version": "3.53.4",
+        "sqlite_source_id": "2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc",
+        "compile_options": [
+          "JDBC_EXTENSIONS",
+          "ATOMIC_INTRINSICS=1",
+          "COMPILER=gcc-11.4.0",
+          "DEFAULT_AUTOVACUUM",
+          "DEFAULT_CACHE_SIZE=-2000",
+          "DEFAULT_FILE_FORMAT=4",
+          "DEFAULT_FILE_PERMISSIONS=0666",
+          "DEFAULT_JOURNAL_SIZE_LIMIT=-1",
+          "DEFAULT_MEMSTATUS=0",
+          "DEFAULT_MMAP_SIZE=0",
+          "DEFAULT_PAGE_SIZE=4096",
+          "DEFAULT_PCACHE_INITSZ=20",
+          "DEFAULT_RECURSIVE_TRIGGERS",
+          "DEFAULT_SECTOR_SIZE=4096",
+          "DEFAULT_SYNCHRONOUS=2",
+          "DEFAULT_WAL_AUTOCHECKPOINT=1000",
+          "DEFAULT_WAL_SYNCHRONOUS=2",
+          "DEFAULT_WORKER_THREADS=0",
+          "DIRECT_OVERFLOW_READ",
+          "DISABLE_PAGECACHE_OVERFLOW_STATS",
+          "ENABLE_COLUMN_METADATA",
+          "ENABLE_DBSTAT_VTAB",
+          "ENABLE_FTS3",
+          "ENABLE_FTS3_PARENTHESIS",
+          "ENABLE_FTS5",
+          "ENABLE_LOAD_EXTENSION",
+          "ENABLE_MATH_FUNCTIONS",
+          "ENABLE_PERCENTILE",
+          "ENABLE_RTREE",
+          "ENABLE_STAT4",
+          "ENABLE_UPDATE_DELETE_LIMIT",
+          "HAVE_ISNAN",
+          "MALLOC_SOFT_LIMIT=1024",
+          "MAX_ATTACHED=125",
+          "MAX_COLUMN=32767",
+          "MAX_COMPOUND_SELECT=500",
+          "MAX_DEFAULT_PAGE_SIZE=8192",
+          "MAX_EXPR_DEPTH=1000",
+          "MAX_FUNCTION_ARG=127",
+          "MAX_LENGTH=2147483647",
+          "MAX_LIKE_PATTERN_LENGTH=50000",
+          "MAX_MMAP_SIZE=1099511627776",
+          "MAX_PAGE_COUNT=4294967294",
+          "MAX_PAGE_SIZE=65536",
+          "MAX_SQL_LENGTH=1073741824",
+          "MAX_TRIGGER_DEPTH=1000",
+          "MAX_VARIABLE_NUMBER=250000",
+          "MAX_VDBE_OP=250000000",
+          "MAX_WORKER_THREADS=8",
+          "MUTEX_W32",
+          "SYSTEM_MALLOC",
+          "TEMP_STORE=1",
+          "THREADSAFE=1"
+        ],
+        "native_libraries": [
+          {
+            "name": "sqlite-3.53.4.0-1b97ae06-7c58-4b9b-a596-8554f596043d-sqlitejdbc.dll",
+            "sha256": "f16882d2eded914edd1e1d313e7c8579e040b0da090a52ea99ad7b0c5d961c45"
+          }
+        ]
+      }
+    },
+    "reason": "Stable SQLitePCLRaw.bundle_e_sqlite3 2.1.13 loads3.53.3; stable Xerial3.53.4.0 loads3.53.4. Source IDs/options/binary hashes differ. Four-cell correctness smoke does not establish native parity."
+  },
+  "database_images": {
+    "resolved_date": "2026-10-27",
+    "platform": "linux/amd64",
+    "executed": true,
+    "resolution_method": "Official registry manifest/config APIs pinned linux/amd64 digests. PostgreSQL subsequently executed; SQL Server not executed. Per-engine runtime_verification records apply.",
+    "postgresql": {
+      "image": "postgres@sha256:9770878138a2e83abcb10856d30cc3f24dae0d317bb956db6ab9159de6c3c80d",
+      "resolved_from": "https://registry-1.docker.io/v2/library/postgres/manifests/18",
+      "config_digest": "sha256:79061104669bb30919d015b549c764e2d8021a18ee39cb175581a2588fe90dbe",
+      "config_created_utc": "2026-10-21T00:37:01.146225564Z",
+      "declared_version": "18.6-1.pgdg13+2",
+      "version_source": "PG_VERSION image configuration and live SELECT version(); four functional cells passed"
+    },
+    "sqlserver": {
+      "image": "mcr.microsoft.com/mssql/server@sha256:cf8f0ab2ebe61feec2eed2629061a07d247f791c2a8ddda74a4ac9f06a291718",
+      "resolved_from": "https://mcr.microsoft.com/v2/mssql/server/manifests/2022-latest",
+      "config_digest": "sha256:7fb2139341715e8a71843cfc2f02bab6e95f1c52c0fa9f9a6b2e7b761f060780",
+      "config_created_utc": "2026-10-03T05:58:05.433673258Z",
+      "declared_version": "16.0.4305.5",
+      "version_source": "com.microsoft.version image configuration; runtime verification pending",
+      "os_image": "Ubuntu 22.04",
+      "edition": "Developer",
+      "eula_accepted": false
+    },
+    "runtime_verification": {
+      "postgresql": {
+        "status": "four_functional_cells_passed",
+        "date": "2026-10-27",
+        "evidence": ".work/postgresql-validation.json",
+        "admitted_performance": false
+      },
+      "sqlserver": {
+        "status": "not_executed",
+        "eula_accepted": false
+      }
+    }
+  },
+  "postgresql_runtime_verification": {
+    "date": "2026-10-27",
+    "status": "passed_four_functional_cells",
+    "server": "PostgreSQL18.6 Debian18.6-1.pgdg13+2 LinuxAMD64",
+    "image": "postgres@sha256:9770878138a2e83abcb10856d30cc3f24dae0d317bb956db6ab9159de6c3c80d",
+    "languages": [
+      "csharp",
+      "java"
+    ],
+    "access_modes": [
+      "raw",
+      "orm"
+    ],
+    "workloads": "D01-D08,H06,stale/duplicate/injected rollback,state digest,8-worker read batch,reset",
+    "app_cpu_affinity": [
+      0,
+      1
+    ],
+    "app_memory_bytes": 2147483648,
+    "database_cpu_affinity": [
+      2,
+      3
+    ],
+    "database_memory_bytes": 1073741824,
+    "evidence": ".work/postgresql-validation.json",
+    "admitted_performance": false,
+    "cleanup_complete": true
+  }
+}
