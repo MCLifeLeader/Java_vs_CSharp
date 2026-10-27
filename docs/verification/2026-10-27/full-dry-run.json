@@ -1,0 +1,51 @@
+{
+  "authored_case_ids": 55,
+  "blockers": [
+    "Full campaign requires independently verified admission gates for all mandatory cells",
+    "Provider/image/native dependency locks and parity are incomplete",
+    "No frozen pilot, offered-rate grid or resource allocation",
+    "Full campaign resource budget is not authorized"
+  ],
+  "estimate_limitations": [
+    "Mutation rows use bounded work; actual duration unknown until pilot",
+    "Startup, build, micro, HTTP and diagnostic rows have distinct execution boundaries",
+    "Unfrozen pilot parameters may expand the final inventory; setup/reset costs excluded"
+  ],
+  "estimate_method": "Inventory rows times configured warmup + measurement; arithmetic only, not measured runtime",
+  "estimated_wall_seconds": {
+    "all_rows_nominal": 855000,
+    "network_dal_nominal": 172800,
+    "sqlite_dal_nominal": 28800
+  },
+  "executed": false,
+  "full_campaign_ready": false,
+  "generated_inventory_rows": 4750,
+  "implemented_smoke_rows": 4750,
+  "performance_index": null,
+  "rows_by_domain": {
+    "A": 160,
+    "C": 110,
+    "D": 1120,
+    "H": 2100,
+    "I": 80,
+    "K": 230,
+    "L": 220,
+    "M": 130,
+    "N": 30,
+    "P": 450,
+    "S": 120
+  },
+  "stage": "full",
+  "status": "plan_only",
+  "track": "lts",
+  "command": [
+    "python",
+    "benchmark/controller/benchmarkctl.py",
+    "run",
+    "--stage",
+    "full",
+    "--all",
+    "--dry-run"
+  ],
+  "source_commit": "5c1bcecca8827f9efdae9a5cf983692c5a5e4f76"
+}

@@ -1,0 +1,57 @@
+[
+  {
+    "harness": "BenchmarkDotNet",
+    "identity": {
+      "case_id": "C01",
+      "dataset": "S",
+      "language": "csharp",
+      "parameter_id": "transform",
+      "profile": "controlled",
+      "workers": 1
+    },
+    "independent_processes": 5,
+    "status": "passed",
+    "admitted": false,
+    "boundary": "Native BenchmarkDotNet invocation; prepared iteration setup excluded",
+    "resource_budget": null,
+    "evidence_hash": "792f6b59ebf4be5c2ec16d758292803116b0aaa67060a381fdeb14c374cd3942",
+    "raw_files": {
+      "SuiteHarness-20261027-105710.log": "7f0c4fed570492fdfbd05327ee69dd0e19f849befa8732f4828e4592eded36b9",
+      "results\\SuiteHarness-report-full-compressed.json": "42f32e6a59098078798e2bd32d3893af05f13d400de021f0fec8baff671d831a",
+      "results\\SuiteHarness-report-full.json": "4aa140da4f6d471b6622c8a08a3916fa0f9897b80f4827d1746d0035c1dc4403",
+      "results\\SuiteHarness-report-github.md": "c1f973eba5b7c9ef8d1cf6c68914ba1294e1473d5891804eb09548c2b8633801",
+      "results\\SuiteHarness-report.csv": "8f2885b0ad1911161555f32785323a08e92b3fd85bd9d7bfae7498d046b2d96b",
+      "results\\SuiteHarness-report.html": "bc5d85ccb864cb65330e63f97bb08011d255a73691e24e8c8a1825a864da7da8",
+      "stderr.log": "98985778471d295d5a197196cf96ea59215259a20ac8eff8701049fb15c63c22",
+      "stdout.log": "7f0c4fed570492fdfbd05327ee69dd0e19f849befa8732f4828e4592eded36b9"
+    },
+    "receipt_sha256": "aed4da531d527dd4d05058dc29c95b5052e8c7a3bb5befb4b4583935f6daa521",
+    "receipt_path": "benchmark\\.work\\bdn-launch-verification-complete\\harness\\01f289a11431cfad3e67dafbd041a9e42828430ba3d7d7eac9d180bf1d7ff667\\evidence.json",
+    "note": "Integration check before source freeze. Timings omitted: no matched resource-constrained comparative campaign."
+  },
+  {
+    "harness": "JMH",
+    "identity": {
+      "case_id": "C01",
+      "dataset": "S",
+      "language": "java",
+      "parameter_id": "transform",
+      "profile": "controlled",
+      "workers": 1
+    },
+    "independent_processes": 5,
+    "status": "passed",
+    "admitted": false,
+    "boundary": "Native JMH measured invocation; prepared invocation setup excluded",
+    "resource_budget": null,
+    "evidence_hash": "4b8b00f9dd43172504ab36e9be65ea18a239a2d2e51d49488b97743d5446fa79",
+    "raw_files": {
+      "jmh.json": "f649ac4cc9d7dd3dde69cfeb9081bbe836fde30671812840c9e952c9d0eae329",
+      "stderr.log": "7b1d4dbe329a5413c147fe307273c7a9d9f2e3e831b4124add63c920acef2a88",
+      "stdout.log": "7e701f78251b073070994585cf81502ac9002014ca62e2ccd916bee2866f92f0"
+    },
+    "receipt_sha256": "998b4ff393cef58fd0d1ef55944bde99db5a3fd9006e9183a6b85a7a7416a4ec",
+    "receipt_path": "benchmark\\.work\\jmh-launch-verification\\harness\\a59e4ac07d97cd23046100f1eac3b348bd89566eb3f8a3ddbc802adb3baa4fbb\\evidence.json",
+    "note": "Integration check before source freeze. Timings omitted: no matched resource-constrained comparative campaign."
+  }
+]

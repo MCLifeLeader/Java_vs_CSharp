@@ -1,0 +1,57 @@
+{
+  "status": "passed",
+  "admitted": false,
+  "raw_receipt_sha256": "a9568ae6b20b8b6d9715b66416d5a829e616bf9011e8a228254f53ea3fd38f59",
+  "raw_receipt_path": "benchmark\\.work\\lifecycle-validation.json",
+  "source_note": "Standalone pre-freeze integration checks; not a score or post-commit campaign. Runtime boundaries are disclosed in benchmark/README.md.",
+  "checks": [
+    {
+      "language": "csharp",
+      "variant": "package",
+      "status": "completed",
+      "artifact_bytes": 84505424,
+      "runtime_inclusive_bytes": 194434723,
+      "dependency_components": 50
+    },
+    {
+      "language": "csharp",
+      "variant": "one-method",
+      "status": "completed",
+      "artifact_bytes": 84504931,
+      "runtime_inclusive_bytes": null,
+      "dependency_components": null
+    },
+    {
+      "language": "csharp",
+      "variant": "packaged-service",
+      "status": "correct",
+      "artifact_bytes": null,
+      "runtime_inclusive_bytes": 194408287,
+      "dependency_components": null
+    },
+    {
+      "language": "java",
+      "variant": "package",
+      "status": "completed",
+      "artifact_bytes": 69565377,
+      "runtime_inclusive_bytes": 461137260,
+      "dependency_components": 61
+    },
+    {
+      "language": "java",
+      "variant": "one-method",
+      "status": "completed",
+      "artifact_bytes": 82676149,
+      "runtime_inclusive_bytes": null,
+      "dependency_components": null
+    },
+    {
+      "language": "java",
+      "variant": "packaged-service",
+      "status": "correct",
+      "artifact_bytes": null,
+      "runtime_inclusive_bytes": 461136744,
+      "dependency_components": null
+    }
+  ]
+}

@@ -1,0 +1,2770 @@
+{
+  "recorded_utc": "2026-10-27T17:17:08.994569+00:00",
+  "source": {
+    "base_commit": "5c1bcecca8827f9efdae9a5cf983692c5a5e4f76",
+    "dirty": false,
+    "files": {
+      ".gitignore": "27418253f712b896ac8a6bcf8e3b9cde7a9dfdde1f1d77d34cb11576ed5ae867",
+      "AGENTS.md": "2577f94e0ee38d3e9c66d415f54d068657af3bcea74388bdec80671c8e2f1287",
+      "LICENSE": "d6bd6e6d9d68e7cc63b4b7a42d2670b1a4fffc0cc334fb70ec9e01a9dd673fb6",
+      "README.md": "db080ee8d2889d02b35573d50eb3383f97c317e0676e843ab6a2cb2f55f33cf1",
+      "benchmark/README.md": "e699ecf933fd4f1ee575d47bcf907bea7571dbe8191306e14918a90126ddbc59",
+      "benchmark/config/campaign.json": "d71fe9ed2340ef3329a1c8f81d6cf80ed196f7f7ba4bd4cd8d2ea7e5942f57f5",
+      "benchmark/config/cases.json": "51fb23ef5f3defaa8d7b3fc14565bb39fe93662a425318756e9078c52b1f088a",
+      "benchmark/config/smoke-result.schema.json": "693675aa57602b80e872f680ee010acb5568ae9a6690b8b22b44cb3df5f0752e",
+      "benchmark/config/sources.json": "fde58acfecfd2cd54f3b5ac5291cc58806ea77161d7d8c0f1a66660cca1c92ed",
+      "benchmark/config/suite-result.schema.json": "bbe53a384a2ad4daa704bbe0309e6137370f4a3daf27e4900e213f3f96356a81",
+      "benchmark/config/versions.lock.json": "f28c075db9247f57939044c1f8f899a77b54ee11b7687483d625d514982147b3",
+      "benchmark/config/weights.json": "de970774b718f53e99e695ac1324d1bbc780ec06cb03c2444995141e7ac60b6c",
+      "benchmark/controller/admission.py": "458ef72bb89d6cb9beff0bfd8a5069e5745830d7011425ec71769a9963426a7a",
+      "benchmark/controller/benchmarkctl.py": "78ebdaaeb3df12338b07fad21f0d75b13f61cde971e28a834f1d35cf86db7c03",
+      "benchmark/controller/database.py": "7baa684edc86c39860bde3bb237a3fa6571a07e03ca3fd9432743dd8102cd643",
+      "benchmark/controller/execution.py": "4973e8d1db0520486759a433f456b6cf207c2fb7c856ea40fdd9ebe637bee0d7",
+      "benchmark/controller/generator.py": "4d6d44509a7cb989da59f2b4ba4f5695969554f88851c2ab1ce7fa4fe878a8c5",
+      "benchmark/controller/harness.py": "2d907abe1209311ba2df3415bf424057994b399fbc71c2519f3ff223fa541e5d",
+      "benchmark/controller/infrastructure.py": "31a77da1db6d98ced9189fea0db25b9c9c25952700165705faaccc78bec2580b",
+      "benchmark/controller/inventory.py": "2138edffad78b505d9332651f3bc06189ef6cfce6b012da8576acbe800e1feef",
+      "benchmark/controller/lifecycle.py": "16f5a9b4d154baaa3b95d478bb3c94779e7f138de0354242b2ebf8be8297d17b",
+      "benchmark/controller/resources.py": "91f35d8d174243e1b23671138006f53c702ccd4fc1c3c3494d6ac2a6c7a41e69",
+      "benchmark/controller/services.py": "2254246284d1f3b489eaae0b1599a1bec09b193795575a38f476af3642cf1db1",
+      "benchmark/controller/suite.py": "5f11dd54312da05c3d764176f1f5a4995bccc08195dfb1e3cba3652d17b1718e",
+      "benchmark/controller/suite_http.py": "0e90a554ba294f65b1c0b22476cf63ee8c215b5eebdc732447ef003ef8534205",
+      "benchmark/controller/toolchain.py": "2d0cabea9705ecbf80c25dd7bec42dd53170c36a0963edbe7a629b251f67721c",
+      "benchmark/data/generate.py": "8931a25da62a3609d05a3d7c9625d871fd774ad185a9f8da6def3b5ca2e5e604",
+      "benchmark/data/generate_suite.py": "3c146ae72035d3dadcac319869df5252e154a2a57952a69582db790c830b1a08",
+      "benchmark/data/record.proto": "b153dea8629c8dbc9563c65d9c4c6df13ac4283b2c7989aa4e2d3863f216b2f8",
+      "benchmark/docs/database-contract.md": "5cc7f211b9fe4d931bd4220bed95efac0dcc0283fcd22db2ac35ed9080235537",
+      "benchmark/docs/parity.md": "21693970d6f54e18ab583e60ab5985ca3f57bc294a48effcb87a11df671973d1",
+      "benchmark/docs/workload-contracts.md": "2731977a5fda96f04dd5590c14db3490d317bd744f1f5155394e8836218f5cd2",
+      "benchmark/dotnet/Database/Database.csproj": "519102190129690a27147f6ab327db7bbed0a51df350c115de6765486a106f48",
+      "benchmark/dotnet/Database/DatabaseSession.cs": "87ad05144af59184190ad8d7cd538c9a36319052e41880dda5e73dee88e52084",
+      "benchmark/dotnet/Database/Model.cs": "743eebf190ea0a28b50b421d9aff34566bddaad5d3feca44043e201093d6577e",
+      "benchmark/dotnet/Database/Program.cs": "4f66d7ea5820c3ac47e4cf2692e171e57a1c8e340dde7e8f2a953e5d250bd582",
+      "benchmark/dotnet/Database/packages.lock.json": "758ec4b82db0fced5ae7d6b38be72b9ed39b24b35aa01d008fd7080e75378da8",
+      "benchmark/dotnet/Program.cs": "706dcc403ce976adadaa478305b8cc1891708bd3ee92e284be032b737b6c8eeb",
+      "benchmark/dotnet/Suite/ConcurrencyWorkloads.cs": "cc5e7fbc822ea77e0f55376bdfbc8e6b06958d5ded39b2de35d95892b8ee2279",
+      "benchmark/dotnet/Suite/CoreWorkloads.cs": "1176056e5e533bee1419c68b30318ca483e54b794fe89740c8aa9eb02e99cd5e",
+      "benchmark/dotnet/Suite/IoWorkloads.cs": "61d199ef84fcf5c4436e635933ce17afb9a3b956da7f92a5f3227507ebf606b0",
+      "benchmark/dotnet/Suite/Program.cs": "952d6d228147e3e68349bfbcf1cd8a2ec6d33096c6a47d8073024a6ac555ceab",
+      "benchmark/dotnet/Suite/Suite.csproj": "9d012f824affca0dd8ef6b69810996a3a1061edcba352a431ed59dd4ef070ff0",
+      "benchmark/dotnet/Suite/packages.lock.json": "4b449db934595d7e0734d8cb508ca73086c24b65c08935f45a8f2ffeaa6460f2",
+      "benchmark/dotnet/Worker.csproj": "874e79ed7609ad1578e59a35238efdd2393df7083c11ec8540d18b4df82b4caf",
+      "benchmark/dotnet/global.json": "22046e396bf32772b948aeab2c5a1b024bcabee65adb223b00afa9c7368a4a4b",
+      "benchmark/dotnet/packages.lock.json": "a4364d81a6de2707d66fbced18fbbc926c882ab96e1d1aebbb17e871285b9d75",
+      "benchmark/infrastructure/README.md": "21f5acded04799506c91c36eb1ad1600deac8bec42020f9ad4bb1a6312d6be77",
+      "benchmark/infrastructure/compose.yaml": "d0c0fe30dfd9b5f912a70434fde1e82cae5aba4b2edc87286a65e7a84917ccc2",
+      "benchmark/infrastructure/images.lock.json": "e635224f1837bef0f53d6df3b2036948971e694281e0d7cd1e5386157fe25bd5",
+      "benchmark/infrastructure/provision.py": "0a359a4718092eb1e80f43e02596c89ba9fcfd9441e0414807e8b1fd67038f02",
+      "benchmark/infrastructure/resource-profile.example.json": "9210c81f07831018d7252781f460475932aab182864fa46638d764b4c18d307a",
+      "benchmark/infrastructure/tls/README.md": "5b3357d880f1cba0ca9b8c8d3bec40c2c184b2590c16143cc568445b9e59743d",
+      "benchmark/infrastructure/tls/localhost.crt": "7228faeff9bc9c65c3fbfec51f5e3926879d5b5336f178fec0bfe068330fc6ae",
+      "benchmark/infrastructure/tls/localhost.key": "ea4974ef1b2286f765f27ad06dbe8bd4b0e64a5ee3bd7217b716adc24a763061",
+      "benchmark/java/database/dependencies.lock.json": "9bf9bde2090dc792fa8a7f317b7c8fcf4f5cc07968e5d00bef36cdde66fcb0a1",
+      "benchmark/java/database/pom.xml": "49ad7f853119e19d52fda9a40b39a112ce8ea13dbecb674b96bfcb55f6e3ab05",
+      "benchmark/java/database/src/main/java/benchmark/database/DatabaseMain.java": "5eafc84f37089292f3eb3336dee949e6d08a427c80163bbdd647410ae9fb7771",
+      "benchmark/java/database/src/main/java/benchmark/database/DatabaseSession.java": "ebb0ae4bbbee5858f67fe1f3d68bcfae6b6e9dae6ff9a55ca26a12b33fa2559b",
+      "benchmark/java/database/src/main/java/benchmark/database/Model.java": "84f6376b6a3b0aaac309dd320cbeac0a39e9ddf6bb25b50c14892553b668b066",
+      "benchmark/java/src/BenchmarkWorker.java": "4629a41a938cbfdf87c0f42cd5487cc6643e7e93685e7eb926241e2a9d85e294",
+      "benchmark/java/suite/README.md": "93e34174972e35cc8896eaa75eb9f218276c489feef4e8e15c9bfa3a8e64d377",
+      "benchmark/java/suite/bootstrap_maven.py": "d6f7b1bfa3c4196da90b48160751b1dfd145a949f0a21141577aadf282884428",
+      "benchmark/java/suite/dependencies.lock.json": "43428726a3dc817f709378ed12f22ff49440e27fd39210a41257cd745604c8d1",
+      "benchmark/java/suite/pom.xml": "69d721c3f31e299feb90658b23146ce496b20ba1520ab3ff1cef45311baa7ca6",
+      "benchmark/java/suite/run_jmh.py": "f57975de341aec2b10403e5b84707258644226edcb8e94b6aa6f169be5dc248b",
+      "benchmark/java/suite/src/main/java/benchmark/suite/Harness.java": "1960db05e5e007129ec1e35bfafd21f886b9d44fd7aa9335129dcd63b390aae6",
+      "benchmark/java/suite/src/main/java/benchmark/suite/SuiteMain.java": "d1e5e22303f927c2a0b9e641a234ea3cc2f1caf8ffe38c11122ddca02b2928f2",
+      "benchmark/java/suite/src/main/java/benchmark/suite/SuiteServer.java": "f3ebd9d97f47fa25d2a72da14fbcc3942fe46514a7f9241bf9ff8b53359828ea",
+      "benchmark/java/suite/src/main/java/benchmark/suite/Workloads.java": "cdea8e9380f5c4a39f6e5966c1252f7fbe42d96ff4a693731c18b48e7ccebb4d",
+      "benchmark/java/suite/src/main/resources/logback.xml": "6d09aeb1bcf4f0bc36d9af5478d6a21b6cc0c3679e723a94f53d8dc62b8400a8",
+      "benchmark/java/suite/src/test/java/benchmark/suite/CsvContractTest.java": "25f125341f4b96daa1fa69bda6e314a83b826d88aa2019e3b9ba93ac8891e7e7",
+      "benchmark/java/suite/verify_dependencies.py": "a444f286b28b907d9c9f0444016644ba1a619e7d4f5fc364eaadc44ed3fa463f",
+      "benchmark/java/suite/verify_smoke.py": "30be2ef20cf635e69c41d8b6e18666baa49766e05b7c8649cdcc4ca070dd7c91",
+      "benchmark/native/bench.c": "400395a7484e28be91d61c4a2003e00ae4de12221eaed6d979661a8c6fecffa4",
+      "benchmark/native/build.py": "6fac9308be13a7b9c7cb405b6d7e01d83ab08a46e048cc4277bec4c5bc7319db",
+      "benchmark/queries/postgresql/D01.sql": "6585fda6f5cb18d1133c1ab56147a453524f19013290bb092fdeb44fc2dd7227",
+      "benchmark/queries/postgresql/D02.sql": "662ca727f847bd287e056681a6eb20e2c2f0358f6e0ff815420c398239bc8356",
+      "benchmark/queries/postgresql/D03.sql": "8da94ff12a1e8353f10ba8a8ea7a3ac0e3f394b5223b26edbeb62db8487a45b2",
+      "benchmark/queries/postgresql/D04.sql": "badc7456c5be8200a5fe34d9aee26fe9d10df1f17a9b8a02fe05fcfa4f28a9f7",
+      "benchmark/queries/postgresql/D05-read.sql": "6585fda6f5cb18d1133c1ab56147a453524f19013290bb092fdeb44fc2dd7227",
+      "benchmark/queries/postgresql/D05-update.sql": "cc659f14a890e2f0419af1b5b7b6678e20f6d9a4c99b018131f4081cd9ccbed3",
+      "benchmark/queries/postgresql/D06-line.sql": "705adb02c3adfa4b1259eed4ff6bed4d3c3346137518e11fc018b1a75913ada7",
+      "benchmark/queries/postgresql/D06-order.sql": "9c4ce1a58e77f9a98e4d6f8e99a6a8d8aa1ecabd252ceb10c7bde024656f8d49",
+      "benchmark/queries/postgresql/D07-child.sql": "dcd38480825896891840991487e8ce1f8e5b92fcb08f4b1ed39ff98512f1d850",
+      "benchmark/queries/postgresql/D07-load.sql": "8da94ff12a1e8353f10ba8a8ea7a3ac0e3f394b5223b26edbeb62db8487a45b2",
+      "benchmark/queries/postgresql/D07-parent.sql": "342cd6be5e67f60abf118733b21c4f41d19f6c0e9a60856655234b59570a803c",
+      "benchmark/queries/postgresql/H06-product.sql": "6ced33ad33fa856ae88ec2aae172c43ac85a910838047a54f579fa86f790f410",
+      "benchmark/queries/sqlite/D01.sql": "6585fda6f5cb18d1133c1ab56147a453524f19013290bb092fdeb44fc2dd7227",
+      "benchmark/queries/sqlite/D02.sql": "662ca727f847bd287e056681a6eb20e2c2f0358f6e0ff815420c398239bc8356",
+      "benchmark/queries/sqlite/D03.sql": "8da94ff12a1e8353f10ba8a8ea7a3ac0e3f394b5223b26edbeb62db8487a45b2",
+      "benchmark/queries/sqlite/D04.sql": "bf1832974612bdbb2b438734ec1dac25950152ea917887aacf1aca7aab4d2fd1",
+      "benchmark/queries/sqlite/D05-read.sql": "6585fda6f5cb18d1133c1ab56147a453524f19013290bb092fdeb44fc2dd7227",
+      "benchmark/queries/sqlite/D05-update.sql": "cc659f14a890e2f0419af1b5b7b6678e20f6d9a4c99b018131f4081cd9ccbed3",
+      "benchmark/queries/sqlite/D06-line.sql": "705adb02c3adfa4b1259eed4ff6bed4d3c3346137518e11fc018b1a75913ada7",
+      "benchmark/queries/sqlite/D06-order.sql": "9c4ce1a58e77f9a98e4d6f8e99a6a8d8aa1ecabd252ceb10c7bde024656f8d49",
+      "benchmark/queries/sqlite/D07-child.sql": "dcd38480825896891840991487e8ce1f8e5b92fcb08f4b1ed39ff98512f1d850",
+      "benchmark/queries/sqlite/D07-load.sql": "8da94ff12a1e8353f10ba8a8ea7a3ac0e3f394b5223b26edbeb62db8487a45b2",
+      "benchmark/queries/sqlite/D07-parent.sql": "342cd6be5e67f60abf118733b21c4f41d19f6c0e9a60856655234b59570a803c",
+      "benchmark/queries/sqlite/H06-product.sql": "6ced33ad33fa856ae88ec2aae172c43ac85a910838047a54f579fa86f790f410",
+      "benchmark/queries/sqlserver/D01.sql": "6585fda6f5cb18d1133c1ab56147a453524f19013290bb092fdeb44fc2dd7227",
+      "benchmark/queries/sqlserver/D02.sql": "f66e5e8b6c9a1d933b96848922c281e9722c0be1eba3570695b83fdddf0c7f64",
+      "benchmark/queries/sqlserver/D03.sql": "8da94ff12a1e8353f10ba8a8ea7a3ac0e3f394b5223b26edbeb62db8487a45b2",
+      "benchmark/queries/sqlserver/D04.sql": "e9f8c9ecba9ceed5bd7e8d72f3e898d4c792a068dcc0d7396090991cf45dba30",
+      "benchmark/queries/sqlserver/D05-read.sql": "6585fda6f5cb18d1133c1ab56147a453524f19013290bb092fdeb44fc2dd7227",
+      "benchmark/queries/sqlserver/D05-update.sql": "cc659f14a890e2f0419af1b5b7b6678e20f6d9a4c99b018131f4081cd9ccbed3",
+      "benchmark/queries/sqlserver/D06-line.sql": "705adb02c3adfa4b1259eed4ff6bed4d3c3346137518e11fc018b1a75913ada7",
+      "benchmark/queries/sqlserver/D06-order.sql": "9c4ce1a58e77f9a98e4d6f8e99a6a8d8aa1ecabd252ceb10c7bde024656f8d49",
+      "benchmark/queries/sqlserver/D07-child.sql": "dcd38480825896891840991487e8ce1f8e5b92fcb08f4b1ed39ff98512f1d850",
+      "benchmark/queries/sqlserver/D07-load.sql": "8da94ff12a1e8353f10ba8a8ea7a3ac0e3f394b5223b26edbeb62db8487a45b2",
+      "benchmark/queries/sqlserver/D07-parent.sql": "342cd6be5e67f60abf118733b21c4f41d19f6c0e9a60856655234b59570a803c",
+      "benchmark/queries/sqlserver/H06-product.sql": "6ced33ad33fa856ae88ec2aae172c43ac85a910838047a54f579fa86f790f410",
+      "benchmark/reporting/analysis.py": "160b3d2ac60763077e534eaaea274e22d82a9e6c82cfef0732ff1b3446da4cec",
+      "benchmark/reporting/campaign.py": "cc407b1dd44d4b7df4ef0be55106d791d54b435dc120c2d3beddbc123ebcefcf",
+      "benchmark/reporting/deployment.py": "5801b8e31b7f3412a595978c46ebf5488ac9ed503e52b44aa0b4450d72af8faa",
+      "benchmark/reporting/pair_gates.py": "422b0607362b8912ba03ca9199e12b2047190c3649a6daa5d617fdfb4d556609",
+      "benchmark/reporting/report.py": "f64ed5e1ec0973e21bd34758c3ca5ab93ef40ad8622ffa0d749943c38c7a3195",
+      "benchmark/reporting/suite_validation.py": "971d22557163ee4b8d2fc5597e9091cd8e53a65fdb08549abb58f1d2fb97a107",
+      "benchmark/schema/postgresql.sql": "b3435d9b0fa664ae083f65c557862870b56f29b1b60cdfd311ec4f17767a351a",
+      "benchmark/schema/sqlite.sql": "c36d28074b934b2d142a9358ed8c8a549ca1c2f981091ae4f192fe863e4ea121",
+      "benchmark/schema/sqlserver.sql": "b9bf0d4c7e6d1ad63c24949bd0c01f26409eeb16a03c47446d52876501a76607",
+      "benchmark/specification.md": "b9b8bf4e88eacf56690fd5a8d9b3ace76fa026400eb7b5845a49d0b648f644ac",
+      "benchmark/tools/activate.ps1": "d07d4ec16f4bcb130ba409b893ecede369e363744bf9eb16cde66eb3e9dae047",
+      "benchmark/tools/bootstrap.py": "3829237a2d671bee3764b5303cf793699eb604672a123877f2461d1e33f0f4a0",
+      "benchmark/validation/database_oracle.py": "223c2331c3e846072eeb47fa48d18e327683681b8bbd4e71a997f8e2fbe09fda",
+      "benchmark/validation/oracle.py": "ee31771c0e95ab69bb0cb2cf7d22990b0bd17118c04168349f56132118015d2d",
+      "benchmark/validation/suite_oracle.py": "c73a05c62adad3f0a279cdf9a72e1368b0d4ca6ac3fabc3715ae48ea450e9e8f",
+      "benchmark/validation/test_analysis.py": "4ca6b19bb9d364bb968ae7dd14daa753c848439e510aef11a4d604304b24533d",
+      "benchmark/validation/test_controller.py": "ec9f76a00c7f59fd664ee6e629479bb274fb86aa4ddc96e6edcf32010680334a",
+      "benchmark/validation/test_csv_contract.py": "33426d6822b991540faf0326c75d75bb41363a232175fbccf9d127f501b4fe9d",
+      "benchmark/validation/test_database_contract.py": "b1726220470eb8b336170ce5067546c75c81b8345e22740ef095d7e9faf25a29",
+      "benchmark/validation/test_database_oracle.py": "3d604b379c1f5f0956b4d1b19d46fb1f90c614741783e37ac57e59113fb9f0ae",
+      "benchmark/validation/test_database_workers.py": "2aff521e9d3936a19103d4f0801b1464a2df2c09e454cff357d2bb4711766b5e",
+      "benchmark/validation/test_execution.py": "70f829b2818819ad984d7931e26f95db910be50268f5dea8a7e8cb252d17bc66",
+      "benchmark/validation/test_generator.py": "b119905f4d3515e21c9335ef03a7fdeff82e5ba82f4836aff8b5604a6fc7d8bb",
+      "benchmark/validation/test_infrastructure.py": "97c8a71c979cf706438beb89fa5046fbc5ba57a1a0d5f7869eb98aedd00ec6f4",
+      "benchmark/validation/test_inventory.py": "d388e1b2ade12d0067225515691c3794d21e7114793ecbc2cc88ac6cf9f97b41",
+      "benchmark/validation/test_reporting.py": "cfc22d4b19c3339c95b707e0247462d22ee77047d8e346592fd2c4c4ed6a9a8f",
+      "benchmark/validation/test_services.py": "e8b8560da6a7f9b3e478ff3768d33a6ff6bc6e0378eb2d94a3396ec4bedd4c77",
+      "benchmark/validation/test_suite_controller.py": "64b371ce266749fa8ba4d064c2b7c11bb1ef4c811b601c88ebbf518a1b140ff6",
+      "benchmark/validation/test_suite_fixtures.py": "4b7542ebf6b1ba84c2e92e66dea5f4c12e9e8884615798dd858dc0b7f84ec36a",
+      "benchmark/validation/test_suite_http.py": "6aa537aaf1efbbd58de65910894dea899081448ca468148331eb8d90fd2fd3e7",
+      "benchmark/validation/test_suite_workers.py": "8fd9bd7c24f609ace5a9a5dd985f1e301227aee446cb3f3c99f7e49ad88b0ee6",
+      "benchmark/validation/test_toolchain.py": "398e46b8423b3f0c39c7bb6c8cb05705e26675a01163a67546879e719c4bd715",
+      "benchmark/validation/test_workers.py": "5ef78ec6ddc03f88554d7fd9e6fa94f08ffe384e92f671df8faa853f5c5f474f",
+      "benchmark/validation/verify.py": "fcc7f18ca4aead6228bbaf50675f376433d100cf803442ac8b7d86dfaff23b73",
+      "benchmark/validation/verify_postgresql.py": "bcf93ddc231ee1ed999e25b3aaaeb5fd6c29a406f8b2ce84948f8fff838e1a61",
+      "docs/WORKLOG.md": "379b406a41077d09a6c95ded44c5d4416624bf83794112606afe58fd0c66aa02",
+      "docs/csharp15_java27_report Part 1.pdf": "c16458f9ceb89db5e760dbad7cef2d76a8d85474223583fb4f1cb547f1970c2d",
+      "docs/csharp15_java27_report Part 2.pdf": "adc6552b6a50d326fdbc1c12e2c11188b4c888b190c5e6489f7e359a44934486",
+      "docs/csharp_java_benchmark_plan.pdf": "050b4ca61c4f695deaeb6e8f6019f3e8ee9e8c72aeaa8310ab812023f71d1554"
+    },
+    "content_sha256": "1379d203bae8808f1b6ce2a016a4dcd259cdad9f12bf73b6f7b44e692a081d3f",
+    "method": "git ls-files cached+untracked excluding Git-ignored files; curated verification output excluded to avoid self-reference"
+  },
+  "source_changed_during_verification": false,
+  "python": {
+    "framework": "unittest",
+    "runtime": "3.15.1 (tags/v3.15.1:c37e74c, Oct 21 2026, 06:24:08) [MSC v.1951 64 bit (AMD64)]",
+    "authored_definitions": 142,
+    "discovered_cases": 142,
+    "tests_run": 142,
+    "results": {
+      "passed": 142
+    },
+    "areas": {
+      "test_analysis": {
+        "authored_definitions": 9,
+        "discovered_cases": 9,
+        "executed_results": {
+          "passed": 9
+        },
+        "subtest_results": {}
+      },
+      "test_controller": {
+        "authored_definitions": 13,
+        "discovered_cases": 13,
+        "executed_results": {
+          "passed": 13
+        },
+        "subtest_results": {}
+      },
+      "test_csv_contract": {
+        "authored_definitions": 3,
+        "discovered_cases": 3,
+        "executed_results": {
+          "passed": 3
+        },
+        "subtest_results": {
+          "passed": 4
+        }
+      },
+      "test_database_contract": {
+        "authored_definitions": 12,
+        "discovered_cases": 12,
+        "executed_results": {
+          "passed": 12
+        },
+        "subtest_results": {
+          "passed": 64
+        }
+      },
+      "test_database_oracle": {
+        "authored_definitions": 3,
+        "discovered_cases": 3,
+        "executed_results": {
+          "passed": 3
+        },
+        "subtest_results": {}
+      },
+      "test_database_workers": {
+        "authored_definitions": 3,
+        "discovered_cases": 3,
+        "executed_results": {
+          "passed": 3
+        },
+        "subtest_results": {
+          "passed": 14
+        }
+      },
+      "test_execution": {
+        "authored_definitions": 7,
+        "discovered_cases": 7,
+        "executed_results": {
+          "passed": 7
+        },
+        "subtest_results": {}
+      },
+      "test_generator": {
+        "authored_definitions": 6,
+        "discovered_cases": 6,
+        "executed_results": {
+          "passed": 6
+        },
+        "subtest_results": {
+          "passed": 3
+        }
+      },
+      "test_infrastructure": {
+        "authored_definitions": 5,
+        "discovered_cases": 5,
+        "executed_results": {
+          "passed": 5
+        },
+        "subtest_results": {}
+      },
+      "test_inventory": {
+        "authored_definitions": 18,
+        "discovered_cases": 18,
+        "executed_results": {
+          "passed": 18
+        },
+        "subtest_results": {
+          "passed": 15
+        }
+      },
+      "test_reporting": {
+        "authored_definitions": 12,
+        "discovered_cases": 12,
+        "executed_results": {
+          "passed": 12
+        },
+        "subtest_results": {}
+      },
+      "test_services": {
+        "authored_definitions": 3,
+        "discovered_cases": 3,
+        "executed_results": {
+          "passed": 3
+        },
+        "subtest_results": {}
+      },
+      "test_suite_controller": {
+        "authored_definitions": 26,
+        "discovered_cases": 26,
+        "executed_results": {
+          "passed": 26
+        },
+        "subtest_results": {}
+      },
+      "test_suite_fixtures": {
+        "authored_definitions": 7,
+        "discovered_cases": 7,
+        "executed_results": {
+          "passed": 7
+        },
+        "subtest_results": {
+          "passed": 3
+        }
+      },
+      "test_suite_http": {
+        "authored_definitions": 3,
+        "discovered_cases": 3,
+        "executed_results": {
+          "passed": 3
+        },
+        "subtest_results": {
+          "passed": 20
+        }
+      },
+      "test_suite_workers": {
+        "authored_definitions": 3,
+        "discovered_cases": 3,
+        "executed_results": {
+          "passed": 3
+        },
+        "subtest_results": {
+          "passed": 196
+        }
+      },
+      "test_toolchain": {
+        "authored_definitions": 4,
+        "discovered_cases": 4,
+        "executed_results": {
+          "passed": 4
+        },
+        "subtest_results": {}
+      },
+      "test_workers": {
+        "authored_definitions": 5,
+        "discovered_cases": 5,
+        "executed_results": {
+          "passed": 5
+        },
+        "subtest_results": {
+          "passed": 14
+        }
+      }
+    },
+    "cases": [
+      {
+        "id": "test_analysis.AnalysisTests.test_bootstrap_resamples_whole_pairs_deterministically",
+        "area": "test_analysis",
+        "status": "passed"
+      },
+      {
+        "id": "test_analysis.AnalysisTests.test_five_process_pairs_required",
+        "area": "test_analysis",
+        "status": "passed"
+      },
+      {
+        "id": "test_analysis.AnalysisTests.test_full_index_formula_and_overall_eight_percent",
+        "area": "test_analysis",
+        "status": "passed"
+      },
+      {
+        "id": "test_analysis.AnalysisTests.test_lower_is_better_direction_and_leaf_scores",
+        "area": "test_analysis",
+        "status": "passed"
+      },
+      {
+        "id": "test_analysis.AnalysisTests.test_missing_mandatory_leaf_keeps_full_index_unavailable",
+        "area": "test_analysis",
+        "status": "passed"
+      },
+      {
+        "id": "test_analysis.AnalysisTests.test_small_consistent_advantage_remains_practically_similar",
+        "area": "test_analysis",
+        "status": "passed"
+      },
+      {
+        "id": "test_analysis.AnalysisTests.test_unfrozen_weights_keep_full_index_unavailable",
+        "area": "test_analysis",
+        "status": "passed"
+      },
+      {
+        "id": "test_analysis.AnalysisTests.test_unsent_arrivals_fail_slo_without_zero_latency",
+        "area": "test_analysis",
+        "status": "passed"
+      },
+      {
+        "id": "test_analysis.AnalysisTests.test_zero_resource_observation_is_not_scored",
+        "area": "test_analysis",
+        "status": "passed"
+      },
+      {
+        "id": "test_controller.ControllerTests.test_atomic_write_replaces_complete_json",
+        "area": "test_controller",
+        "status": "passed"
+      },
+      {
+        "id": "test_controller.ControllerTests.test_dry_run_preserves_exact_dal_count_and_performs_no_processes",
+        "area": "test_controller",
+        "status": "passed"
+      },
+      {
+        "id": "test_controller.ControllerTests.test_preflight_failures_do_not_connect_database",
+        "area": "test_controller",
+        "status": "passed"
+      },
+      {
+        "id": "test_controller.ControllerTests.test_rejects_below_contract_warmup",
+        "area": "test_controller",
+        "status": "passed"
+      },
+      {
+        "id": "test_controller.ControllerTests.test_rejects_hidden_sqlite_contention_profile",
+        "area": "test_controller",
+        "status": "passed"
+      },
+      {
+        "id": "test_controller.ControllerTests.test_rejects_invalid_mutation_trace_size",
+        "area": "test_controller",
+        "status": "passed"
+      },
+      {
+        "id": "test_controller.ControllerTests.test_rejects_negative_nominal_duration",
+        "area": "test_controller",
+        "status": "passed"
+      },
+      {
+        "id": "test_controller.ControllerTests.test_rejects_negative_worker_budget",
+        "area": "test_controller",
+        "status": "passed"
+      },
+      {
+        "id": "test_controller.ControllerTests.test_rejects_silently_removed_engine",
+        "area": "test_controller",
+        "status": "passed"
+      },
+      {
+        "id": "test_controller.ControllerTests.test_rejects_unselected_runtime_track",
+        "area": "test_controller",
+        "status": "passed"
+      },
+      {
+        "id": "test_controller.ControllerTests.test_selectors_fail_when_no_rows_match",
+        "area": "test_controller",
+        "status": "passed"
+      },
+      {
+        "id": "test_controller.ControllerTests.test_unknown_authored_case_fails",
+        "area": "test_controller",
+        "status": "passed"
+      },
+      {
+        "id": "test_controller.ControllerTests.test_worker_runtime_is_checked_inside_process",
+        "area": "test_controller",
+        "status": "passed"
+      },
+      {
+        "id": "test_csv_contract.CsvContractTests.test_empty_trailing_fields_and_field_count",
+        "area": "test_csv_contract",
+        "status": "passed"
+      },
+      {
+        "id": "test_csv_contract.CsvContractTests.test_quote_placement_and_unterminated_fields_are_rejected",
+        "area": "test_csv_contract",
+        "status": "passed"
+      },
+      {
+        "id": "test_csv_contract.CsvContractTests.test_quoted_commas_newlines_and_escaped_quotes_are_preserved",
+        "area": "test_csv_contract",
+        "status": "passed"
+      },
+      {
+        "id": "test_database_contract.DatabaseContractTests.test_ascii_lengths_and_case_sensitive_unique_values",
+        "area": "test_database_contract",
+        "status": "passed"
+      },
+      {
+        "id": "test_database_contract.DatabaseContractTests.test_customer_and_single_query_full_graph_materialization",
+        "area": "test_database_contract",
+        "status": "passed"
+      },
+      {
+        "id": "test_database_contract.DatabaseContractTests.test_delete_children_then_stale_parent_rolls_back_then_success_commits",
+        "area": "test_database_contract",
+        "status": "passed"
+      },
+      {
+        "id": "test_database_contract.DatabaseContractTests.test_duplicate_foreign_key_and_required_value_failures",
+        "area": "test_database_contract",
+        "status": "passed"
+      },
+      {
+        "id": "test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts",
+        "area": "test_database_contract",
+        "status": "passed"
+      },
+      {
+        "id": "test_database_contract.DatabaseContractTests.test_group_projection_uses_ordered_four_statuses_and_half_open_window",
+        "area": "test_database_contract",
+        "status": "passed"
+      },
+      {
+        "id": "test_database_contract.DatabaseContractTests.test_insert_six_logical_statements_and_failure_rolls_back_full_graph",
+        "area": "test_database_contract",
+        "status": "passed"
+      },
+      {
+        "id": "test_database_contract.DatabaseContractTests.test_keyset_paging_preserves_ties_and_complete_rows",
+        "area": "test_database_contract",
+        "status": "passed"
+      },
+      {
+        "id": "test_database_contract.DatabaseContractTests.test_named_memory_lifetime_and_per_connection_settings",
+        "area": "test_database_contract",
+        "status": "passed"
+      },
+      {
+        "id": "test_database_contract.DatabaseContractTests.test_realized_catalog_has_expected_indexes_and_no_cascade",
+        "area": "test_database_contract",
+        "status": "passed"
+      },
+      {
+        "id": "test_database_contract.DatabaseContractTests.test_signed_64bit_boundaries_and_domain_checks",
+        "area": "test_database_contract",
+        "status": "passed"
+      },
+      {
+        "id": "test_database_contract.DatabaseContractTests.test_update_read_modify_write_version_increment_and_stale_conflict",
+        "area": "test_database_contract",
+        "status": "passed"
+      },
+      {
+        "id": "test_database_oracle.DatabaseOracleTests.test_injected_delete_rollback_restores_line_index",
+        "area": "test_database_oracle",
+        "status": "passed"
+      },
+      {
+        "id": "test_database_oracle.DatabaseOracleTests.test_known_valid_insert_delete_keeps_index_and_state_consistent",
+        "area": "test_database_oracle",
+        "status": "passed"
+      },
+      {
+        "id": "test_database_oracle.DatabaseOracleTests.test_partial_duplicate_insert_rolls_back_rows_and_index",
+        "area": "test_database_oracle",
+        "status": "passed"
+      },
+      {
+        "id": "test_database_workers.DatabaseWorkerTests.test_four_sqlite_cells_match_oracle_all_workloads_and_rollback",
+        "area": "test_database_workers",
+        "status": "passed"
+      },
+      {
+        "id": "test_database_workers.DatabaseWorkerTests.test_invalid_targets_and_finite_trace_requests_fail_closed",
+        "area": "test_database_workers",
+        "status": "passed"
+      },
+      {
+        "id": "test_database_workers.DatabaseWorkerTests.test_untimed_audit_and_commit_reconciliation_preserve_order_and_state",
+        "area": "test_database_workers",
+        "status": "passed"
+      },
+      {
+        "id": "test_execution.ExecutionTests.test_batch_must_finish_frozen_iteration_count",
+        "area": "test_execution",
+        "status": "passed"
+      },
+      {
+        "id": "test_execution.ExecutionTests.test_batch_output_must_be_consumed_and_match_oracle",
+        "area": "test_execution",
+        "status": "passed"
+      },
+      {
+        "id": "test_execution.ExecutionTests.test_batch_uses_unsigned_modulo_checksum_aggregation",
+        "area": "test_execution",
+        "status": "passed"
+      },
+      {
+        "id": "test_execution.ExecutionTests.test_common_os_sampler_reads_only_requested_pid",
+        "area": "test_execution",
+        "status": "passed"
+      },
+      {
+        "id": "test_execution.ExecutionTests.test_duplicate_language_pair_rejected",
+        "area": "test_execution",
+        "status": "passed"
+      },
+      {
+        "id": "test_execution.ExecutionTests.test_incomplete_language_pair_rejected",
+        "area": "test_execution",
+        "status": "passed"
+      },
+      {
+        "id": "test_execution.ExecutionTests.test_seeded_pair_order_is_balanced_and_deterministic",
+        "area": "test_execution",
+        "status": "passed"
+      },
+      {
+        "id": "test_generator.GeneratorTests.test_distinct_seeds_produce_distinct_inputs",
+        "area": "test_generator",
+        "status": "passed"
+      },
+      {
+        "id": "test_generator.GeneratorTests.test_nonpositive_counts_rejected",
+        "area": "test_generator",
+        "status": "passed"
+      },
+      {
+        "id": "test_generator.GeneratorTests.test_oracle_signed_sort_and_modular_sum",
+        "area": "test_generator",
+        "status": "passed"
+      },
+      {
+        "id": "test_generator.GeneratorTests.test_oracle_unknown_case_rejected",
+        "area": "test_generator",
+        "status": "passed"
+      },
+      {
+        "id": "test_generator.GeneratorTests.test_same_seed_produces_identical_files_and_hashes",
+        "area": "test_generator",
+        "status": "passed"
+      },
+      {
+        "id": "test_generator.GeneratorTests.test_splitmix64_published_seed_zero_vector",
+        "area": "test_generator",
+        "status": "passed"
+      },
+      {
+        "id": "test_infrastructure.InfrastructureTests.test_arbitrary_database_name_cannot_be_dropped",
+        "area": "test_infrastructure",
+        "status": "passed"
+      },
+      {
+        "id": "test_infrastructure.InfrastructureTests.test_equal_process_budget_requires_memory_and_valid_cpu_ids",
+        "area": "test_infrastructure",
+        "status": "passed"
+      },
+      {
+        "id": "test_infrastructure.InfrastructureTests.test_forged_owned_prefix_is_not_enough",
+        "area": "test_infrastructure",
+        "status": "passed"
+      },
+      {
+        "id": "test_infrastructure.InfrastructureTests.test_sqlserver_eula_is_never_implicitly_accepted",
+        "area": "test_infrastructure",
+        "status": "passed"
+      },
+      {
+        "id": "test_infrastructure.InfrastructureTests.test_unpinned_image_is_rejected_before_any_process",
+        "area": "test_infrastructure",
+        "status": "passed"
+      },
+      {
+        "id": "test_inventory.InventoryContractTests.test_a04_idiomatic_is_required_but_never_score_designated",
+        "area": "test_inventory",
+        "status": "passed"
+      },
+      {
+        "id": "test_inventory.InventoryContractTests.test_all_55_authored_cases_are_present_without_duplicates",
+        "area": "test_inventory",
+        "status": "passed"
+      },
+      {
+        "id": "test_inventory.InventoryContractTests.test_all_eight_database_workloads_have_same_12_cells",
+        "area": "test_inventory",
+        "status": "passed"
+      },
+      {
+        "id": "test_inventory.InventoryContractTests.test_database_inventory_has_12_cells_and_required_scaling",
+        "area": "test_inventory",
+        "status": "passed"
+      },
+      {
+        "id": "test_inventory.InventoryContractTests.test_diagnostics_never_enter_performance_score",
+        "area": "test_inventory",
+        "status": "passed"
+      },
+      {
+        "id": "test_inventory.InventoryContractTests.test_full_implementation_is_distinct_from_execution_and_admission",
+        "area": "test_inventory",
+        "status": "passed"
+      },
+      {
+        "id": "test_inventory.InventoryContractTests.test_hashes_are_unique_reproducible_and_config_sensitive",
+        "area": "test_inventory",
+        "status": "passed"
+      },
+      {
+        "id": "test_inventory.InventoryContractTests.test_http_checkout_sqlite_is_separate_supplemental_scope",
+        "area": "test_inventory",
+        "status": "passed"
+      },
+      {
+        "id": "test_inventory.InventoryContractTests.test_http_rate_grid_and_unknown_pilot_workers_stay_visible",
+        "area": "test_inventory",
+        "status": "passed"
+      },
+      {
+        "id": "test_inventory.InventoryContractTests.test_invalid_configuration_is_rejected",
+        "area": "test_inventory",
+        "status": "passed"
+      },
+      {
+        "id": "test_inventory.InventoryContractTests.test_invalid_selector_fails_instead_of_silent_empty_inventory",
+        "area": "test_inventory",
+        "status": "passed"
+      },
+      {
+        "id": "test_inventory.InventoryContractTests.test_missing_case_is_rejected",
+        "area": "test_inventory",
+        "status": "passed"
+      },
+      {
+        "id": "test_inventory.InventoryContractTests.test_non_database_cases_do_not_expand_for_engine_or_access",
+        "area": "test_inventory",
+        "status": "passed"
+      },
+      {
+        "id": "test_inventory.InventoryContractTests.test_packaging_selects_one_matched_deployment_kind",
+        "area": "test_inventory",
+        "status": "passed"
+      },
+      {
+        "id": "test_inventory.InventoryContractTests.test_pairs_match_only_language_and_repeat_ids_differ",
+        "area": "test_inventory",
+        "status": "passed"
+      },
+      {
+        "id": "test_inventory.InventoryContractTests.test_requested_track_is_explicitly_deferred",
+        "area": "test_inventory",
+        "status": "passed"
+      },
+      {
+        "id": "test_inventory.InventoryContractTests.test_sqlite_multiple_workers_are_rejected_for_mandatory_baseline",
+        "area": "test_inventory",
+        "status": "passed"
+      },
+      {
+        "id": "test_inventory.InventoryContractTests.test_startup_and_build_have_30_and_10_independent_repetitions",
+        "area": "test_inventory",
+        "status": "passed"
+      },
+      {
+        "id": "test_reporting.ReportingTests.test_byte_count_must_match_returned_items",
+        "area": "test_reporting",
+        "status": "passed"
+      },
+      {
+        "id": "test_reporting.ReportingTests.test_changed_content_rejects_original_hash",
+        "area": "test_reporting",
+        "status": "passed"
+      },
+      {
+        "id": "test_reporting.ReportingTests.test_evidence_path_cannot_escape_root",
+        "area": "test_reporting",
+        "status": "passed"
+      },
+      {
+        "id": "test_reporting.ReportingTests.test_manifest_removed_gap_is_rejected",
+        "area": "test_reporting",
+        "status": "passed"
+      },
+      {
+        "id": "test_reporting.ReportingTests.test_modified_evidence_is_rejected",
+        "area": "test_reporting",
+        "status": "passed"
+      },
+      {
+        "id": "test_reporting.ReportingTests.test_negative_chronology_is_rejected",
+        "area": "test_reporting",
+        "status": "passed"
+      },
+      {
+        "id": "test_reporting.ReportingTests.test_pair_identity_cannot_be_changed",
+        "area": "test_reporting",
+        "status": "passed"
+      },
+      {
+        "id": "test_reporting.ReportingTests.test_schema_rejects_unknown_fields",
+        "area": "test_reporting",
+        "status": "passed"
+      },
+      {
+        "id": "test_reporting.ReportingTests.test_smoke_cannot_be_admitted_even_when_rehashed",
+        "area": "test_reporting",
+        "status": "passed"
+      },
+      {
+        "id": "test_reporting.ReportingTests.test_smoke_cannot_gain_fabricated_measurement",
+        "area": "test_reporting",
+        "status": "passed"
+      },
+      {
+        "id": "test_reporting.ReportingTests.test_success_count_cannot_exceed_attempts_even_when_rehashed",
+        "area": "test_reporting",
+        "status": "passed"
+      },
+      {
+        "id": "test_reporting.ReportingTests.test_valid_smoke_is_accepted_without_scoring",
+        "area": "test_reporting",
+        "status": "passed"
+      },
+      {
+        "id": "test_services.ServiceTests.test_open_loop_preserves_all_scheduled_arrivals",
+        "area": "test_services",
+        "status": "passed"
+      },
+      {
+        "id": "test_services.ServiceTests.test_rejects_unlisted_remote_host",
+        "area": "test_services",
+        "status": "passed"
+      },
+      {
+        "id": "test_services.ServiceTests.test_shared_delay_plain_echo_and_tls13_echo",
+        "area": "test_services",
+        "status": "passed"
+      },
+      {
+        "id": "test_suite_controller.CampaignAnalysisIntegrationTests.test_complete_portfolio_produces_expected_index_and_sensitivity_weights",
+        "area": "test_suite_controller",
+        "status": "passed"
+      },
+      {
+        "id": "test_suite_controller.CampaignAnalysisIntegrationTests.test_duplicate_non_slo_pair_metric_rejects",
+        "area": "test_suite_controller",
+        "status": "passed"
+      },
+      {
+        "id": "test_suite_controller.CampaignAnalysisIntegrationTests.test_http_slo_selects_actual_max_while_latency_uses_common_rate",
+        "area": "test_suite_controller",
+        "status": "passed"
+      },
+      {
+        "id": "test_suite_controller.CampaignAnalysisIntegrationTests.test_missing_metric_preserves_gap_in_full_index",
+        "area": "test_suite_controller",
+        "status": "passed"
+      },
+      {
+        "id": "test_suite_controller.SuiteControllerTests.test_bdn_proves_actual_independent_launches",
+        "area": "test_suite_controller",
+        "status": "passed"
+      },
+      {
+        "id": "test_suite_controller.SuiteControllerTests.test_compression_output_size_gate_requires_both_languages_within_one_percent",
+        "area": "test_suite_controller",
+        "status": "passed"
+      },
+      {
+        "id": "test_suite_controller.SuiteControllerTests.test_database_latency_count_and_failures_fail_closed",
+        "area": "test_suite_controller",
+        "status": "passed"
+      },
+      {
+        "id": "test_suite_controller.SuiteControllerTests.test_database_read_batches_distribute_keys_across_entire_population",
+        "area": "test_suite_controller",
+        "status": "passed"
+      },
+      {
+        "id": "test_suite_controller.SuiteControllerTests.test_database_warmup_and_measurement_deletes_are_disjoint",
+        "area": "test_suite_controller",
+        "status": "passed"
+      },
+      {
+        "id": "test_suite_controller.SuiteControllerTests.test_database_warmup_counts_operation_time_and_resets_outside_it",
+        "area": "test_suite_controller",
+        "status": "passed"
+      },
+      {
+        "id": "test_suite_controller.SuiteControllerTests.test_failed_slo_does_not_become_sustainable_throughput",
+        "area": "test_suite_controller",
+        "status": "passed"
+      },
+      {
+        "id": "test_suite_controller.SuiteControllerTests.test_full_weight_inventory_exactly_one_hundred_without_campaign_narrowing",
+        "area": "test_suite_controller",
+        "status": "passed"
+      },
+      {
+        "id": "test_suite_controller.SuiteControllerTests.test_http_finite_checkout_plan_has_independent_final_state",
+        "area": "test_suite_controller",
+        "status": "passed"
+      },
+      {
+        "id": "test_suite_controller.SuiteControllerTests.test_http_os_sampling_includes_quiescence_tail_and_archives_arrivals_first",
+        "area": "test_suite_controller",
+        "status": "passed"
+      },
+      {
+        "id": "test_suite_controller.SuiteControllerTests.test_native_harness_five_forks_required",
+        "area": "test_suite_controller",
+        "status": "passed"
+      },
+      {
+        "id": "test_suite_controller.SuiteControllerTests.test_native_jmh_unit_conversion_and_agreement",
+        "area": "test_suite_controller",
+        "status": "passed"
+      },
+      {
+        "id": "test_suite_controller.SuiteControllerTests.test_network_engine_is_not_automatically_admitted",
+        "area": "test_suite_controller",
+        "status": "passed"
+      },
+      {
+        "id": "test_suite_controller.SuiteControllerTests.test_sqlite_http_can_admit_an_exact_frozen_native_receipt",
+        "area": "test_suite_controller",
+        "status": "passed"
+      },
+      {
+        "id": "test_suite_controller.SuiteControllerTests.test_sqlite_http_mismatched_version_or_loaded_native_bytes_stay_excluded",
+        "area": "test_suite_controller",
+        "status": "passed"
+      },
+      {
+        "id": "test_suite_controller.SuiteControllerTests.test_sqlite_http_without_receipt_or_native_hash_stays_excluded",
+        "area": "test_suite_controller",
+        "status": "passed"
+      },
+      {
+        "id": "test_suite_controller.SuiteControllerTests.test_tls13_protocol_normalization_still_requires_matching_cipher",
+        "area": "test_suite_controller",
+        "status": "passed"
+      },
+      {
+        "id": "test_suite_controller.SuiteEvidenceTests.test_admission_cannot_override_failed_gate",
+        "area": "test_suite_controller",
+        "status": "passed"
+      },
+      {
+        "id": "test_suite_controller.SuiteEvidenceTests.test_batch_work_units_must_match_check",
+        "area": "test_suite_controller",
+        "status": "passed"
+      },
+      {
+        "id": "test_suite_controller.SuiteEvidenceTests.test_nonfinite_metric_rejected_even_when_rehashed",
+        "area": "test_suite_controller",
+        "status": "passed"
+      },
+      {
+        "id": "test_suite_controller.SuiteEvidenceTests.test_raw_tamper_is_not_resigned_during_resume",
+        "area": "test_suite_controller",
+        "status": "passed"
+      },
+      {
+        "id": "test_suite_controller.SuiteEvidenceTests.test_valid_evidence_passes",
+        "area": "test_suite_controller",
+        "status": "passed"
+      },
+      {
+        "id": "test_suite_fixtures.SuiteFixtureTests.test_csv_has_embedded_newlines_quotes_and_exact_scale",
+        "area": "test_suite_fixtures",
+        "status": "passed"
+      },
+      {
+        "id": "test_suite_fixtures.SuiteFixtureTests.test_http_population_is_finite_disjoint_and_independent_of_delete_trace",
+        "area": "test_suite_fixtures",
+        "status": "passed"
+      },
+      {
+        "id": "test_suite_fixtures.SuiteFixtureTests.test_json_exact_sizes_and_numeric_unicode_boundaries",
+        "area": "test_suite_fixtures",
+        "status": "passed"
+      },
+      {
+        "id": "test_suite_fixtures.SuiteFixtureTests.test_manifest_is_reproducible_despite_runtime_files",
+        "area": "test_suite_fixtures",
+        "status": "passed"
+      },
+      {
+        "id": "test_suite_fixtures.SuiteFixtureTests.test_mixed_traces_preserve_proportions_and_write_ownership",
+        "area": "test_suite_fixtures",
+        "status": "passed"
+      },
+      {
+        "id": "test_suite_fixtures.SuiteFixtureTests.test_oracle_distinguishes_workers_and_protocol_units",
+        "area": "test_suite_fixtures",
+        "status": "passed"
+      },
+      {
+        "id": "test_suite_fixtures.SuiteFixtureTests.test_relational_foreign_keys_five_lines_and_totals",
+        "area": "test_suite_fixtures",
+        "status": "passed"
+      },
+      {
+        "id": "test_suite_http.SuiteHttpTests.test_h01_h02_h03_return_full_canonical_values",
+        "area": "test_suite_http",
+        "status": "passed"
+      },
+      {
+        "id": "test_suite_http.SuiteHttpTests.test_malformed_http_returns_consistent_sanitized_errors",
+        "area": "test_suite_http",
+        "status": "passed"
+      },
+      {
+        "id": "test_suite_http.SuiteHttpTests.test_sqlite_h04_h05_h06_match_oracle_rollback_and_reset",
+        "area": "test_suite_http",
+        "status": "passed"
+      },
+      {
+        "id": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "area": "test_suite_workers",
+        "status": "passed"
+      },
+      {
+        "id": "test_suite_workers.SuiteWorkerTests.test_sort_batches_preserve_original_input_for_following_operations",
+        "area": "test_suite_workers",
+        "status": "passed"
+      },
+      {
+        "id": "test_suite_workers.SuiteWorkerTests.test_unknown_case_parameter_and_command_are_rejected_without_losing_protocol",
+        "area": "test_suite_workers",
+        "status": "passed"
+      },
+      {
+        "id": "test_toolchain.ToolchainTests.test_exact_local_build_activates_only_current_environment",
+        "area": "test_toolchain",
+        "status": "passed"
+      },
+      {
+        "id": "test_toolchain.ToolchainTests.test_existing_tools_preserve_process_environment",
+        "area": "test_toolchain",
+        "status": "passed"
+      },
+      {
+        "id": "test_toolchain.ToolchainTests.test_missing_tools_report_bootstrap_without_mutation",
+        "area": "test_toolchain",
+        "status": "passed"
+      },
+      {
+        "id": "test_toolchain.ToolchainTests.test_wrong_local_jdk_is_rejected",
+        "area": "test_toolchain",
+        "status": "passed"
+      },
+      {
+        "id": "test_workers.WorkerParityTests.test_boundary_values_match_independent_oracle",
+        "area": "test_workers",
+        "status": "passed"
+      },
+      {
+        "id": "test_workers.WorkerParityTests.test_empty_and_truncated_input_rejected",
+        "area": "test_workers",
+        "status": "passed"
+      },
+      {
+        "id": "test_workers.WorkerParityTests.test_malformed_protocol_rejected",
+        "area": "test_workers",
+        "status": "passed"
+      },
+      {
+        "id": "test_workers.WorkerParityTests.test_sort_does_not_mutate_runtime_loaded_input",
+        "area": "test_workers",
+        "status": "passed"
+      },
+      {
+        "id": "test_workers.WorkerParityTests.test_unknown_operation_rejected",
+        "area": "test_workers",
+        "status": "passed"
+      }
+    ],
+    "subtests": [
+      {
+        "parent": "test_csv_contract.CsvContractTests.test_quote_placement_and_unterminated_fields_are_rejected",
+        "id": "test_quote_placement_and_unterminated_fields_are_rejected (test_csv_contract.CsvContractTests.test_quote_placement_and_unterminated_fields_are_rejected) (source='ab\"c\",b,c,d,e\\r\\n')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_csv_contract.CsvContractTests.test_quote_placement_and_unterminated_fields_are_rejected",
+        "id": "test_quote_placement_and_unterminated_fields_are_rejected (test_csv_contract.CsvContractTests.test_quote_placement_and_unterminated_fields_are_rejected) (source='\"a\"tail,b,c,d,e\\r\\n')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_csv_contract.CsvContractTests.test_quote_placement_and_unterminated_fields_are_rejected",
+        "id": "test_quote_placement_and_unterminated_fields_are_rejected (test_csv_contract.CsvContractTests.test_quote_placement_and_unterminated_fields_are_rejected) (source='\"a\" ,b,c,d,e\\r\\n')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_csv_contract.CsvContractTests.test_quote_placement_and_unterminated_fields_are_rejected",
+        "id": "test_quote_placement_and_unterminated_fields_are_rejected (test_csv_contract.CsvContractTests.test_quote_placement_and_unterminated_fields_are_rejected) (source='\"a,b,c,d,e')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_contract.DatabaseContractTests.test_ascii_lengths_and_case_sensitive_unique_values",
+        "id": "test_ascii_lengths_and_case_sensitive_unique_values (test_database_contract.DatabaseContractTests.test_ascii_lengths_and_case_sensitive_unique_values) (email=\"''\")",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_contract.DatabaseContractTests.test_ascii_lengths_and_case_sensitive_unique_values",
+        "id": "test_ascii_lengths_and_case_sensitive_unique_values (test_database_contract.DatabaseContractTests.test_ascii_lengths_and_case_sensitive_unique_values) (email=\"'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'\")",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_contract.DatabaseContractTests.test_ascii_lengths_and_case_sensitive_unique_values",
+        "id": "test_ascii_lengths_and_case_sensitive_unique_values (test_database_contract.DatabaseContractTests.test_ascii_lengths_and_case_sensitive_unique_values) (email=\"'nonascii\u00e9@example.test'\")",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_contract.DatabaseContractTests.test_ascii_lengths_and_case_sensitive_unique_values",
+        "id": "test_ascii_lengths_and_case_sensitive_unique_values (test_database_contract.DatabaseContractTests.test_ascii_lengths_and_case_sensitive_unique_values) (email=\"'trailing '\")",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_contract.DatabaseContractTests.test_ascii_lengths_and_case_sensitive_unique_values",
+        "id": "test_ascii_lengths_and_case_sensitive_unique_values (test_database_contract.DatabaseContractTests.test_ascii_lengths_and_case_sensitive_unique_values) (email=\"'a\\\\x00b'\")",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_contract.DatabaseContractTests.test_ascii_lengths_and_case_sensitive_unique_values",
+        "id": "test_ascii_lengths_and_case_sensitive_unique_values (test_database_contract.DatabaseContractTests.test_ascii_lengths_and_case_sensitive_unique_values) (email=\"'line\\\\nbreak'\")",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_contract.DatabaseContractTests.test_ascii_lengths_and_case_sensitive_unique_values",
+        "id": "test_ascii_lengths_and_case_sensitive_unique_values (test_database_contract.DatabaseContractTests.test_ascii_lengths_and_case_sensitive_unique_values) (statement=\"INSERT INTO customer VALUES (6, 'six@example.test', ?, 0, 0)\")",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_contract.DatabaseContractTests.test_ascii_lengths_and_case_sensitive_unique_values",
+        "id": "test_ascii_lengths_and_case_sensitive_unique_values (test_database_contract.DatabaseContractTests.test_ascii_lengths_and_case_sensitive_unique_values) (statement=\"INSERT INTO product VALUES (7, ?, 'Name', 0)\")",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_contract.DatabaseContractTests.test_ascii_lengths_and_case_sensitive_unique_values",
+        "id": "test_ascii_lengths_and_case_sensitive_unique_values (test_database_contract.DatabaseContractTests.test_ascii_lengths_and_case_sensitive_unique_values) (statement=\"INSERT INTO product VALUES (7, ?, 'Name', 0)\")",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_contract.DatabaseContractTests.test_duplicate_foreign_key_and_required_value_failures",
+        "id": "test_duplicate_foreign_key_and_required_value_failures (test_database_contract.DatabaseContractTests.test_duplicate_foreign_key_and_required_value_failures) (statement='INSERT INTO customer VALUES (?, ?, ?, ?, ?)', parameters=(1, 'new@example.test', 'New', 0, 0))",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_contract.DatabaseContractTests.test_duplicate_foreign_key_and_required_value_failures",
+        "id": "test_duplicate_foreign_key_and_required_value_failures (test_database_contract.DatabaseContractTests.test_duplicate_foreign_key_and_required_value_failures) (statement='INSERT INTO customer VALUES (?, ?, ?, ?, ?)', parameters=(3, 'one@example.test', 'New', 0, 0))",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_contract.DatabaseContractTests.test_duplicate_foreign_key_and_required_value_failures",
+        "id": "test_duplicate_foreign_key_and_required_value_failures (test_database_contract.DatabaseContractTests.test_duplicate_foreign_key_and_required_value_failures) (statement='INSERT INTO customer VALUES (?, ?, ?, ?, ?)', parameters=(None, 'new@example.test', 'New', 0, 0))",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_contract.DatabaseContractTests.test_duplicate_foreign_key_and_required_value_failures",
+        "id": "test_duplicate_foreign_key_and_required_value_failures (test_database_contract.DatabaseContractTests.test_duplicate_foreign_key_and_required_value_failures) (statement='INSERT INTO product VALUES (?, ?, ?, ?)', parameters=(6, 'SKU1', 'New', 0))",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_contract.DatabaseContractTests.test_duplicate_foreign_key_and_required_value_failures",
+        "id": "test_duplicate_foreign_key_and_required_value_failures (test_database_contract.DatabaseContractTests.test_duplicate_foreign_key_and_required_value_failures) (statement='INSERT INTO orders VALUES (?, ?, ?, ?, ?, ?)', parameters=(300, 999, 0, 1000, 0, 0))",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_contract.DatabaseContractTests.test_duplicate_foreign_key_and_required_value_failures",
+        "id": "test_duplicate_foreign_key_and_required_value_failures (test_database_contract.DatabaseContractTests.test_duplicate_foreign_key_and_required_value_failures) (statement='INSERT INTO order_line VALUES (?, ?, ?, ?, ?, ?)', parameters=(9999, 9999, 1, 1, 1, 100))",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_contract.DatabaseContractTests.test_duplicate_foreign_key_and_required_value_failures",
+        "id": "test_duplicate_foreign_key_and_required_value_failures (test_database_contract.DatabaseContractTests.test_duplicate_foreign_key_and_required_value_failures) (statement='INSERT INTO order_line VALUES (?, ?, ?, ?, ?, ?)', parameters=(9999, 1, 6, 9999, 1, 100))",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_contract.DatabaseContractTests.test_duplicate_foreign_key_and_required_value_failures",
+        "id": "test_duplicate_foreign_key_and_required_value_failures (test_database_contract.DatabaseContractTests.test_duplicate_foreign_key_and_required_value_failures) (statement='INSERT INTO order_line VALUES (?, ?, ?, ?, ?, ?)', parameters=(9999, 1, 1, 1, 1, 100))",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_contract.DatabaseContractTests.test_duplicate_foreign_key_and_required_value_failures",
+        "id": "test_duplicate_foreign_key_and_required_value_failures (test_database_contract.DatabaseContractTests.test_duplicate_foreign_key_and_required_value_failures) (statement='DELETE FROM orders WHERE id=?', parameters=(1,))",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_contract.DatabaseContractTests.test_duplicate_foreign_key_and_required_value_failures",
+        "id": "test_duplicate_foreign_key_and_required_value_failures (test_database_contract.DatabaseContractTests.test_duplicate_foreign_key_and_required_value_failures) (statement='DELETE FROM customer WHERE id=?', parameters=(1,))",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_contract.DatabaseContractTests.test_duplicate_foreign_key_and_required_value_failures",
+        "id": "test_duplicate_foreign_key_and_required_value_failures (test_database_contract.DatabaseContractTests.test_duplicate_foreign_key_and_required_value_failures) (statement='DELETE FROM product WHERE id=?', parameters=(1,))",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts",
+        "id": "test_engine_templates_share_parameters_and_exclude_hidden_shortcuts (test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts) (engine='sqlserver', name='D01.sql')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts",
+        "id": "test_engine_templates_share_parameters_and_exclude_hidden_shortcuts (test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts) (engine='sqlserver', name='D02.sql')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts",
+        "id": "test_engine_templates_share_parameters_and_exclude_hidden_shortcuts (test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts) (engine='sqlserver', name='D03.sql')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts",
+        "id": "test_engine_templates_share_parameters_and_exclude_hidden_shortcuts (test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts) (engine='sqlserver', name='D04.sql')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts",
+        "id": "test_engine_templates_share_parameters_and_exclude_hidden_shortcuts (test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts) (engine='sqlserver', name='D05-read.sql')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts",
+        "id": "test_engine_templates_share_parameters_and_exclude_hidden_shortcuts (test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts) (engine='sqlserver', name='D05-update.sql')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts",
+        "id": "test_engine_templates_share_parameters_and_exclude_hidden_shortcuts (test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts) (engine='sqlserver', name='D06-line.sql')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts",
+        "id": "test_engine_templates_share_parameters_and_exclude_hidden_shortcuts (test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts) (engine='sqlserver', name='D06-order.sql')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts",
+        "id": "test_engine_templates_share_parameters_and_exclude_hidden_shortcuts (test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts) (engine='sqlserver', name='D07-child.sql')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts",
+        "id": "test_engine_templates_share_parameters_and_exclude_hidden_shortcuts (test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts) (engine='sqlserver', name='D07-load.sql')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts",
+        "id": "test_engine_templates_share_parameters_and_exclude_hidden_shortcuts (test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts) (engine='sqlserver', name='D07-parent.sql')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts",
+        "id": "test_engine_templates_share_parameters_and_exclude_hidden_shortcuts (test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts) (engine='sqlserver', name='H06-product.sql')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts",
+        "id": "test_engine_templates_share_parameters_and_exclude_hidden_shortcuts (test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts) (engine='postgresql', name='D01.sql')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts",
+        "id": "test_engine_templates_share_parameters_and_exclude_hidden_shortcuts (test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts) (engine='postgresql', name='D02.sql')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts",
+        "id": "test_engine_templates_share_parameters_and_exclude_hidden_shortcuts (test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts) (engine='postgresql', name='D03.sql')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts",
+        "id": "test_engine_templates_share_parameters_and_exclude_hidden_shortcuts (test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts) (engine='postgresql', name='D04.sql')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts",
+        "id": "test_engine_templates_share_parameters_and_exclude_hidden_shortcuts (test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts) (engine='postgresql', name='D05-read.sql')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts",
+        "id": "test_engine_templates_share_parameters_and_exclude_hidden_shortcuts (test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts) (engine='postgresql', name='D05-update.sql')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts",
+        "id": "test_engine_templates_share_parameters_and_exclude_hidden_shortcuts (test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts) (engine='postgresql', name='D06-line.sql')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts",
+        "id": "test_engine_templates_share_parameters_and_exclude_hidden_shortcuts (test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts) (engine='postgresql', name='D06-order.sql')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts",
+        "id": "test_engine_templates_share_parameters_and_exclude_hidden_shortcuts (test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts) (engine='postgresql', name='D07-child.sql')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts",
+        "id": "test_engine_templates_share_parameters_and_exclude_hidden_shortcuts (test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts) (engine='postgresql', name='D07-load.sql')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts",
+        "id": "test_engine_templates_share_parameters_and_exclude_hidden_shortcuts (test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts) (engine='postgresql', name='D07-parent.sql')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts",
+        "id": "test_engine_templates_share_parameters_and_exclude_hidden_shortcuts (test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts) (engine='postgresql', name='H06-product.sql')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts",
+        "id": "test_engine_templates_share_parameters_and_exclude_hidden_shortcuts (test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts) (engine='sqlite', name='D01.sql')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts",
+        "id": "test_engine_templates_share_parameters_and_exclude_hidden_shortcuts (test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts) (engine='sqlite', name='D02.sql')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts",
+        "id": "test_engine_templates_share_parameters_and_exclude_hidden_shortcuts (test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts) (engine='sqlite', name='D03.sql')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts",
+        "id": "test_engine_templates_share_parameters_and_exclude_hidden_shortcuts (test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts) (engine='sqlite', name='D04.sql')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts",
+        "id": "test_engine_templates_share_parameters_and_exclude_hidden_shortcuts (test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts) (engine='sqlite', name='D05-read.sql')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts",
+        "id": "test_engine_templates_share_parameters_and_exclude_hidden_shortcuts (test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts) (engine='sqlite', name='D05-update.sql')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts",
+        "id": "test_engine_templates_share_parameters_and_exclude_hidden_shortcuts (test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts) (engine='sqlite', name='D06-line.sql')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts",
+        "id": "test_engine_templates_share_parameters_and_exclude_hidden_shortcuts (test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts) (engine='sqlite', name='D06-order.sql')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts",
+        "id": "test_engine_templates_share_parameters_and_exclude_hidden_shortcuts (test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts) (engine='sqlite', name='D07-child.sql')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts",
+        "id": "test_engine_templates_share_parameters_and_exclude_hidden_shortcuts (test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts) (engine='sqlite', name='D07-load.sql')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts",
+        "id": "test_engine_templates_share_parameters_and_exclude_hidden_shortcuts (test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts) (engine='sqlite', name='D07-parent.sql')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts",
+        "id": "test_engine_templates_share_parameters_and_exclude_hidden_shortcuts (test_database_contract.DatabaseContractTests.test_engine_templates_share_parameters_and_exclude_hidden_shortcuts) (engine='sqlite', name='H06-product.sql')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_contract.DatabaseContractTests.test_signed_64bit_boundaries_and_domain_checks",
+        "id": "test_signed_64bit_boundaries_and_domain_checks (test_database_contract.DatabaseContractTests.test_signed_64bit_boundaries_and_domain_checks) (statement='UPDATE customer SET version=-1 WHERE id=1')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_contract.DatabaseContractTests.test_signed_64bit_boundaries_and_domain_checks",
+        "id": "test_signed_64bit_boundaries_and_domain_checks (test_database_contract.DatabaseContractTests.test_signed_64bit_boundaries_and_domain_checks) (statement='UPDATE product SET price_cents=-1 WHERE id=1')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_contract.DatabaseContractTests.test_signed_64bit_boundaries_and_domain_checks",
+        "id": "test_signed_64bit_boundaries_and_domain_checks (test_database_contract.DatabaseContractTests.test_signed_64bit_boundaries_and_domain_checks) (statement='UPDATE orders SET status=4 WHERE id=1')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_contract.DatabaseContractTests.test_signed_64bit_boundaries_and_domain_checks",
+        "id": "test_signed_64bit_boundaries_and_domain_checks (test_database_contract.DatabaseContractTests.test_signed_64bit_boundaries_and_domain_checks) (statement='UPDATE orders SET total_cents=-1 WHERE id=1')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_contract.DatabaseContractTests.test_signed_64bit_boundaries_and_domain_checks",
+        "id": "test_signed_64bit_boundaries_and_domain_checks (test_database_contract.DatabaseContractTests.test_signed_64bit_boundaries_and_domain_checks) (statement='UPDATE orders SET created_epoch_ms=-1 WHERE id=1')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_contract.DatabaseContractTests.test_signed_64bit_boundaries_and_domain_checks",
+        "id": "test_signed_64bit_boundaries_and_domain_checks (test_database_contract.DatabaseContractTests.test_signed_64bit_boundaries_and_domain_checks) (statement='UPDATE order_line SET quantity=0 WHERE id=6')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_contract.DatabaseContractTests.test_signed_64bit_boundaries_and_domain_checks",
+        "id": "test_signed_64bit_boundaries_and_domain_checks (test_database_contract.DatabaseContractTests.test_signed_64bit_boundaries_and_domain_checks) (statement='UPDATE order_line SET line_no=0 WHERE id=6')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_contract.DatabaseContractTests.test_signed_64bit_boundaries_and_domain_checks",
+        "id": "test_signed_64bit_boundaries_and_domain_checks (test_database_contract.DatabaseContractTests.test_signed_64bit_boundaries_and_domain_checks) (statement='UPDATE order_line SET unit_price_cents=-1 WHERE id=6')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_workers.DatabaseWorkerTests.test_four_sqlite_cells_match_oracle_all_workloads_and_rollback",
+        "id": "test_four_sqlite_cells_match_oracle_all_workloads_and_rollback (test_database_workers.DatabaseWorkerTests.test_four_sqlite_cells_match_oracle_all_workloads_and_rollback) (language='csharp', access='raw')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_workers.DatabaseWorkerTests.test_four_sqlite_cells_match_oracle_all_workloads_and_rollback",
+        "id": "test_four_sqlite_cells_match_oracle_all_workloads_and_rollback (test_database_workers.DatabaseWorkerTests.test_four_sqlite_cells_match_oracle_all_workloads_and_rollback) (language='csharp', access='orm')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_workers.DatabaseWorkerTests.test_four_sqlite_cells_match_oracle_all_workloads_and_rollback",
+        "id": "test_four_sqlite_cells_match_oracle_all_workloads_and_rollback (test_database_workers.DatabaseWorkerTests.test_four_sqlite_cells_match_oracle_all_workloads_and_rollback) (language='java', access='raw')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_workers.DatabaseWorkerTests.test_four_sqlite_cells_match_oracle_all_workloads_and_rollback",
+        "id": "test_four_sqlite_cells_match_oracle_all_workloads_and_rollback (test_database_workers.DatabaseWorkerTests.test_four_sqlite_cells_match_oracle_all_workloads_and_rollback) (language='java', access='orm')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_workers.DatabaseWorkerTests.test_invalid_targets_and_finite_trace_requests_fail_closed",
+        "id": "test_invalid_targets_and_finite_trace_requests_fail_closed (test_database_workers.DatabaseWorkerTests.test_invalid_targets_and_finite_trace_requests_fail_closed) (language='csharp', target='unconfigured network')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_workers.DatabaseWorkerTests.test_invalid_targets_and_finite_trace_requests_fail_closed",
+        "id": "test_invalid_targets_and_finite_trace_requests_fail_closed (test_database_workers.DatabaseWorkerTests.test_invalid_targets_and_finite_trace_requests_fail_closed) (language='csharp', target='allowlisted target without controller lease')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_workers.DatabaseWorkerTests.test_invalid_targets_and_finite_trace_requests_fail_closed",
+        "id": "test_invalid_targets_and_finite_trace_requests_fail_closed (test_database_workers.DatabaseWorkerTests.test_invalid_targets_and_finite_trace_requests_fail_closed) (language='csharp', target='invalid trace')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_workers.DatabaseWorkerTests.test_invalid_targets_and_finite_trace_requests_fail_closed",
+        "id": "test_invalid_targets_and_finite_trace_requests_fail_closed (test_database_workers.DatabaseWorkerTests.test_invalid_targets_and_finite_trace_requests_fail_closed) (language='java', target='unconfigured network')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_workers.DatabaseWorkerTests.test_invalid_targets_and_finite_trace_requests_fail_closed",
+        "id": "test_invalid_targets_and_finite_trace_requests_fail_closed (test_database_workers.DatabaseWorkerTests.test_invalid_targets_and_finite_trace_requests_fail_closed) (language='java', target='allowlisted target without controller lease')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_workers.DatabaseWorkerTests.test_invalid_targets_and_finite_trace_requests_fail_closed",
+        "id": "test_invalid_targets_and_finite_trace_requests_fail_closed (test_database_workers.DatabaseWorkerTests.test_invalid_targets_and_finite_trace_requests_fail_closed) (language='java', target='invalid trace')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_workers.DatabaseWorkerTests.test_untimed_audit_and_commit_reconciliation_preserve_order_and_state",
+        "id": "test_untimed_audit_and_commit_reconciliation_preserve_order_and_state (test_database_workers.DatabaseWorkerTests.test_untimed_audit_and_commit_reconciliation_preserve_order_and_state) (language='csharp', access='raw')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_workers.DatabaseWorkerTests.test_untimed_audit_and_commit_reconciliation_preserve_order_and_state",
+        "id": "test_untimed_audit_and_commit_reconciliation_preserve_order_and_state (test_database_workers.DatabaseWorkerTests.test_untimed_audit_and_commit_reconciliation_preserve_order_and_state) (language='csharp', access='orm')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_workers.DatabaseWorkerTests.test_untimed_audit_and_commit_reconciliation_preserve_order_and_state",
+        "id": "test_untimed_audit_and_commit_reconciliation_preserve_order_and_state (test_database_workers.DatabaseWorkerTests.test_untimed_audit_and_commit_reconciliation_preserve_order_and_state) (language='java', access='raw')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_database_workers.DatabaseWorkerTests.test_untimed_audit_and_commit_reconciliation_preserve_order_and_state",
+        "id": "test_untimed_audit_and_commit_reconciliation_preserve_order_and_state (test_database_workers.DatabaseWorkerTests.test_untimed_audit_and_commit_reconciliation_preserve_order_and_state) (language='java', access='orm')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_generator.GeneratorTests.test_nonpositive_counts_rejected",
+        "id": "test_nonpositive_counts_rejected (test_generator.GeneratorTests.test_nonpositive_counts_rejected) (count=0)",
+        "status": "passed"
+      },
+      {
+        "parent": "test_generator.GeneratorTests.test_nonpositive_counts_rejected",
+        "id": "test_nonpositive_counts_rejected (test_generator.GeneratorTests.test_nonpositive_counts_rejected) (count=-1)",
+        "status": "passed"
+      },
+      {
+        "parent": "test_generator.GeneratorTests.test_nonpositive_counts_rejected",
+        "id": "test_nonpositive_counts_rejected (test_generator.GeneratorTests.test_nonpositive_counts_rejected) (count=2.5)",
+        "status": "passed"
+      },
+      {
+        "parent": "test_inventory.InventoryContractTests.test_invalid_configuration_is_rejected",
+        "id": "test_invalid_configuration_is_rejected (test_inventory.InventoryContractTests.test_invalid_configuration_is_rejected) (change={'languages': ['java', 'java']})",
+        "status": "passed"
+      },
+      {
+        "parent": "test_inventory.InventoryContractTests.test_invalid_configuration_is_rejected",
+        "id": "test_invalid_configuration_is_rejected (test_inventory.InventoryContractTests.test_invalid_configuration_is_rejected) (change={'engines': ['h2']})",
+        "status": "passed"
+      },
+      {
+        "parent": "test_inventory.InventoryContractTests.test_invalid_configuration_is_rejected",
+        "id": "test_invalid_configuration_is_rejected (test_inventory.InventoryContractTests.test_invalid_configuration_is_rejected) (change={'repetitions': 0})",
+        "status": "passed"
+      },
+      {
+        "parent": "test_inventory.InventoryContractTests.test_invalid_configuration_is_rejected",
+        "id": "test_invalid_configuration_is_rejected (test_inventory.InventoryContractTests.test_invalid_configuration_is_rejected) (change={'track': 'mystery'})",
+        "status": "passed"
+      },
+      {
+        "parent": "test_inventory.InventoryContractTests.test_invalid_configuration_is_rejected",
+        "id": "test_invalid_configuration_is_rejected (test_inventory.InventoryContractTests.test_invalid_configuration_is_rejected) (change={'network_workers': [1, 1]})",
+        "status": "passed"
+      },
+      {
+        "parent": "test_inventory.InventoryContractTests.test_invalid_configuration_is_rejected",
+        "id": "test_invalid_configuration_is_rejected (test_inventory.InventoryContractTests.test_invalid_configuration_is_rejected) (change={'network_workers': [True]})",
+        "status": "passed"
+      },
+      {
+        "parent": "test_inventory.InventoryContractTests.test_invalid_selector_fails_instead_of_silent_empty_inventory",
+        "id": "test_invalid_selector_fails_instead_of_silent_empty_inventory (test_inventory.InventoryContractTests.test_invalid_selector_fails_instead_of_silent_empty_inventory) (selector={'case': 'D09'})",
+        "status": "passed"
+      },
+      {
+        "parent": "test_inventory.InventoryContractTests.test_invalid_selector_fails_instead_of_silent_empty_inventory",
+        "id": "test_invalid_selector_fails_instead_of_silent_empty_inventory (test_inventory.InventoryContractTests.test_invalid_selector_fails_instead_of_silent_empty_inventory) (selector={'engine': 'h2'})",
+        "status": "passed"
+      },
+      {
+        "parent": "test_inventory.InventoryContractTests.test_invalid_selector_fails_instead_of_silent_empty_inventory",
+        "id": "test_invalid_selector_fails_instead_of_silent_empty_inventory (test_inventory.InventoryContractTests.test_invalid_selector_fails_instead_of_silent_empty_inventory) (selector={'language': 'python'})",
+        "status": "passed"
+      },
+      {
+        "parent": "test_inventory.InventoryContractTests.test_invalid_selector_fails_instead_of_silent_empty_inventory",
+        "id": "test_invalid_selector_fails_instead_of_silent_empty_inventory (test_inventory.InventoryContractTests.test_invalid_selector_fails_instead_of_silent_empty_inventory) (selector={'access': 'micro-orm'})",
+        "status": "passed"
+      },
+      {
+        "parent": "test_inventory.InventoryContractTests.test_invalid_selector_fails_instead_of_silent_empty_inventory",
+        "id": "test_invalid_selector_fails_instead_of_silent_empty_inventory (test_inventory.InventoryContractTests.test_invalid_selector_fails_instead_of_silent_empty_inventory) (selector={'workers': 0})",
+        "status": "passed"
+      },
+      {
+        "parent": "test_inventory.InventoryContractTests.test_invalid_selector_fails_instead_of_silent_empty_inventory",
+        "id": "test_invalid_selector_fails_instead_of_silent_empty_inventory (test_inventory.InventoryContractTests.test_invalid_selector_fails_instead_of_silent_empty_inventory) (selector={'repetition': '-1'})",
+        "status": "passed"
+      },
+      {
+        "parent": "test_inventory.InventoryContractTests.test_invalid_selector_fails_instead_of_silent_empty_inventory",
+        "id": "test_invalid_selector_fails_instead_of_silent_empty_inventory (test_inventory.InventoryContractTests.test_invalid_selector_fails_instead_of_silent_empty_inventory) (selector={'dataset': 'unknown'})",
+        "status": "passed"
+      },
+      {
+        "parent": "test_inventory.InventoryContractTests.test_invalid_selector_fails_instead_of_silent_empty_inventory",
+        "id": "test_invalid_selector_fails_instead_of_silent_empty_inventory (test_inventory.InventoryContractTests.test_invalid_selector_fails_instead_of_silent_empty_inventory) (selector={'profile': 'aot'})",
+        "status": "passed"
+      },
+      {
+        "parent": "test_inventory.InventoryContractTests.test_invalid_selector_fails_instead_of_silent_empty_inventory",
+        "id": "test_invalid_selector_fails_instead_of_silent_empty_inventory (test_inventory.InventoryContractTests.test_invalid_selector_fails_instead_of_silent_empty_inventory) (selector={'typo': 'C01'})",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_fixtures.SuiteFixtureTests.test_json_exact_sizes_and_numeric_unicode_boundaries",
+        "id": "test_json_exact_sizes_and_numeric_unicode_boundaries (test_suite_fixtures.SuiteFixtureTests.test_json_exact_sizes_and_numeric_unicode_boundaries) (size=1024)",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_fixtures.SuiteFixtureTests.test_json_exact_sizes_and_numeric_unicode_boundaries",
+        "id": "test_json_exact_sizes_and_numeric_unicode_boundaries (test_suite_fixtures.SuiteFixtureTests.test_json_exact_sizes_and_numeric_unicode_boundaries) (size=65536)",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_fixtures.SuiteFixtureTests.test_json_exact_sizes_and_numeric_unicode_boundaries",
+        "id": "test_json_exact_sizes_and_numeric_unicode_boundaries (test_suite_fixtures.SuiteFixtureTests.test_json_exact_sizes_and_numeric_unicode_boundaries) (size=1048576)",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_http.SuiteHttpTests.test_h01_h02_h03_return_full_canonical_values",
+        "id": "test_h01_h02_h03_return_full_canonical_values (test_suite_http.SuiteHttpTests.test_h01_h02_h03_return_full_canonical_values) (language='csharp')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_http.SuiteHttpTests.test_h01_h02_h03_return_full_canonical_values",
+        "id": "test_h01_h02_h03_return_full_canonical_values (test_suite_http.SuiteHttpTests.test_h01_h02_h03_return_full_canonical_values) (language='java')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_http.SuiteHttpTests.test_malformed_http_returns_consistent_sanitized_errors",
+        "id": "test_malformed_http_returns_consistent_sanitized_errors (test_suite_http.SuiteHttpTests.test_malformed_http_returns_consistent_sanitized_errors) (path='/json?size=0', body_type='NoneType', language='csharp')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_http.SuiteHttpTests.test_malformed_http_returns_consistent_sanitized_errors",
+        "id": "test_malformed_http_returns_consistent_sanitized_errors (test_suite_http.SuiteHttpTests.test_malformed_http_returns_consistent_sanitized_errors) (path='/json?size=0', body_type='dict', language='csharp')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_http.SuiteHttpTests.test_malformed_http_returns_consistent_sanitized_errors",
+        "id": "test_malformed_http_returns_consistent_sanitized_errors (test_suite_http.SuiteHttpTests.test_malformed_http_returns_consistent_sanitized_errors) (path='/json?size=1024', body_type='bytes', language='csharp')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_http.SuiteHttpTests.test_malformed_http_returns_consistent_sanitized_errors",
+        "id": "test_malformed_http_returns_consistent_sanitized_errors (test_suite_http.SuiteHttpTests.test_malformed_http_returns_consistent_sanitized_errors) (path='/json?size=1024', body_type='dict', language='csharp')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_http.SuiteHttpTests.test_malformed_http_returns_consistent_sanitized_errors",
+        "id": "test_malformed_http_returns_consistent_sanitized_errors (test_suite_http.SuiteHttpTests.test_malformed_http_returns_consistent_sanitized_errors) (path='/json?size=1024', body_type='dict', language='csharp')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_http.SuiteHttpTests.test_malformed_http_returns_consistent_sanitized_errors",
+        "id": "test_malformed_http_returns_consistent_sanitized_errors (test_suite_http.SuiteHttpTests.test_malformed_http_returns_consistent_sanitized_errors) (path='/json?size=1024', body_type='bytes', language='csharp')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_http.SuiteHttpTests.test_malformed_http_returns_consistent_sanitized_errors",
+        "id": "test_malformed_http_returns_consistent_sanitized_errors (test_suite_http.SuiteHttpTests.test_malformed_http_returns_consistent_sanitized_errors) (language='csharp')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_http.SuiteHttpTests.test_malformed_http_returns_consistent_sanitized_errors",
+        "id": "test_malformed_http_returns_consistent_sanitized_errors (test_suite_http.SuiteHttpTests.test_malformed_http_returns_consistent_sanitized_errors) (path='/json?size=0', body_type='NoneType', language='java')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_http.SuiteHttpTests.test_malformed_http_returns_consistent_sanitized_errors",
+        "id": "test_malformed_http_returns_consistent_sanitized_errors (test_suite_http.SuiteHttpTests.test_malformed_http_returns_consistent_sanitized_errors) (path='/json?size=0', body_type='dict', language='java')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_http.SuiteHttpTests.test_malformed_http_returns_consistent_sanitized_errors",
+        "id": "test_malformed_http_returns_consistent_sanitized_errors (test_suite_http.SuiteHttpTests.test_malformed_http_returns_consistent_sanitized_errors) (path='/json?size=1024', body_type='bytes', language='java')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_http.SuiteHttpTests.test_malformed_http_returns_consistent_sanitized_errors",
+        "id": "test_malformed_http_returns_consistent_sanitized_errors (test_suite_http.SuiteHttpTests.test_malformed_http_returns_consistent_sanitized_errors) (path='/json?size=1024', body_type='dict', language='java')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_http.SuiteHttpTests.test_malformed_http_returns_consistent_sanitized_errors",
+        "id": "test_malformed_http_returns_consistent_sanitized_errors (test_suite_http.SuiteHttpTests.test_malformed_http_returns_consistent_sanitized_errors) (path='/json?size=1024', body_type='dict', language='java')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_http.SuiteHttpTests.test_malformed_http_returns_consistent_sanitized_errors",
+        "id": "test_malformed_http_returns_consistent_sanitized_errors (test_suite_http.SuiteHttpTests.test_malformed_http_returns_consistent_sanitized_errors) (path='/json?size=1024', body_type='bytes', language='java')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_http.SuiteHttpTests.test_malformed_http_returns_consistent_sanitized_errors",
+        "id": "test_malformed_http_returns_consistent_sanitized_errors (test_suite_http.SuiteHttpTests.test_malformed_http_returns_consistent_sanitized_errors) (language='java')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_http.SuiteHttpTests.test_sqlite_h04_h05_h06_match_oracle_rollback_and_reset",
+        "id": "test_sqlite_h04_h05_h06_match_oracle_rollback_and_reset (test_suite_http.SuiteHttpTests.test_sqlite_h04_h05_h06_match_oracle_rollback_and_reset) (language='csharp', access='raw')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_http.SuiteHttpTests.test_sqlite_h04_h05_h06_match_oracle_rollback_and_reset",
+        "id": "test_sqlite_h04_h05_h06_match_oracle_rollback_and_reset (test_suite_http.SuiteHttpTests.test_sqlite_h04_h05_h06_match_oracle_rollback_and_reset) (language='csharp', access='orm')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_http.SuiteHttpTests.test_sqlite_h04_h05_h06_match_oracle_rollback_and_reset",
+        "id": "test_sqlite_h04_h05_h06_match_oracle_rollback_and_reset (test_suite_http.SuiteHttpTests.test_sqlite_h04_h05_h06_match_oracle_rollback_and_reset) (language='java', access='raw')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_http.SuiteHttpTests.test_sqlite_h04_h05_h06_match_oracle_rollback_and_reset",
+        "id": "test_sqlite_h04_h05_h06_match_oracle_rollback_and_reset (test_suite_http.SuiteHttpTests.test_sqlite_h04_h05_h06_match_oracle_rollback_and_reset) (language='java', access='orm')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='C01', parameter='transform')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='C02', parameter='n128')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='C02', parameter='n512')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='C03', parameter='invoices')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='C04', parameter='bits2048')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='C05', parameter='bytes1024')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='C05', parameter='bytes1048576')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='C06', parameter='compress-text')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='C06', parameter='compress-incompressible')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='C06', parameter='decompress-text')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='C06', parameter='decompress-incompressible')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='K01', parameter='scan')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='K01', parameter='sort')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='K02', parameter='append')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='K02', parameter='iterate')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='K02', parameter='remove')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='K03', parameter='ascii-insert')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='K03', parameter='ascii-lookup')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='K03', parameter='ascii-remove')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='K03', parameter='int64-insert')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='K03', parameter='int64-lookup')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='K03', parameter='int64-remove')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='K04', parameter='union-prebuilt')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='K04', parameter='union-build-inclusive')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='K04', parameter='intersection-prebuilt')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='K04', parameter='intersection-build-inclusive')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='K05', parameter='encode-ascii')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='K05', parameter='encode-unicode')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='K05', parameter='decode-ascii')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='K05', parameter='decode-unicode')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='K05', parameter='search-ascii')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='K05', parameter='search-unicode')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='K06', parameter='integer-parse')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='K06', parameter='regex-extract')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='M01', parameter='allocate-release')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='M02', parameter='survival-1pct')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='M02', parameter='survival-10pct')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='M02', parameter='survival-50pct')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='M03', parameter='retain-query')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='M04', parameter='copy-4096')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='M04', parameter='copy-1048576')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='M04', parameter='slice-4096')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='M04', parameter='slice-1048576')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='M04', parameter='parse-4096')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='M04', parameter='parse-1048576')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='M05', parameter='limit-512MiB')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='M05', parameter='limit-2048MiB')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='A01', parameter='task-graph')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='A02', parameter='pipeline')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='A03', parameter='atomic')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='A03', parameter='lock')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='A04', parameter='inflight-1000')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='A04', parameter='inflight-10000')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='A05', parameter='deadline')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='A05', parameter='child-failure')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='S01', parameter='serialize-1024')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='S01', parameter='serialize-65536')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='S01', parameter='serialize-1048576')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='S01', parameter='deserialize-1024')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='S01', parameter='deserialize-65536')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='S01', parameter='deserialize-1048576')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='S02', parameter='encode')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='S02', parameter='decode')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='S03', parameter='pipeline')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='S03', parameter='imperative')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='S04', parameter='parse')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='S04', parameter='emit')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='I01', parameter='read-buffered')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='I01', parameter='read-durable-flush')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='I01', parameter='write-buffered')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='I01', parameter='write-durable-flush')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='I02', parameter='random-4KiB')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='I03', parameter='echo-1MiB')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='I04', parameter='handshake')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='I04', parameter='persistent-transfer')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='N01', parameter='count-1')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='N01', parameter='count-1024')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='N02', parameter='preallocated')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='L01', parameter='reference-generic')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='L01', parameter='boxed-reference')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='L01', parameter='primitive-array')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='L01', parameter='idiomatic-record')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='L02', parameter='switch')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='L02', parameter='pattern')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='L03', parameter='failure-0pct')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='L03', parameter='failure-0.1pct')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='L03', parameter='failure-1pct')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='L03', parameter='failure-10pct')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='L04', parameter='invoke-capturing')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='L04', parameter='invoke-noncapturing')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='L04', parameter='reflection-lookup-cached')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='L04', parameter='reflection-lookup-uncached')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='L04', parameter='reflection-invoke-cached')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='csharp', case_id='L04', parameter='reflection-invoke-uncached')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='C01', parameter='transform')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='C02', parameter='n128')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='C02', parameter='n512')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='C03', parameter='invoices')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='C04', parameter='bits2048')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='C05', parameter='bytes1024')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='C05', parameter='bytes1048576')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='C06', parameter='compress-text')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='C06', parameter='compress-incompressible')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='C06', parameter='decompress-text')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='C06', parameter='decompress-incompressible')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='K01', parameter='scan')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='K01', parameter='sort')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='K02', parameter='append')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='K02', parameter='iterate')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='K02', parameter='remove')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='K03', parameter='ascii-insert')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='K03', parameter='ascii-lookup')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='K03', parameter='ascii-remove')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='K03', parameter='int64-insert')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='K03', parameter='int64-lookup')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='K03', parameter='int64-remove')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='K04', parameter='union-prebuilt')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='K04', parameter='union-build-inclusive')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='K04', parameter='intersection-prebuilt')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='K04', parameter='intersection-build-inclusive')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='K05', parameter='encode-ascii')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='K05', parameter='encode-unicode')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='K05', parameter='decode-ascii')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='K05', parameter='decode-unicode')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='K05', parameter='search-ascii')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='K05', parameter='search-unicode')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='K06', parameter='integer-parse')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='K06', parameter='regex-extract')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='M01', parameter='allocate-release')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='M02', parameter='survival-1pct')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='M02', parameter='survival-10pct')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='M02', parameter='survival-50pct')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='M03', parameter='retain-query')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='M04', parameter='copy-4096')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='M04', parameter='copy-1048576')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='M04', parameter='slice-4096')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='M04', parameter='slice-1048576')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='M04', parameter='parse-4096')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='M04', parameter='parse-1048576')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='M05', parameter='limit-512MiB')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='M05', parameter='limit-2048MiB')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='A01', parameter='task-graph')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='A02', parameter='pipeline')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='A03', parameter='atomic')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='A03', parameter='lock')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='A04', parameter='inflight-1000')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='A04', parameter='inflight-10000')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='A05', parameter='deadline')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='A05', parameter='child-failure')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='S01', parameter='serialize-1024')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='S01', parameter='serialize-65536')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='S01', parameter='serialize-1048576')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='S01', parameter='deserialize-1024')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='S01', parameter='deserialize-65536')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='S01', parameter='deserialize-1048576')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='S02', parameter='encode')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='S02', parameter='decode')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='S03', parameter='pipeline')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='S03', parameter='imperative')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='S04', parameter='parse')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='S04', parameter='emit')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='I01', parameter='read-buffered')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='I01', parameter='read-durable-flush')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='I01', parameter='write-buffered')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='I01', parameter='write-durable-flush')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='I02', parameter='random-4KiB')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='I03', parameter='echo-1MiB')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='I04', parameter='handshake')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='I04', parameter='persistent-transfer')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='N01', parameter='count-1')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='N01', parameter='count-1024')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='N02', parameter='preallocated')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='L01', parameter='reference-generic')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='L01', parameter='boxed-reference')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='L01', parameter='primitive-array')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='L01', parameter='idiomatic-record')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='L02', parameter='switch')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='L02', parameter='pattern')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='L03', parameter='failure-0pct')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='L03', parameter='failure-0.1pct')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='L03', parameter='failure-1pct')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='L03', parameter='failure-10pct')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='L04', parameter='invoke-capturing')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='L04', parameter='invoke-noncapturing')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='L04', parameter='reflection-lookup-cached')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='L04', parameter='reflection-lookup-uncached')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='L04', parameter='reflection-invoke-cached')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle",
+        "id": "test_every_parameter_check_and_repeated_batch_match_independent_oracle (test_suite_workers.SuiteWorkerTests.test_every_parameter_check_and_repeated_batch_match_independent_oracle) (language='java', case_id='L04', parameter='reflection-invoke-uncached')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_sort_batches_preserve_original_input_for_following_operations",
+        "id": "test_sort_batches_preserve_original_input_for_following_operations (test_suite_workers.SuiteWorkerTests.test_sort_batches_preserve_original_input_for_following_operations) (language='csharp')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_sort_batches_preserve_original_input_for_following_operations",
+        "id": "test_sort_batches_preserve_original_input_for_following_operations (test_suite_workers.SuiteWorkerTests.test_sort_batches_preserve_original_input_for_following_operations) (language='java')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_unknown_case_parameter_and_command_are_rejected_without_losing_protocol",
+        "id": "test_unknown_case_parameter_and_command_are_rejected_without_losing_protocol (test_suite_workers.SuiteWorkerTests.test_unknown_case_parameter_and_command_are_rejected_without_losing_protocol) (language='csharp', command='CHECK', case_id='X99')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_unknown_case_parameter_and_command_are_rejected_without_losing_protocol",
+        "id": "test_unknown_case_parameter_and_command_are_rejected_without_losing_protocol (test_suite_workers.SuiteWorkerTests.test_unknown_case_parameter_and_command_are_rejected_without_losing_protocol) (language='csharp', command='CHECK', case_id='C01')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_unknown_case_parameter_and_command_are_rejected_without_losing_protocol",
+        "id": "test_unknown_case_parameter_and_command_are_rejected_without_losing_protocol (test_suite_workers.SuiteWorkerTests.test_unknown_case_parameter_and_command_are_rejected_without_losing_protocol) (language='csharp', command='INVALID', case_id='C01')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_unknown_case_parameter_and_command_are_rejected_without_losing_protocol",
+        "id": "test_unknown_case_parameter_and_command_are_rejected_without_losing_protocol (test_suite_workers.SuiteWorkerTests.test_unknown_case_parameter_and_command_are_rejected_without_losing_protocol) (language='java', command='CHECK', case_id='X99')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_unknown_case_parameter_and_command_are_rejected_without_losing_protocol",
+        "id": "test_unknown_case_parameter_and_command_are_rejected_without_losing_protocol (test_suite_workers.SuiteWorkerTests.test_unknown_case_parameter_and_command_are_rejected_without_losing_protocol) (language='java', command='CHECK', case_id='C01')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_suite_workers.SuiteWorkerTests.test_unknown_case_parameter_and_command_are_rejected_without_losing_protocol",
+        "id": "test_unknown_case_parameter_and_command_are_rejected_without_losing_protocol (test_suite_workers.SuiteWorkerTests.test_unknown_case_parameter_and_command_are_rejected_without_losing_protocol) (language='java', command='INVALID', case_id='C01')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_workers.WorkerParityTests.test_boundary_values_match_independent_oracle",
+        "id": "test_boundary_values_match_independent_oracle (test_workers.WorkerParityTests.test_boundary_values_match_independent_oracle) (language='csharp')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_workers.WorkerParityTests.test_boundary_values_match_independent_oracle",
+        "id": "test_boundary_values_match_independent_oracle (test_workers.WorkerParityTests.test_boundary_values_match_independent_oracle) (language='java')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_workers.WorkerParityTests.test_empty_and_truncated_input_rejected",
+        "id": "test_empty_and_truncated_input_rejected (test_workers.WorkerParityTests.test_empty_and_truncated_input_rejected) (language='csharp', bytes=0)",
+        "status": "passed"
+      },
+      {
+        "parent": "test_workers.WorkerParityTests.test_empty_and_truncated_input_rejected",
+        "id": "test_empty_and_truncated_input_rejected (test_workers.WorkerParityTests.test_empty_and_truncated_input_rejected) (language='csharp', bytes=7)",
+        "status": "passed"
+      },
+      {
+        "parent": "test_workers.WorkerParityTests.test_empty_and_truncated_input_rejected",
+        "id": "test_empty_and_truncated_input_rejected (test_workers.WorkerParityTests.test_empty_and_truncated_input_rejected) (language='csharp', bytes=9)",
+        "status": "passed"
+      },
+      {
+        "parent": "test_workers.WorkerParityTests.test_empty_and_truncated_input_rejected",
+        "id": "test_empty_and_truncated_input_rejected (test_workers.WorkerParityTests.test_empty_and_truncated_input_rejected) (language='java', bytes=0)",
+        "status": "passed"
+      },
+      {
+        "parent": "test_workers.WorkerParityTests.test_empty_and_truncated_input_rejected",
+        "id": "test_empty_and_truncated_input_rejected (test_workers.WorkerParityTests.test_empty_and_truncated_input_rejected) (language='java', bytes=7)",
+        "status": "passed"
+      },
+      {
+        "parent": "test_workers.WorkerParityTests.test_empty_and_truncated_input_rejected",
+        "id": "test_empty_and_truncated_input_rejected (test_workers.WorkerParityTests.test_empty_and_truncated_input_rejected) (language='java', bytes=9)",
+        "status": "passed"
+      },
+      {
+        "parent": "test_workers.WorkerParityTests.test_malformed_protocol_rejected",
+        "id": "test_malformed_protocol_rejected (test_workers.WorkerParityTests.test_malformed_protocol_rejected) (language='csharp')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_workers.WorkerParityTests.test_malformed_protocol_rejected",
+        "id": "test_malformed_protocol_rejected (test_workers.WorkerParityTests.test_malformed_protocol_rejected) (language='java')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_workers.WorkerParityTests.test_sort_does_not_mutate_runtime_loaded_input",
+        "id": "test_sort_does_not_mutate_runtime_loaded_input (test_workers.WorkerParityTests.test_sort_does_not_mutate_runtime_loaded_input) (language='csharp')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_workers.WorkerParityTests.test_sort_does_not_mutate_runtime_loaded_input",
+        "id": "test_sort_does_not_mutate_runtime_loaded_input (test_workers.WorkerParityTests.test_sort_does_not_mutate_runtime_loaded_input) (language='java')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_workers.WorkerParityTests.test_unknown_operation_rejected",
+        "id": "test_unknown_operation_rejected (test_workers.WorkerParityTests.test_unknown_operation_rejected) (language='csharp')",
+        "status": "passed"
+      },
+      {
+        "parent": "test_workers.WorkerParityTests.test_unknown_operation_rejected",
+        "id": "test_unknown_operation_rejected (test_workers.WorkerParityTests.test_unknown_operation_rejected) (language='java')",
+        "status": "passed"
+      }
+    ]
+  },
+  "java": {
+    "framework": "JUnit5/Surefire",
+    "authored_definitions": 6,
+    "discovered_cases": 6,
+    "results": {
+      "passed": 6
+    },
+    "command": [
+      "C:\\Code\\Personal\\Java_vs_CSharp\\benchmark\\.work\\tools\\apache-maven-3.9.11\\bin\\mvn.cmd",
+      "-B",
+      "-q",
+      "test"
+    ],
+    "exit_code": 0,
+    "cases": [
+      {
+        "id": "benchmark.suite.CsvContractTest.emptyFieldsAndFinalRecordWithoutNewlineArePreserved",
+        "status": "passed"
+      },
+      {
+        "id": "benchmark.suite.CsvContractTest.unterminatedQuotedFieldIsRejected",
+        "status": "passed"
+      },
+      {
+        "id": "benchmark.suite.CsvContractTest.quoteInsideUnquotedFieldIsRejected",
+        "status": "passed"
+      },
+      {
+        "id": "benchmark.suite.CsvContractTest.charactersFollowingClosingQuoteAreRejected",
+        "status": "passed"
+      },
+      {
+        "id": "benchmark.suite.CsvContractTest.fnvMatchesIndependentKnownVectorsAndTreatsBytesUnsigned",
+        "status": "passed"
+      },
+      {
+        "id": "benchmark.suite.CsvContractTest.quotedCommasQuotesUnicodeAndNewlinesRoundTrip",
+        "status": "passed"
+      }
+    ],
+    "reports": [
+      {
+        "file": "java\\suite\\target\\surefire-reports\\TEST-benchmark.suite.CsvContractTest.xml",
+        "sha256": "7bded11b4d733cbf271c19d097cfdda7281984ca1a9e90a196d7a66d45c4d7e4"
+      }
+    ],
+    "log_sha256": "e4c255629125dad39a71886421111db9956c7ba9d2fad07211b5c87559ab58b2"
+  },
+  "coverage": {
+    "status": "unavailable",
+    "reason": "No measured coverage report"
+  },
+  "benchmark_inventory": "55 authored workload IDs and 180 parameter definitions; these are not unit-test totals",
+  "method": "AST authored Python test methods; unittest discovery and execution; subtests separate. JUnit @Test definitions and fresh Surefire XML cases. No snapshots/browser repetitions/standalone script counts added."
+}

@@ -1,0 +1,800 @@
+{
+  "date_utc": "2026-10-27T17:07:36.632014+00:00",
+  "engine": "postgresql",
+  "admitted": false,
+  "scope": "Standalone four-cell functional integration; no independent performance repetitions",
+  "source_commit": "7568074aec959cbdd58a7397035e170c9e14227a",
+  "request_sha256": "ba95b23aa8673dc8a8d7728feca9e9c31f496d61c86a181e2a9310bd34eaf1aa",
+  "cells": [
+    {
+      "language": "csharp",
+      "engine": "postgresql",
+      "access": "raw",
+      "resource_budget": {
+        "memory_bytes": 2147483648,
+        "cpu_affinity": [
+          0,
+          1
+        ],
+        "enforced": true,
+        "mechanism": "Windows per-process JobObject commit-memory limit and affinity",
+        "memory_boundary": "Process committed memory; OS RSS is reported independently"
+      },
+      "evidence": ".work\\postgresql-controls-validation.csharp.raw.json",
+      "evidence_sha256": "1257c675e460f6986525a66ab81e44426e57e7b4b8f34ac9678ff78cab02c2af",
+      "status": "passed",
+      "metadata": {
+        "engine": "postgresql",
+        "access": "raw",
+        "orm": "10.0.14.0",
+        "driver": "10.0.3.0",
+        "network_verification": "connected",
+        "server_version": "18.6 (Debian 18.6-1.pgdg13+2)",
+        "schema_sha256": "b3435d9b0fa664ae083f65c557862870b56f29b1b60cdfd311ec4f17767a351a",
+        "query_sha256": {
+          "D01.sql": "6585fda6f5cb18d1133c1ab56147a453524f19013290bb092fdeb44fc2dd7227",
+          "D02.sql": "662ca727f847bd287e056681a6eb20e2c2f0358f6e0ff815420c398239bc8356",
+          "D03.sql": "8da94ff12a1e8353f10ba8a8ea7a3ac0e3f394b5223b26edbeb62db8487a45b2",
+          "D04.sql": "badc7456c5be8200a5fe34d9aee26fe9d10df1f17a9b8a02fe05fcfa4f28a9f7",
+          "D05-read.sql": "6585fda6f5cb18d1133c1ab56147a453524f19013290bb092fdeb44fc2dd7227",
+          "D05-update.sql": "cc659f14a890e2f0419af1b5b7b6678e20f6d9a4c99b018131f4081cd9ccbed3",
+          "D06-line.sql": "705adb02c3adfa4b1259eed4ff6bed4d3c3346137518e11fc018b1a75913ada7",
+          "D06-order.sql": "9c4ce1a58e77f9a98e4d6f8e99a6a8d8aa1ecabd252ceb10c7bde024656f8d49",
+          "D07-child.sql": "dcd38480825896891840991487e8ce1f8e5b92fcb08f4b1ed39ff98512f1d850",
+          "D07-load.sql": "8da94ff12a1e8353f10ba8a8ea7a3ac0e3f394b5223b26edbeb62db8487a45b2",
+          "D07-parent.sql": "342cd6be5e67f60abf118733b21c4f41d19f6c0e9a60856655234b59570a803c",
+          "H06-product.sql": "6ced33ad33fa856ae88ec2aae172c43ac85a910838047a54f579fa86f790f410"
+        },
+        "pool_limit": 16,
+        "connection_acquisition_timeout_seconds": 15,
+        "command_timeout_seconds": 15,
+        "orm_policy": "fresh tracked DbContext per operation, no context/result caches, no lazy loading, network MaxBatchSize=1",
+        "native_parity_admission": "requires same server/image/settings evidence"
+      },
+      "initial_state": {
+        "sha256": "f168790ec90025b0d93bd68ae79e607d53850944bd2b634fe6a9ead48eec503b",
+        "counts": {
+          "customer": 100,
+          "product": 32,
+          "orders": 200,
+          "order_line": 1000
+        }
+      },
+      "final_state": {
+        "sha256": "fed428c37da3dc564c3be4ca34f41c7e5cc0fc35f19fc0b0354b5a09db78bc99",
+        "counts": {
+          "customer": 100,
+          "product": 32,
+          "orders": 203,
+          "order_line": 1015
+        }
+      },
+      "sequential_requests": 17,
+      "audit_operations": 8,
+      "commit_reconciliation_verified": true,
+      "parallel_read_attempts": 4,
+      "reset_verified": true
+    },
+    {
+      "language": "csharp",
+      "engine": "postgresql",
+      "access": "orm",
+      "resource_budget": {
+        "memory_bytes": 2147483648,
+        "cpu_affinity": [
+          0,
+          1
+        ],
+        "enforced": true,
+        "mechanism": "Windows per-process JobObject commit-memory limit and affinity",
+        "memory_boundary": "Process committed memory; OS RSS is reported independently"
+      },
+      "evidence": ".work\\postgresql-controls-validation.csharp.orm.json",
+      "evidence_sha256": "3d5cb4ddf9c04c5f5cfe56b874d34eaa4b882d05bbbbfa5abfd51953d32b36f0",
+      "status": "passed",
+      "metadata": {
+        "engine": "postgresql",
+        "access": "orm",
+        "orm": "10.0.14.0",
+        "driver": "10.0.3.0",
+        "network_verification": "connected",
+        "server_version": "18.6 (Debian 18.6-1.pgdg13+2)",
+        "schema_sha256": "b3435d9b0fa664ae083f65c557862870b56f29b1b60cdfd311ec4f17767a351a",
+        "query_sha256": {
+          "D01.sql": "6585fda6f5cb18d1133c1ab56147a453524f19013290bb092fdeb44fc2dd7227",
+          "D02.sql": "662ca727f847bd287e056681a6eb20e2c2f0358f6e0ff815420c398239bc8356",
+          "D03.sql": "8da94ff12a1e8353f10ba8a8ea7a3ac0e3f394b5223b26edbeb62db8487a45b2",
+          "D04.sql": "badc7456c5be8200a5fe34d9aee26fe9d10df1f17a9b8a02fe05fcfa4f28a9f7",
+          "D05-read.sql": "6585fda6f5cb18d1133c1ab56147a453524f19013290bb092fdeb44fc2dd7227",
+          "D05-update.sql": "cc659f14a890e2f0419af1b5b7b6678e20f6d9a4c99b018131f4081cd9ccbed3",
+          "D06-line.sql": "705adb02c3adfa4b1259eed4ff6bed4d3c3346137518e11fc018b1a75913ada7",
+          "D06-order.sql": "9c4ce1a58e77f9a98e4d6f8e99a6a8d8aa1ecabd252ceb10c7bde024656f8d49",
+          "D07-child.sql": "dcd38480825896891840991487e8ce1f8e5b92fcb08f4b1ed39ff98512f1d850",
+          "D07-load.sql": "8da94ff12a1e8353f10ba8a8ea7a3ac0e3f394b5223b26edbeb62db8487a45b2",
+          "D07-parent.sql": "342cd6be5e67f60abf118733b21c4f41d19f6c0e9a60856655234b59570a803c",
+          "H06-product.sql": "6ced33ad33fa856ae88ec2aae172c43ac85a910838047a54f579fa86f790f410"
+        },
+        "pool_limit": 16,
+        "connection_acquisition_timeout_seconds": 15,
+        "command_timeout_seconds": 15,
+        "orm_policy": "fresh tracked DbContext per operation, no context/result caches, no lazy loading, network MaxBatchSize=1",
+        "native_parity_admission": "requires same server/image/settings evidence"
+      },
+      "initial_state": {
+        "sha256": "f168790ec90025b0d93bd68ae79e607d53850944bd2b634fe6a9ead48eec503b",
+        "counts": {
+          "customer": 100,
+          "product": 32,
+          "orders": 200,
+          "order_line": 1000
+        }
+      },
+      "final_state": {
+        "sha256": "fed428c37da3dc564c3be4ca34f41c7e5cc0fc35f19fc0b0354b5a09db78bc99",
+        "counts": {
+          "customer": 100,
+          "product": 32,
+          "orders": 203,
+          "order_line": 1015
+        }
+      },
+      "sequential_requests": 17,
+      "audit_operations": 8,
+      "commit_reconciliation_verified": true,
+      "parallel_read_attempts": 4,
+      "reset_verified": true
+    },
+    {
+      "language": "java",
+      "engine": "postgresql",
+      "access": "raw",
+      "resource_budget": {
+        "memory_bytes": 2147483648,
+        "cpu_affinity": [
+          0,
+          1
+        ],
+        "enforced": true,
+        "mechanism": "Windows per-process JobObject commit-memory limit and affinity",
+        "memory_boundary": "Process committed memory; OS RSS is reported independently"
+      },
+      "evidence": ".work\\postgresql-controls-validation.java.raw.json",
+      "evidence_sha256": "d674e1dbabab488fbf5ef061337cfbc71f6d99e1f76db9f53668e65c315a2839",
+      "status": "passed",
+      "metadata": {
+        "engine": "postgresql",
+        "access": "raw",
+        "orm": "7.4.14.Final",
+        "driver": null,
+        "schema_sha256": "b3435d9b0fa664ae083f65c557862870b56f29b1b60cdfd311ec4f17767a351a",
+        "query_sha256": {
+          "D01.sql": "6585fda6f5cb18d1133c1ab56147a453524f19013290bb092fdeb44fc2dd7227",
+          "D02.sql": "662ca727f847bd287e056681a6eb20e2c2f0358f6e0ff815420c398239bc8356",
+          "D03.sql": "8da94ff12a1e8353f10ba8a8ea7a3ac0e3f394b5223b26edbeb62db8487a45b2",
+          "D04.sql": "badc7456c5be8200a5fe34d9aee26fe9d10df1f17a9b8a02fe05fcfa4f28a9f7",
+          "D05-read.sql": "6585fda6f5cb18d1133c1ab56147a453524f19013290bb092fdeb44fc2dd7227",
+          "D05-update.sql": "cc659f14a890e2f0419af1b5b7b6678e20f6d9a4c99b018131f4081cd9ccbed3",
+          "D06-line.sql": "705adb02c3adfa4b1259eed4ff6bed4d3c3346137518e11fc018b1a75913ada7",
+          "D06-order.sql": "9c4ce1a58e77f9a98e4d6f8e99a6a8d8aa1ecabd252ceb10c7bde024656f8d49",
+          "D07-child.sql": "dcd38480825896891840991487e8ce1f8e5b92fcb08f4b1ed39ff98512f1d850",
+          "D07-load.sql": "8da94ff12a1e8353f10ba8a8ea7a3ac0e3f394b5223b26edbeb62db8487a45b2",
+          "D07-parent.sql": "342cd6be5e67f60abf118733b21c4f41d19f6c0e9a60856655234b59570a803c",
+          "H06-product.sql": "6ced33ad33fa856ae88ec2aae172c43ac85a910838047a54f579fa86f790f410"
+        },
+        "pool_limit": 16,
+        "connection_acquisition_timeout_seconds": 15,
+        "command_timeout_seconds": 15,
+        "orm_policy": "fresh tracked Session per operation, no second-level/query cache, no lazy loads, JDBC batch_size=0",
+        "native_parity_admission": "requires same server/image/settings evidence",
+        "driver_version": "42.7.14",
+        "server_version": "18.6 (Debian 18.6-1.pgdg13+2)"
+      },
+      "initial_state": {
+        "sha256": "f168790ec90025b0d93bd68ae79e607d53850944bd2b634fe6a9ead48eec503b",
+        "counts": {
+          "customer": 100,
+          "product": 32,
+          "orders": 200,
+          "order_line": 1000
+        }
+      },
+      "final_state": {
+        "sha256": "fed428c37da3dc564c3be4ca34f41c7e5cc0fc35f19fc0b0354b5a09db78bc99",
+        "counts": {
+          "customer": 100,
+          "product": 32,
+          "orders": 203,
+          "order_line": 1015
+        }
+      },
+      "sequential_requests": 17,
+      "audit_operations": 8,
+      "commit_reconciliation_verified": true,
+      "parallel_read_attempts": 4,
+      "reset_verified": true
+    },
+    {
+      "language": "java",
+      "engine": "postgresql",
+      "access": "orm",
+      "resource_budget": {
+        "memory_bytes": 2147483648,
+        "cpu_affinity": [
+          0,
+          1
+        ],
+        "enforced": true,
+        "mechanism": "Windows per-process JobObject commit-memory limit and affinity",
+        "memory_boundary": "Process committed memory; OS RSS is reported independently"
+      },
+      "evidence": ".work\\postgresql-controls-validation.java.orm.json",
+      "evidence_sha256": "af2f423022cba5252232f4c742eaa26e8bccb8a2b11dda8b52a1f911dcbb605a",
+      "status": "passed",
+      "metadata": {
+        "engine": "postgresql",
+        "access": "orm",
+        "orm": "7.4.14.Final",
+        "driver": null,
+        "schema_sha256": "b3435d9b0fa664ae083f65c557862870b56f29b1b60cdfd311ec4f17767a351a",
+        "query_sha256": {
+          "D01.sql": "6585fda6f5cb18d1133c1ab56147a453524f19013290bb092fdeb44fc2dd7227",
+          "D02.sql": "662ca727f847bd287e056681a6eb20e2c2f0358f6e0ff815420c398239bc8356",
+          "D03.sql": "8da94ff12a1e8353f10ba8a8ea7a3ac0e3f394b5223b26edbeb62db8487a45b2",
+          "D04.sql": "badc7456c5be8200a5fe34d9aee26fe9d10df1f17a9b8a02fe05fcfa4f28a9f7",
+          "D05-read.sql": "6585fda6f5cb18d1133c1ab56147a453524f19013290bb092fdeb44fc2dd7227",
+          "D05-update.sql": "cc659f14a890e2f0419af1b5b7b6678e20f6d9a4c99b018131f4081cd9ccbed3",
+          "D06-line.sql": "705adb02c3adfa4b1259eed4ff6bed4d3c3346137518e11fc018b1a75913ada7",
+          "D06-order.sql": "9c4ce1a58e77f9a98e4d6f8e99a6a8d8aa1ecabd252ceb10c7bde024656f8d49",
+          "D07-child.sql": "dcd38480825896891840991487e8ce1f8e5b92fcb08f4b1ed39ff98512f1d850",
+          "D07-load.sql": "8da94ff12a1e8353f10ba8a8ea7a3ac0e3f394b5223b26edbeb62db8487a45b2",
+          "D07-parent.sql": "342cd6be5e67f60abf118733b21c4f41d19f6c0e9a60856655234b59570a803c",
+          "H06-product.sql": "6ced33ad33fa856ae88ec2aae172c43ac85a910838047a54f579fa86f790f410"
+        },
+        "pool_limit": 16,
+        "connection_acquisition_timeout_seconds": 15,
+        "command_timeout_seconds": 15,
+        "orm_policy": "fresh tracked Session per operation, no second-level/query cache, no lazy loads, JDBC batch_size=0",
+        "native_parity_admission": "requires same server/image/settings evidence",
+        "driver_version": "42.7.14",
+        "server_version": "18.6 (Debian 18.6-1.pgdg13+2)"
+      },
+      "initial_state": {
+        "sha256": "f168790ec90025b0d93bd68ae79e607d53850944bd2b634fe6a9ead48eec503b",
+        "counts": {
+          "customer": 100,
+          "product": 32,
+          "orders": 200,
+          "order_line": 1000
+        }
+      },
+      "final_state": {
+        "sha256": "fed428c37da3dc564c3be4ca34f41c7e5cc0fc35f19fc0b0354b5a09db78bc99",
+        "counts": {
+          "customer": 100,
+          "product": 32,
+          "orders": 203,
+          "order_line": 1015
+        }
+      },
+      "sequential_requests": 17,
+      "audit_operations": 8,
+      "commit_reconciliation_verified": true,
+      "parallel_read_attempts": 4,
+      "reset_verified": true
+    }
+  ],
+  "source_and_input_sha256": {
+    "schema\\postgresql.sql": "b3435d9b0fa664ae083f65c557862870b56f29b1b60cdfd311ec4f17767a351a",
+    "dotnet\\Database\\bin\\Release\\net10.0\\Database.dll": "72760cb6f628bd1b0c93604fa32a89fd204436990d7f323841a2724cdbb6f6ec",
+    "java\\database\\target\\database-worker-1.0.0-all.jar": "9e3fbeda37f56733939939f72e160c1674755527493ed9e77404b9a1a96cbd66",
+    "validation\\verify_postgresql.py": "bcf93ddc231ee1ed999e25b3aaaeb5fd6c29a406f8b2ce84948f8fff838e1a61",
+    "validation\\database_oracle.py": "9a8001269532ec0eacab187e0f35c3fea6639127146e98e667e53047d7b9cd1f",
+    "queries\\postgresql\\D01.sql": "6585fda6f5cb18d1133c1ab56147a453524f19013290bb092fdeb44fc2dd7227",
+    "queries\\postgresql\\D02.sql": "662ca727f847bd287e056681a6eb20e2c2f0358f6e0ff815420c398239bc8356",
+    "queries\\postgresql\\D03.sql": "8da94ff12a1e8353f10ba8a8ea7a3ac0e3f394b5223b26edbeb62db8487a45b2",
+    "queries\\postgresql\\D04.sql": "badc7456c5be8200a5fe34d9aee26fe9d10df1f17a9b8a02fe05fcfa4f28a9f7",
+    "queries\\postgresql\\D05-read.sql": "6585fda6f5cb18d1133c1ab56147a453524f19013290bb092fdeb44fc2dd7227",
+    "queries\\postgresql\\D05-update.sql": "cc659f14a890e2f0419af1b5b7b6678e20f6d9a4c99b018131f4081cd9ccbed3",
+    "queries\\postgresql\\D06-line.sql": "705adb02c3adfa4b1259eed4ff6bed4d3c3346137518e11fc018b1a75913ada7",
+    "queries\\postgresql\\D06-order.sql": "9c4ce1a58e77f9a98e4d6f8e99a6a8d8aa1ecabd252ceb10c7bde024656f8d49",
+    "queries\\postgresql\\D07-child.sql": "dcd38480825896891840991487e8ce1f8e5b92fcb08f4b1ed39ff98512f1d850",
+    "queries\\postgresql\\D07-load.sql": "8da94ff12a1e8353f10ba8a8ea7a3ac0e3f394b5223b26edbeb62db8487a45b2",
+    "queries\\postgresql\\D07-parent.sql": "342cd6be5e67f60abf118733b21c4f41d19f6c0e9a60856655234b59570a803c",
+    "queries\\postgresql\\H06-product.sql": "6ced33ad33fa856ae88ec2aae172c43ac85a910838047a54f579fa86f790f410",
+    ".work\\suite-data\\smoke\\csv-10m.csv": "537b6d979169a7fd5613431948de181a7d534f6a9f672518a6fd7f1b6d944100",
+    ".work\\suite-data\\smoke\\customers.csv": "25ed35820d20dc19e5d49d3ab41883dc782d8edaf56cc6f26f41c0ccd806069d",
+    ".work\\suite-data\\smoke\\orders.csv": "189ea9d4eb540c025dc1db62294c9b0cd31d8b665f38ef316c15d45d1902eee1",
+    ".work\\suite-data\\smoke\\order_lines.csv": "d26686bfcf1917ca1e3ba7277fcc15c23a3f7c58c6ffcbb369e53dc8d6628cd3",
+    ".work\\suite-data\\smoke\\products.csv": "35c2b204b3ffd38fa04f4768a05c5d52869fa29c4621bd752d1a37b8676ca270"
+  },
+  "image": "postgres@sha256:9770878138a2e83abcb10856d30cc3f24dae0d317bb956db6ab9159de6c3c80d",
+  "server_version": "version                                                       \n--------------------------------------------------------------------------------------------------------------------\n PostgreSQL 18.6 (Debian 18.6-1.pgdg13+2) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit\n(1 row)",
+  "realized_catalog": {
+    "database": "bench_8d1d1287fab445588898ef0169ea028b",
+    "image": "postgres@sha256:9770878138a2e83abcb10856d30cc3f24dae0d317bb956db6ab9159de6c3c80d",
+    "durability": {
+      "fsync": "on",
+      "synchronous_commit": "on",
+      "full_page_writes": "on",
+      "default_transaction_isolation": "read committed",
+      "server_encoding": "UTF8"
+    },
+    "columns": [
+      {
+        "table": "customer",
+        "column": "id",
+        "type": "bigint",
+        "nullable": "NO",
+        "length": null,
+        "collation": null
+      },
+      {
+        "table": "customer",
+        "column": "email",
+        "type": "character varying",
+        "nullable": "NO",
+        "length": 254,
+        "collation": "C"
+      },
+      {
+        "table": "customer",
+        "column": "name",
+        "type": "character varying",
+        "nullable": "NO",
+        "length": 128,
+        "collation": "C"
+      },
+      {
+        "table": "customer",
+        "column": "balance_cents",
+        "type": "bigint",
+        "nullable": "NO",
+        "length": null,
+        "collation": null
+      },
+      {
+        "table": "customer",
+        "column": "version",
+        "type": "bigint",
+        "nullable": "NO",
+        "length": null,
+        "collation": null
+      },
+      {
+        "table": "order_line",
+        "column": "id",
+        "type": "bigint",
+        "nullable": "NO",
+        "length": null,
+        "collation": null
+      },
+      {
+        "table": "order_line",
+        "column": "order_id",
+        "type": "bigint",
+        "nullable": "NO",
+        "length": null,
+        "collation": null
+      },
+      {
+        "table": "order_line",
+        "column": "line_no",
+        "type": "bigint",
+        "nullable": "NO",
+        "length": null,
+        "collation": null
+      },
+      {
+        "table": "order_line",
+        "column": "product_id",
+        "type": "bigint",
+        "nullable": "NO",
+        "length": null,
+        "collation": null
+      },
+      {
+        "table": "order_line",
+        "column": "quantity",
+        "type": "bigint",
+        "nullable": "NO",
+        "length": null,
+        "collation": null
+      },
+      {
+        "table": "order_line",
+        "column": "unit_price_cents",
+        "type": "bigint",
+        "nullable": "NO",
+        "length": null,
+        "collation": null
+      },
+      {
+        "table": "orders",
+        "column": "id",
+        "type": "bigint",
+        "nullable": "NO",
+        "length": null,
+        "collation": null
+      },
+      {
+        "table": "orders",
+        "column": "customer_id",
+        "type": "bigint",
+        "nullable": "NO",
+        "length": null,
+        "collation": null
+      },
+      {
+        "table": "orders",
+        "column": "status",
+        "type": "bigint",
+        "nullable": "NO",
+        "length": null,
+        "collation": null
+      },
+      {
+        "table": "orders",
+        "column": "created_epoch_ms",
+        "type": "bigint",
+        "nullable": "NO",
+        "length": null,
+        "collation": null
+      },
+      {
+        "table": "orders",
+        "column": "total_cents",
+        "type": "bigint",
+        "nullable": "NO",
+        "length": null,
+        "collation": null
+      },
+      {
+        "table": "orders",
+        "column": "version",
+        "type": "bigint",
+        "nullable": "NO",
+        "length": null,
+        "collation": null
+      },
+      {
+        "table": "product",
+        "column": "id",
+        "type": "bigint",
+        "nullable": "NO",
+        "length": null,
+        "collation": null
+      },
+      {
+        "table": "product",
+        "column": "sku",
+        "type": "character varying",
+        "nullable": "NO",
+        "length": 64,
+        "collation": "C"
+      },
+      {
+        "table": "product",
+        "column": "name",
+        "type": "character varying",
+        "nullable": "NO",
+        "length": 128,
+        "collation": "C"
+      },
+      {
+        "table": "product",
+        "column": "price_cents",
+        "type": "bigint",
+        "nullable": "NO",
+        "length": null,
+        "collation": null
+      }
+    ],
+    "indexes": [
+      {
+        "table": "customer",
+        "index": "customer_email_key",
+        "definition": "CREATE UNIQUE INDEX customer_email_key ON public.customer USING btree (email)"
+      },
+      {
+        "table": "customer",
+        "index": "customer_pkey",
+        "definition": "CREATE UNIQUE INDEX customer_pkey ON public.customer USING btree (id)"
+      },
+      {
+        "table": "order_line",
+        "index": "ix_order_line_product_id",
+        "definition": "CREATE INDEX ix_order_line_product_id ON public.order_line USING btree (product_id)"
+      },
+      {
+        "table": "order_line",
+        "index": "order_line_order_id_line_no_key",
+        "definition": "CREATE UNIQUE INDEX order_line_order_id_line_no_key ON public.order_line USING btree (order_id, line_no)"
+      },
+      {
+        "table": "order_line",
+        "index": "order_line_pkey",
+        "definition": "CREATE UNIQUE INDEX order_line_pkey ON public.order_line USING btree (id)"
+      },
+      {
+        "table": "orders",
+        "index": "ix_orders_customer_created_id",
+        "definition": "CREATE INDEX ix_orders_customer_created_id ON public.orders USING btree (customer_id, created_epoch_ms, id)"
+      },
+      {
+        "table": "orders",
+        "index": "ix_orders_status_created_id",
+        "definition": "CREATE INDEX ix_orders_status_created_id ON public.orders USING btree (status, created_epoch_ms, id)"
+      },
+      {
+        "table": "orders",
+        "index": "orders_pkey",
+        "definition": "CREATE UNIQUE INDEX orders_pkey ON public.orders USING btree (id)"
+      },
+      {
+        "table": "product",
+        "index": "product_pkey",
+        "definition": "CREATE UNIQUE INDEX product_pkey ON public.product USING btree (id)"
+      },
+      {
+        "table": "product",
+        "index": "product_sku_key",
+        "definition": "CREATE UNIQUE INDEX product_sku_key ON public.product USING btree (sku)"
+      }
+    ],
+    "constraints": [
+      {
+        "name": "customer_balance_cents_not_null",
+        "kind": "n",
+        "definition": "NOT NULL balance_cents"
+      },
+      {
+        "name": "customer_email_check",
+        "kind": "c",
+        "definition": "CHECK ((((length((email)::text) >= 1) AND (length((email)::text) <= 254)) AND ((email)::text ~ '^[ -~]+$'::text) AND (\"right\"((email)::text, 1) <> ' '::text)))"
+      },
+      {
+        "name": "customer_email_key",
+        "kind": "u",
+        "definition": "UNIQUE (email)"
+      },
+      {
+        "name": "customer_email_not_null",
+        "kind": "n",
+        "definition": "NOT NULL email"
+      },
+      {
+        "name": "customer_id_check",
+        "kind": "c",
+        "definition": "CHECK ((id > 0))"
+      },
+      {
+        "name": "customer_id_not_null",
+        "kind": "n",
+        "definition": "NOT NULL id"
+      },
+      {
+        "name": "customer_name_check",
+        "kind": "c",
+        "definition": "CHECK ((((length((name)::text) >= 1) AND (length((name)::text) <= 128)) AND ((name)::text ~ '^[ -~]+$'::text) AND (\"right\"((name)::text, 1) <> ' '::text)))"
+      },
+      {
+        "name": "customer_name_not_null",
+        "kind": "n",
+        "definition": "NOT NULL name"
+      },
+      {
+        "name": "customer_pkey",
+        "kind": "p",
+        "definition": "PRIMARY KEY (id)"
+      },
+      {
+        "name": "customer_version_check",
+        "kind": "c",
+        "definition": "CHECK ((version >= 0))"
+      },
+      {
+        "name": "customer_version_not_null",
+        "kind": "n",
+        "definition": "NOT NULL version"
+      },
+      {
+        "name": "order_line_id_check",
+        "kind": "c",
+        "definition": "CHECK ((id > 0))"
+      },
+      {
+        "name": "order_line_id_not_null",
+        "kind": "n",
+        "definition": "NOT NULL id"
+      },
+      {
+        "name": "order_line_line_no_check",
+        "kind": "c",
+        "definition": "CHECK ((line_no > 0))"
+      },
+      {
+        "name": "order_line_line_no_not_null",
+        "kind": "n",
+        "definition": "NOT NULL line_no"
+      },
+      {
+        "name": "order_line_order_id_fkey",
+        "kind": "f",
+        "definition": "FOREIGN KEY (order_id) REFERENCES orders(id)"
+      },
+      {
+        "name": "order_line_order_id_line_no_key",
+        "kind": "u",
+        "definition": "UNIQUE (order_id, line_no)"
+      },
+      {
+        "name": "order_line_order_id_not_null",
+        "kind": "n",
+        "definition": "NOT NULL order_id"
+      },
+      {
+        "name": "order_line_pkey",
+        "kind": "p",
+        "definition": "PRIMARY KEY (id)"
+      },
+      {
+        "name": "order_line_product_id_fkey",
+        "kind": "f",
+        "definition": "FOREIGN KEY (product_id) REFERENCES product(id)"
+      },
+      {
+        "name": "order_line_product_id_not_null",
+        "kind": "n",
+        "definition": "NOT NULL product_id"
+      },
+      {
+        "name": "order_line_quantity_check",
+        "kind": "c",
+        "definition": "CHECK ((quantity > 0))"
+      },
+      {
+        "name": "order_line_quantity_not_null",
+        "kind": "n",
+        "definition": "NOT NULL quantity"
+      },
+      {
+        "name": "order_line_unit_price_cents_check",
+        "kind": "c",
+        "definition": "CHECK ((unit_price_cents >= 0))"
+      },
+      {
+        "name": "order_line_unit_price_cents_not_null",
+        "kind": "n",
+        "definition": "NOT NULL unit_price_cents"
+      },
+      {
+        "name": "orders_created_epoch_ms_check",
+        "kind": "c",
+        "definition": "CHECK ((created_epoch_ms >= 0))"
+      },
+      {
+        "name": "orders_created_epoch_ms_not_null",
+        "kind": "n",
+        "definition": "NOT NULL created_epoch_ms"
+      },
+      {
+        "name": "orders_customer_id_fkey",
+        "kind": "f",
+        "definition": "FOREIGN KEY (customer_id) REFERENCES customer(id)"
+      },
+      {
+        "name": "orders_customer_id_not_null",
+        "kind": "n",
+        "definition": "NOT NULL customer_id"
+      },
+      {
+        "name": "orders_id_check",
+        "kind": "c",
+        "definition": "CHECK ((id > 0))"
+      },
+      {
+        "name": "orders_id_not_null",
+        "kind": "n",
+        "definition": "NOT NULL id"
+      },
+      {
+        "name": "orders_pkey",
+        "kind": "p",
+        "definition": "PRIMARY KEY (id)"
+      },
+      {
+        "name": "orders_status_check",
+        "kind": "c",
+        "definition": "CHECK ((status = ANY (ARRAY[(0)::bigint, (1)::bigint, (2)::bigint, (3)::bigint])))"
+      },
+      {
+        "name": "orders_status_not_null",
+        "kind": "n",
+        "definition": "NOT NULL status"
+      },
+      {
+        "name": "orders_total_cents_check",
+        "kind": "c",
+        "definition": "CHECK ((total_cents >= 0))"
+      },
+      {
+        "name": "orders_total_cents_not_null",
+        "kind": "n",
+        "definition": "NOT NULL total_cents"
+      },
+      {
+        "name": "orders_version_check",
+        "kind": "c",
+        "definition": "CHECK ((version >= 0))"
+      },
+      {
+        "name": "orders_version_not_null",
+        "kind": "n",
+        "definition": "NOT NULL version"
+      },
+      {
+        "name": "product_id_check",
+        "kind": "c",
+        "definition": "CHECK ((id > 0))"
+      },
+      {
+        "name": "product_id_not_null",
+        "kind": "n",
+        "definition": "NOT NULL id"
+      },
+      {
+        "name": "product_name_check",
+        "kind": "c",
+        "definition": "CHECK ((((length((name)::text) >= 1) AND (length((name)::text) <= 128)) AND ((name)::text ~ '^[ -~]+$'::text) AND (\"right\"((name)::text, 1) <> ' '::text)))"
+      },
+      {
+        "name": "product_name_not_null",
+        "kind": "n",
+        "definition": "NOT NULL name"
+      },
+      {
+        "name": "product_pkey",
+        "kind": "p",
+        "definition": "PRIMARY KEY (id)"
+      },
+      {
+        "name": "product_price_cents_check",
+        "kind": "c",
+        "definition": "CHECK ((price_cents >= 0))"
+      },
+      {
+        "name": "product_price_cents_not_null",
+        "kind": "n",
+        "definition": "NOT NULL price_cents"
+      },
+      {
+        "name": "product_sku_check",
+        "kind": "c",
+        "definition": "CHECK ((((length((sku)::text) >= 1) AND (length((sku)::text) <= 64)) AND ((sku)::text ~ '^[ -~]+$'::text) AND (\"right\"((sku)::text, 1) <> ' '::text)))"
+      },
+      {
+        "name": "product_sku_key",
+        "kind": "u",
+        "definition": "UNIQUE (sku)"
+      },
+      {
+        "name": "product_sku_not_null",
+        "kind": "n",
+        "definition": "NOT NULL sku"
+      }
+    ]
+  },
+  "database_resources": {
+    "cpu_seconds": 32.739239,
+    "cgroup_memory_bytes": 104783872,
+    "memory_boundary": "Entire database container including shared buffers, file cache and kernel charges; not process RSS",
+    "collector": "Owned Linux cgroup-v2 cpu.stat/memory.current"
+  },
+  "cleanup_complete": true,
+  "status": "passed",
+  "raw_evidence": {
+    "path": "benchmark\\.work\\postgresql-controls-validation.json",
+    "sha256": "45eba62072efcc159b19e2e2f48c2ffbddbb4b7b59e78e47b2761aaa637770a4",
+    "source_note": "Standalone receipt produced before implementation commit; recorded per-file hashes identify the source and binaries used. Not a performance campaign."
+  }
+}
